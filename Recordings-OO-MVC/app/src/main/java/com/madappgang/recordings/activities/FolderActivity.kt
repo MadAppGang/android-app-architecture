@@ -1,3 +1,9 @@
+/*
+ * Copyright 2018 MadAppGang.
+ *
+ * Created by Andrii Fedorov afedorov@madappgang.com on 6/7/18.
+ */
+
 package com.madappgang.recordings.activities
 
 import android.content.Context
@@ -9,22 +15,25 @@ import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.kit.FileManager
 
 class FolderActivity : AppCompatActivity() {
-    companion object {
-        private val FOLDER_EXTRA = "folder_extra"
 
-        fun start(context: Context, folder: Folder) {
-            val intent = Intent(context, FolderActivity::class.java)
-            intent.putExtra(FOLDER_EXTRA, folder)
-            context.startActivity(intent)
-        }
-    }
+    private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
 
-    private val folder by lazy { intent.getParcelableExtra(FOLDER_EXTRA) as Folder }
-//    TODO assign value
+    // TODO assign value
     private lateinit var fileManager: FileManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder)
+    }
+
+    companion object {
+
+        private val FOLDER_KEY = "folder_key"
+
+        fun start(context: Context, folder: Folder) {
+            val intent = Intent(context, FolderActivity::class.java)
+            intent.putExtra(FOLDER_KEY, folder)
+            context.startActivity(intent)
+        }
     }
 }

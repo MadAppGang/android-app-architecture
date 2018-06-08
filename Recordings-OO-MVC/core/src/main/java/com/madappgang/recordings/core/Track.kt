@@ -1,13 +1,16 @@
+/*
+ * Copyright 2018 MadAppGang.
+ *
+ * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
+ */
+
 package com.madappgang.recordings.core
 
 import android.os.Parcel
 import android.os.Parcelable
 
-/**
- * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
- */
+data class Track(var id: String = "") : Parcelable {
 
-data class Track(var id: String = ""): Parcelable {
     var name: String = ""
     var path: String = ""
     var url: String = ""
@@ -28,12 +31,10 @@ data class Track(var id: String = ""): Parcelable {
     override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<Track> {
-        override fun createFromParcel(parcel: Parcel): Track {
-            return Track(parcel)
-        }
 
-        override fun newArray(size: Int): Array<Track?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel) = Track(parcel)
+
+        override fun newArray(size: Int) = arrayOfNulls<Track?>(size)
+
     }
 }

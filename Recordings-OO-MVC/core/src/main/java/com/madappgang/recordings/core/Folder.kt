@@ -1,13 +1,16 @@
+/*
+ * Copyright 2018 MadAppGang.
+ *
+ * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
+ */
+
 package com.madappgang.recordings.core
 
 import android.os.Parcel
 import android.os.Parcelable
 
-/**
- * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
- */
+data class Folder(var id: String = "") : Foldable, Parcelable {
 
-data class Folder(var id: String = ""): Foldable, Parcelable {
     var name: String = ""
 
     constructor(parcel: Parcel) : this(parcel.readString()) {
@@ -22,14 +25,10 @@ data class Folder(var id: String = ""): Foldable, Parcelable {
     override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<Folder> {
-        override fun createFromParcel(parcel: Parcel): Folder {
-            return Folder(parcel)
-        }
 
-        override fun newArray(size: Int): Array<Folder?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel) = Folder(parcel)
+
+        override fun newArray(size: Int) = arrayOfNulls<Folder?>(size)
+
     }
-
-
 }

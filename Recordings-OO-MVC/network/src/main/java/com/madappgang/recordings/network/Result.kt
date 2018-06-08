@@ -1,14 +1,12 @@
-package com.madappgang.recordings.network
-
-/**
+/*
+ * Copyright 2018 MadAppGang.
+ *
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
  */
 
+package com.madappgang.recordings.network
+
 class Result<T> private constructor(private val result: Any?) {
-    companion object {
-        fun <T> success(value: T): Result<T> = Result(value)
-        fun <T> failure(exception: Throwable) = Result<T>(Failure(exception))
-    }
 
     val isFailure: Boolean get() = result is Failure
     val isSuccess: Boolean get() = result !is Failure
@@ -40,4 +38,11 @@ class Result<T> private constructor(private val result: Any?) {
     }
 
     private class Failure(@JvmField val exception: Throwable)
+
+    companion object {
+
+        fun <T> success(value: T): Result<T> = Result(value)
+
+        fun <T> failure(exception: Throwable) = Result<T>(Failure(exception))
+    }
 }
