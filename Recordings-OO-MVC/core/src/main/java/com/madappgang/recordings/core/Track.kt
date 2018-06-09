@@ -9,22 +9,19 @@ package com.madappgang.recordings.core
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Track(var id: String = "") : Parcelable {
+data class Track(var id: Id? = null) : Parcelable {
 
     var name: String = ""
-    var path: String = ""
     var url: String = ""
 
-    constructor(parcel: Parcel) : this(parcel.readString()) {
+    constructor(parcel: Parcel) : this(parcel.readParcelable<Id>(Id::class.java.classLoader)) {
         name = parcel.readString()
-        path = parcel.readString()
         url = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
+        parcel.writeParcelable(id, flags)
         parcel.writeString(name)
-        parcel.writeString(path)
         parcel.writeString(url)
     }
 

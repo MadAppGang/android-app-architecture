@@ -9,16 +9,16 @@ package com.madappgang.recordings.core
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Folder(var id: String = "") : Foldable, Parcelable {
+data class Folder(var id: Id? = null) : Foldable, Parcelable {
 
     var name: String = ""
 
-    constructor(parcel: Parcel) : this(parcel.readString()) {
+    constructor(parcel: Parcel) : this(parcel.readParcelable<Id>(Id::class.java.classLoader)) {
         name = parcel.readString()
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(id)
+        dest?.writeParcelable(id, flags)
         dest?.writeString(name)
     }
 
