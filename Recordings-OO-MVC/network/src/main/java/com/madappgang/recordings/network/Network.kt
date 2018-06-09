@@ -8,13 +8,17 @@ package com.madappgang.recordings.network
 
 import com.madappgang.recordings.core.Id
 
-interface Network {
+class Network(
+        private val endpoint: Endpoint = Endpoint.Staging,
+        private val networkSession: NetworkSession = OkHttpNetworkSession(),
+        private val requestFactory: RequestFactory = RequestFactory(endpoint)
+) {
 
     fun <T> fetchEntity(clazz: Class<T>, id: Id): Result<T> {
         TODO("not implemented")
     }
 
-    fun <T> fetchContent(clazz: Class<T>, id: Id): Result<List<T>> {
+    fun <T> fetchContent(classContent: Class<T>, classParent: Class<Any>, id: Id): Result<List<T>> {
         TODO("not implemented")
     }
 
@@ -25,5 +29,4 @@ interface Network {
     fun <T> removeEntity(entity: T): Result<Unit> {
         TODO("not implemented")
     }
-
 }
