@@ -11,14 +11,17 @@ import android.os.Parcelable
 
 data class Folder(var id: Id? = null) : Foldable, Parcelable {
 
+    var parentId: Id? = null
     var name: String = ""
 
     constructor(parcel: Parcel) : this(parcel.readParcelable<Id>(Id::class.java.classLoader)) {
+        parentId = parcel.readParcelable(Id::class.java.classLoader)
         name = parcel.readString()
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeParcelable(id, flags)
+        dest?.writeParcelable(parentId, flags)
         dest?.writeString(name)
     }
 

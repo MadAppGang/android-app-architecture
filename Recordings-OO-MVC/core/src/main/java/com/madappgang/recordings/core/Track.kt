@@ -11,16 +11,19 @@ import android.os.Parcelable
 
 data class Track(var id: Id? = null) : Parcelable {
 
+    var parentId: Id? = null
     var name: String = ""
     var url: String = ""
 
     constructor(parcel: Parcel) : this(parcel.readParcelable<Id>(Id::class.java.classLoader)) {
+        parentId = parcel.readParcelable(Id::class.java.classLoader)
         name = parcel.readString()
         url = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(id, flags)
+        parcel.writeParcelable(parentId, flags)
         parcel.writeString(name)
         parcel.writeString(url)
     }

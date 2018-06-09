@@ -6,19 +6,24 @@
 
 package com.madappgang.recordings.network
 
-import com.madappgang.recordings.core.Folder
-import com.madappgang.recordings.core.Track
+import com.madappgang.recordings.core.Id
 
 interface Network {
 
-    fun getRootFolder(): Result<Folder>
+    fun <T> fetchEntity(clazz: Class<T>, id: Id): Result<T> {
+        TODO("not implemented")
+    }
 
-    fun createFolder(parentFolder: Folder, folder: Folder): Result<Folder>
+    fun <T> fetchContent(clazz: Class<T>, id: Id): Result<List<T>> {
+        TODO("not implemented")
+    }
 
-    fun uploadTrack(parentFolder: Folder, track: Track): Result<Track>
+    fun <T> createEntity(entity: T): Result<T> {
+        TODO("not implemented")
+    }
 
-    fun removeFolder(folder: Folder): Result<Unit>
-
-    fun removeTrack(track: Track): Result<Unit>
+    fun <T> removeEntity(entity: T): Result<Unit> {
+        TODO("not implemented")
+    }
 
 }
