@@ -1,7 +1,8 @@
-package com.madappgang.architecture.recorder
+package com.madappgang.architecture.recorder.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.madappgang.architecture.recorder.R
 
 class MainActivity : AppCompatActivity() {
 
