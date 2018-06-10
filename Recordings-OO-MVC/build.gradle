@@ -33,6 +33,6 @@ ext {
     compileSdkVersion = 27
 
     // App dependencies
-    supportLibraryVersion = '27.1.1'
+    supportLibraryVersion = '27.1.0'
 
 }

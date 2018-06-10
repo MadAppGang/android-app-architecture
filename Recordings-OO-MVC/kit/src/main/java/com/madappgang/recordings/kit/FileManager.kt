@@ -8,19 +8,37 @@ package com.madappgang.recordings.kit
 
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
+import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.network.Network
+import com.madappgang.recordings.network.Result
 
-class FileManager(val network: Network) {
+class FileManager(private val network: Network) {
 
-    fun fetchContent(folder: Folder): List<Foldable> {
+    fun <T : Foldable> fetch(id: Id): Result<T> {
         TODO("not implemented")
     }
 
-    fun add(foldable: Foldable) {
+    fun fetchContent(folder: Folder): Result<List<Foldable>> {
+        TODO("not implemented")
+    }
+
+    fun <T : Foldable> add(foldable: T): Result<T> {
         TODO("not implemented")
     }
 
     fun remove(foldable: Foldable) {
         TODO("not implemented")
+    }
+}
+
+sealed class FileExceptions(message: String) : Throwable(message) {
+
+    object FileNameIsEmptyException : FileExceptions("")
+
+}
+
+fun FileManager.validName(name: String) {
+    if (name.isEmpty()) {
+        throw FileExceptions.FileNameIsEmptyException
     }
 }

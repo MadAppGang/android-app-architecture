@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Recordings</string>
+
+    <string name="InitialActivity_Create_root_folder">Create root folder</string>
+    <string name="InitialActivity_enter_name">Enter name</string>
+    <string name="InitialActivity_cancel">Cancel</string>
+    <string name="InitialActivity_create">Create</string>
+
+    <string name="EditableDialogFragment_cancel">Cancel</string>
+    <string name="EditableDialogFragment_save">Save</string>
 </resources>

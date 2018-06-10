@@ -30,9 +30,12 @@ class FolderActivity : AppCompatActivity() {
 
         private val FOLDER_KEY = "folder_key"
 
-        fun start(context: Context, folder: Folder) {
+        fun start(context: Context, folder: Folder, asRoot: Boolean = false) {
             val intent = Intent(context, FolderActivity::class.java)
             intent.putExtra(FOLDER_KEY, folder)
+            if (asRoot) {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             context.startActivity(intent)
         }
     }
