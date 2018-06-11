@@ -1,13 +1,14 @@
 package com.madappgang.architecture.recorder.activities
 
 
-import android.support.v7.app.AppCompatActivity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.SeekBar
 import com.madappgang.architecture.recorder.R
 import kotlinx.android.synthetic.main.activity_player.*
@@ -42,5 +43,12 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
 
     fun onClickPlay(v: View) {
         Log.d("Play button", "play")
+    }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 }

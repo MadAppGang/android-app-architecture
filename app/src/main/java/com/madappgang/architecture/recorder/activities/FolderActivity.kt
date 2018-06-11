@@ -1,11 +1,9 @@
 package com.madappgang.architecture.recorder.activities
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -14,7 +12,6 @@ import android.view.MenuItem
 import android.widget.EditText
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
-import kotlinx.android.synthetic.main.dialog_item_name.*
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
@@ -39,26 +36,20 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.documents_menu, menu);
+        menuInflater.inflate(R.menu.documents_menu, menu);
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.create_folder -> {
-                onClickCreateFolder()
-                return true
-            }
-            R.id.create_record -> {
-                onClickCreateRecord()
-                return true
-            }
+            R.id.create_folder -> onClickCreateFolder()
+            R.id.create_record -> onClickCreateRecord()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(title: String) {
-        Log.d("TODO Actions",  "Clicked at item: " + title)
+        Log.d("TODO Actions", "Clicked at item: " + title)
         onClickItem(title)
     }
 
@@ -73,7 +64,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.setTitle(R.string.dlg_folder_name_title)
         dialogBuilder.setMessage(R.string.dlg_folder_name_subtitle)
         dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
-            Log.d("TODO Actions",  "Entered name : " + editName.text.toString())
+            Log.d("TODO Actions", "Entered name : " + editName.text.toString())
         })
         dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
             //pass
@@ -83,8 +74,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onClickItem(title: String) {
-        val intent = Intent(this, PlayerActivity::class.java)
-        startActivity(intent)
+        PlayerActivity.start(this)
     }
 
     private fun onClickCreateFolder() {
@@ -92,7 +82,6 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onClickCreateRecord() {
-        val intent = Intent(this, RecorderActivity::class.java)
-        startActivity(intent)
+        RecorderActivity.start(this)
     }
 }
