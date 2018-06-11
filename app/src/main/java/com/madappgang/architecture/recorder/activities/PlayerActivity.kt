@@ -41,6 +41,6 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     }
 
     fun onClickPlay(v: View) {
-        Log.d("ertyui", "nbmbmnb")
+        Log.d("Play button", "play")
     }
 }

@@ -67,6 +67,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     fun onClickCreateRecord() {
-        Log.d("TODO Actions", "Create record")
+        val intent = Intent(this, RecorderActivity::class.java)
+        startActivity(intent)
     }
 }
