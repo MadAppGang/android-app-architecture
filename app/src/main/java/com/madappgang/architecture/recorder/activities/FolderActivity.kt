@@ -1,5 +1,8 @@
 package com.madappgang.architecture.recorder.activities
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,8 +11,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
+import kotlinx.android.synthetic.main.dialog_item_name.*
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
@@ -20,7 +25,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder)
 
-        val myDataset = arrayOf("a", "b", "c", "d", "e", "f", "g")
+        val myDataset = arrayOf("One", "Two", "Three", "Four", "Five", "Six", "Seven")
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = FolderAdapter(myDataset)
@@ -57,16 +62,36 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         onClickItem(title)
     }
 
-    fun onClickItem(title: String) {
+    private fun showNewNameDialog() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_item_name, null)
+        dialogBuilder.setView(dialogView)
+
+        val editName = dialogView.findViewById<EditText>(R.id.editItemName)
+
+        dialogBuilder.setTitle(R.string.dlg_folder_name_title)
+        dialogBuilder.setMessage(R.string.dlg_folder_name_subtitle)
+        dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
+            Log.d("TODO Actions",  "Entered name : " + editName.text.toString())
+        })
+        dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
+            //pass
+        })
+        val b = dialogBuilder.create()
+        b.show()
+    }
+
+    private fun onClickItem(title: String) {
         val intent = Intent(this, PlayerActivity::class.java)
         startActivity(intent)
     }
 
-    fun onClickCreateFolder() {
-        Log.d("TODO Actions", "Create folder")
+    private fun onClickCreateFolder() {
+        showNewNameDialog()
     }
 
-    fun onClickCreateRecord() {
+    private fun onClickCreateRecord() {
         val intent = Intent(this, RecorderActivity::class.java)
         startActivity(intent)
     }
