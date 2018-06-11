@@ -2,6 +2,7 @@ package com.madappgang.architecture.recorder.activities
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -12,11 +13,19 @@ import android.view.MenuItem
 import android.widget.EditText
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
+import com.madappgang.architecture.recorder.activities.RecorderActivity.Companion.RECORDER_REQUEST_CODE
+import com.madappgang.architecture.recorder.helpers.Recorder.Companion.mainDirectory
+import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
+import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordName
+import com.madappgang.architecture.recorder.helpers.Recorder.Companion.timeDirectory
+import java.io.File
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private lateinit var timeValueName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +62,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         onClickItem(title)
     }
 
-    private fun showNewNameDialog() {
+    private fun showNewNameDialog(isFolderDialog: Boolean) {
         val dialogBuilder = AlertDialog.Builder(this)
         val inflater = this.layoutInflater
         val dialogView = inflater.inflate(R.layout.dialog_item_name, null)
@@ -61,10 +70,12 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
         val editName = dialogView.findViewById<EditText>(R.id.editItemName)
 
-        dialogBuilder.setTitle(R.string.dlg_folder_name_title)
-        dialogBuilder.setMessage(R.string.dlg_folder_name_subtitle)
+        dialogBuilder.setTitle(if (isFolderDialog) R.string.dlg_folder_name_title else R.string.dlg_recording_name_title)
+        dialogBuilder.setMessage(if (isFolderDialog) R.string.dlg_folder_name_subtitle else R.string.dlg_recording_name_subtitle)
         dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
-            Log.d("TODO Actions", "Entered name : " + editName.text.toString())
+            val name = editName.text.toString()
+            Log.d("TODO Actions", "Entered name : " + name)
+            if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
         })
         dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
             //pass
@@ -74,14 +85,33 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onClickItem(title: String) {
-        PlayerActivity.start(this)
+        val title = mainDirectory + "/" + recordName + recordFormat
+        PlayerActivity.start(this, title)
     }
 
     private fun onClickCreateFolder() {
-        showNewNameDialog()
+        showNewNameDialog(true)
     }
 
     private fun onClickCreateRecord() {
-        RecorderActivity.start(this)
+        val intent = Intent(this, RecorderActivity::class.java)
+        startActivityForResult(intent, RECORDER_REQUEST_CODE)
+    }
+
+    private fun onSaveFolder(name: String) {
+        File(mainDirectory, name).mkdirs()
+    }
+
+    private fun onSaveRecord(name: String) {
+        timeValueName = name
+        val cacheRecord = File(timeDirectory, "$recordName$recordFormat")
+        if (cacheRecord.absoluteFile.exists())
+            cacheRecord.copyTo(File(mainDirectory, "$name$recordFormat"), true, DEFAULT_BUFFER_SIZE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
+            showNewNameDialog(false)
+        }
     }
 }
