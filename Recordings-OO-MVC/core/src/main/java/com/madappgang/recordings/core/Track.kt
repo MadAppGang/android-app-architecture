@@ -9,7 +9,7 @@ package com.madappgang.recordings.core
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Track(var id: Id? = null) : Parcelable {
+data class Track(var id: Id? = null) : Foldable, Parcelable {
 
     var parentId: Id? = null
     var name: String = ""

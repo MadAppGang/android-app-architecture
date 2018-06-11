@@ -6,7 +6,6 @@
 
 package com.madappgang.recordings.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -34,10 +33,10 @@ class RecorderActivity : AppCompatActivity() {
 
         private val FOLDER_KEY = "folder_key"
 
-        fun start(context: Context, folder: Folder) {
-            val intent = Intent(context, RecorderActivity::class.java)
+        fun startForResult(activity: AppCompatActivity, folder: Folder, requestCode: Int) {
+            val intent = Intent(activity, RecorderActivity::class.java)
             intent.putExtra(FOLDER_KEY, folder)
-            context.startActivity(intent)
+            activity.startActivityForResult(intent, requestCode)
         }
     }
 }

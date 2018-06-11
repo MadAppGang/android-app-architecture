@@ -6,6 +6,8 @@
 
 package com.madappgang.recordings.extensions
 
+import android.content.res.Resources
+import android.util.TypedValue
 import android.view.View
 
 fun View.makeVisible() {
@@ -18,4 +20,9 @@ fun View.makeGone() {
 
 fun View.makeInvisible() {
     visibility = View.INVISIBLE
+}
+
+fun View.getPxFromDp(dp: Float): Float {
+    val r: Resources = this.context.resources
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.displayMetrics)
 }

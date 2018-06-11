@@ -41,6 +41,7 @@ dependencies {
     //Design
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation 'ru.rambler.android:swipe-layout:1.0.14'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
     //Test

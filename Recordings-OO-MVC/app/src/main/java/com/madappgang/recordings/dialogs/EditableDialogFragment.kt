@@ -115,7 +115,9 @@ class EditableDialogFragment : DialogFragment() {
             AlertDialog.Builder(requireContext())
                     .setView(view)
                     .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                                event.action == KeyEvent.ACTION_UP
+                        ) {
                             completionHandler?.onDialogNegativeClick(requestId)
                             return@OnKeyListener true
                         }

@@ -8,4 +8,10 @@
 
     <string name="EditableDialogFragment_cancel">Cancel</string>
     <string name="EditableDialogFragment_save">Save</string>
+
+    <string name="SelectFoldableTypeDialogFragment_chose">Chose</string>
+    <string name="SelectFoldableTypeDialogFragment_add_folder">Add folder</string>
+    <string name="SelectFoldableTypeDialogFragment_start_recording">Start Recording</string>
+
+    <string name="FoldableAdapter_delete">Delete</string>
 </resources>

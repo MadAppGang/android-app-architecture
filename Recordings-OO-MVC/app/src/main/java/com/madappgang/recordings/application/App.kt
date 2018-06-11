@@ -4,7 +4,7 @@
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/7/18.
  */
 
-package com.madappgang.recordings
+package com.madappgang.recordings.application
 
 import android.app.Application
 

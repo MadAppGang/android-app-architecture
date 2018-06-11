@@ -9,7 +9,7 @@ package com.madappgang.recordings.activities
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ProgressBar
-import com.madappgang.recordings.App
+import com.madappgang.recordings.application.App
 import com.madappgang.recordings.R
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Id
