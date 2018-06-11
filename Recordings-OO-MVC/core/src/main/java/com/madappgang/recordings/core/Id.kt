@@ -9,7 +9,7 @@ package com.madappgang.recordings.core
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Id(val id: String? = null) : Parcelable {
+data class Id(val id: String) : Parcelable {
 
     constructor(parcel: Parcel) : this(parcel.readString())
 

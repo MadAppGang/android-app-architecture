@@ -39,7 +39,7 @@ class FolderActivity :
         EditableDialogFragment.FieldValidationHandler {
 
     private val createRootFolderRequestId = "createRootFolderRequestId"
-    private val recorderActivityRequestId = 86731
+    private val recorderActivityRequestId = 6731
 
     private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
 
@@ -187,7 +187,7 @@ class FolderActivity :
         swipeRefresherView.isRefreshing = true
 
         val folder = Folder().apply {
-            this.parentId = folder.id
+            this.folderId = folder.id
             this.name = name
         }
 

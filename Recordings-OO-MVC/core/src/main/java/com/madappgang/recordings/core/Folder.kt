@@ -6,32 +6,28 @@
 
 package com.madappgang.recordings.core
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-data class Folder(var id: Id? = null) : Foldable, Parcelable {
+@Parcelize
+data class Folder(
+        var id: Id? = null,
+        var folderId: Id? = null,
+        override var name: String = ""
+) : Foldable, Parcelable {
 
-    var parentId: Id? = null
-    var name: String = ""
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    constructor(parcel: Parcel) : this(parcel.readParcelable<Id>(Id::class.java.classLoader)) {
-        parentId = parcel.readParcelable(Id::class.java.classLoader)
-        name = parcel.readString()
+        other as Folder
+
+        if (id != other.id) return false
+
+        return true
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeParcelable(id, flags)
-        dest?.writeParcelable(parentId, flags)
-        dest?.writeString(name)
-    }
-
-    override fun describeContents() = 0
-
-    companion object CREATOR : Parcelable.Creator<Folder> {
-
-        override fun createFromParcel(parcel: Parcel) = Folder(parcel)
-
-        override fun newArray(size: Int) = arrayOfNulls<Folder?>(size)
-
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
     }
 }

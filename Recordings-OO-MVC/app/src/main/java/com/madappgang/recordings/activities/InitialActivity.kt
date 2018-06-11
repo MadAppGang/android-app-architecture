@@ -72,7 +72,7 @@ class InitialActivity :
 
     private fun getRootFolder() = launch(uiContext) {
         progressBar.makeVisible()
-        val result = async(bgContext) { fileManager.fetch<Folder>(Id()) }.await()
+        val result = async(bgContext) { fileManager.fetch<Folder>(Id("")) }.await()
         progressBar.makeGone()
         when (result) {
             is Result.Success -> startFolderActivity(result.value)

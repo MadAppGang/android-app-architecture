@@ -6,4 +6,6 @@
 
 package com.madappgang.recordings.core
 
-interface Foldable
+interface Foldable {
+    var name: String
+}
