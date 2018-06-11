@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -18,23 +17,34 @@ import com.madappgang.architecture.recorder.helpers.Recorder.Companion.mainDirec
 import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
 import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordName
 import com.madappgang.architecture.recorder.helpers.Recorder.Companion.timeDirectory
+import kotlinx.android.synthetic.main.activity_folder.*
 import java.io.File
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-
     private lateinit var timeValueName: String
+    private var toolbarButtonUse: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder)
-
-        val myDataset = arrayOf("One", "Two", "Three", "Four", "Five", "Six", "Seven")
+        setSupportActionBar(toolbar)
+        toolbarButton.setOnClickListener {
+            if (toolbarButtonUse) {
+                viewAdapter.setNormalMode()
+                toolbarButton.text = getString(R.string.toolbar_button_normal)
+            } else {
+                viewAdapter.setRemoveMode()
+                toolbarButton.text = getString(R.string.toolbar_button_select)
+            }
+            toolbarButtonUse = !toolbarButtonUse
+        }
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = FolderAdapter(myDataset)
+        viewAdapter = FolderAdapter(mainDirectory)
         viewAdapter.setupItemClickListener(this)
 
         recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
@@ -45,8 +55,13 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.documents_menu, menu);
+        menuInflater.inflate(R.menu.documents_menu, menu)
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewAdapter.updateListFiles()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -57,36 +72,17 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(title: String) {
-        Log.d("TODO Actions", "Clicked at item: " + title)
-        onClickItem(title)
+    override fun onItemClick(file: File) {
+        if (file.isDirectory) {
+            viewAdapter.setPathForAdapter(file.absolutePath)
+            label.text = file.name
+        } else {
+            onClickItem(file)
+        }
     }
 
-    private fun showNewNameDialog(isFolderDialog: Boolean) {
-        val dialogBuilder = AlertDialog.Builder(this)
-        val inflater = this.layoutInflater
-        val dialogView = inflater.inflate(R.layout.dialog_item_name, null)
-        dialogBuilder.setView(dialogView)
-
-        val editName = dialogView.findViewById<EditText>(R.id.editItemName)
-
-        dialogBuilder.setTitle(if (isFolderDialog) R.string.dlg_folder_name_title else R.string.dlg_recording_name_title)
-        dialogBuilder.setMessage(if (isFolderDialog) R.string.dlg_folder_name_subtitle else R.string.dlg_recording_name_subtitle)
-        dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
-            val name = editName.text.toString()
-            Log.d("TODO Actions", "Entered name : " + name)
-            if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
-        })
-        dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
-            //pass
-        })
-        val b = dialogBuilder.create()
-        b.show()
-    }
-
-    private fun onClickItem(title: String) {
-        val title = mainDirectory + "/" + recordName + recordFormat
-        PlayerActivity.start(this, title)
+    private fun onClickItem(file: File) {
+        PlayerActivity.start(this, file.absolutePath)
     }
 
     private fun onClickCreateFolder() {
@@ -99,19 +95,48 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onSaveFolder(name: String) {
-        File(mainDirectory, name).mkdirs()
+        File(viewAdapter.currentPath, name).mkdirs()
+        viewAdapter.updateListFiles()
     }
 
     private fun onSaveRecord(name: String) {
         timeValueName = name
         val cacheRecord = File(timeDirectory, "$recordName$recordFormat")
-        if (cacheRecord.absoluteFile.exists())
-            cacheRecord.copyTo(File(mainDirectory, "$name$recordFormat"), true, DEFAULT_BUFFER_SIZE)
+        if (cacheRecord.absoluteFile.exists()) {
+            cacheRecord.copyTo(File(viewAdapter.currentPath, "$name$recordFormat"), true, DEFAULT_BUFFER_SIZE)
+            viewAdapter.updateListFiles()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (viewAdapter.currentPath != mainDirectory) {
+            viewAdapter.setLastPathForAdapter()
+            label.text = File(viewAdapter.currentPath).name
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            showNewNameDialog(false)
-        }
+        if (resultCode == RESULT_OK) showNewNameDialog(false)
+    }
+
+    private fun showNewNameDialog(isFolderDialog: Boolean) {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_item_name, null)
+        val editName = dialogView.findViewById<EditText>(R.id.editItemName)
+
+        dialogBuilder.setView(dialogView)
+        dialogBuilder.setTitle(if (isFolderDialog) R.string.dlg_folder_name_title else R.string.dlg_recording_name_title)
+        dialogBuilder.setMessage(if (isFolderDialog) R.string.dlg_folder_name_subtitle else R.string.dlg_recording_name_subtitle)
+        dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
+            val name = editName.text.toString()
+            if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
+        })
+        dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
+            //pass
+        })
+        dialogBuilder.create().show()
     }
 }

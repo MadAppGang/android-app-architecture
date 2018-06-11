@@ -13,7 +13,9 @@ import android.view.View
 import android.widget.SeekBar
 import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.helpers.Player
+import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
 import kotlinx.android.synthetic.main.activity_player.*
+import java.io.File
 
 
 class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, TextWatcher, Player.PlayerCallback {
@@ -21,14 +23,19 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     private lateinit var player: Player
     private var isClickOnButton = false
     private val handler = Handler()
+    private lateinit var filePath: String
+    private lateinit var fileName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+        setSupportActionBar(toolbar)
 
         val filePath = intent.getStringExtra(FILE_PATH)
-        val fileName = filePath.split("/").last().split(".").first()
+        fileName = filePath.split("/").last().removeSuffix(recordFormat)
+        this.filePath = filePath.substring(0, filePath.length - (fileName.length + recordFormat.length + 1))
         player = Player(filePath, this)
+        label.text = fileName
         editRecordName.setText(fileName)
         editRecordName.addTextChangedListener(this)
         seekBar.setOnSeekBarChangeListener(this)
@@ -74,10 +81,22 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         seekChange()
     }
 
-    override fun afterTextChanged(p0: Editable?) {}
+    override fun afterTextChanged(p0: Editable?) {
+        val newName = editRecordName.text.toString()
+        label.text = newName
+        renameFile(filePath, newName)
+    }
+
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         Log.d("onTextChanged", p0.toString())
+    }
+
+    private fun renameFile(filePath: String, name: String) {
+        val oldFile = File(filePath, fileName + recordFormat)
+        val newFile = File(filePath, name + recordFormat)
+        val result = oldFile.renameTo(newFile)
+        fileName = name
     }
 
     fun onClickPlay(v: View) {
