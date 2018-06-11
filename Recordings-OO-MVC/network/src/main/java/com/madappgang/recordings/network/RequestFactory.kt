@@ -9,7 +9,7 @@ package com.madappgang.recordings.network
 import com.madappgang.recordings.core.Id
 import okhttp3.Request
 
-class RequestFactory(private val endpoint: Endpoint) {
+internal class RequestFactory(private val endpoint: Endpoint) {
 
     fun <T> makeForFetching(clazz: Class<T>, id: Id): Request {
         TODO("not implemented")

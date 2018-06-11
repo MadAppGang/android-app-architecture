@@ -8,11 +8,16 @@ package com.madappgang.recordings.network
 
 import com.madappgang.recordings.core.Id
 
-class Network(
+class Network internal constructor(
         private val endpoint: Endpoint = Endpoint.Staging,
-        private val networkSession: NetworkSession = OkHttpNetworkSession(),
+        private val networkSession: NetworkSession = OkHttpSession(),
         private val requestFactory: RequestFactory = RequestFactory(endpoint)
 ) {
+
+    constructor(
+            endpoint: Endpoint = Endpoint.Staging,
+            networkSession: NetworkSession = OkHttpSession()
+    ) : this(endpoint, networkSession, RequestFactory(endpoint))
 
     fun <T> fetchEntity(clazz: Class<T>, id: Id): Result<T> {
         TODO("not implemented")

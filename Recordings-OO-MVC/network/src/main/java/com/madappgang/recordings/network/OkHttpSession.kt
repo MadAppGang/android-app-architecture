@@ -10,9 +10,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-class OkHttpNetworkSession : NetworkSession {
-
-    private val client: OkHttpClient by lazy { OkHttpClient().newBuilder().build() }
+internal class OkHttpSession(
+        private val client: OkHttpClient = OkHttpClient().newBuilder().build()
+) : NetworkSession {
 
     override fun makeRequest(request: Request, completionHandler: (Response?, Throwable?) -> Unit) {
         try {
