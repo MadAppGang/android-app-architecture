@@ -18,7 +18,7 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.PlayerActivity" />
-        <activity android:name=".activities.RecorderActivity"></activity>
+        <activity android:name=".activities.RecorderActivity" />
     </application>
 
 </manifest>

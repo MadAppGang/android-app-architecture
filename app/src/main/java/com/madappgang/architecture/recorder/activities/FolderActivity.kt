@@ -1,5 +1,6 @@
 package com.madappgang.architecture.recorder.activities
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -53,6 +54,12 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onItemClick(title: String) {
         Log.d("TODO Actions",  "Clicked at item: " + title)
+        onClickItem(title)
+    }
+
+    fun onClickItem(title: String) {
+        val intent = Intent(this, PlayerActivity::class.java)
+        startActivity(intent)
     }
 
     fun onClickCreateFolder() {
