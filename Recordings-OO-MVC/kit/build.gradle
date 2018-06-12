@@ -31,14 +31,17 @@ dependencies {
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //Media
+    implementation "com.googlecode.mp4parser:isoparser:1.1.22"
+
     //Test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Project
-    compile project(path: ':core')
-    compile project(path: ':network')
+    api project(path: ':core')
+    api project(path: ':network')
 }
 repositories {
     mavenCentral()

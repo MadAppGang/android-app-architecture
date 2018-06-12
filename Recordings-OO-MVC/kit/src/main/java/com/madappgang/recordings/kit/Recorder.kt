@@ -7,6 +7,7 @@
 package com.madappgang.recordings.kit
 
 import com.madappgang.recordings.core.Track
+import java.io.File
 
 class Recorder {
 
@@ -14,7 +15,7 @@ class Recorder {
         TODO("not implemented")
     }
 
-    fun pause() {
+    fun addPart(file: File) {
         TODO("not implemented")
     }
 

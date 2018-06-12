@@ -38,7 +38,7 @@ class FolderActivity :
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {
 
-    private val createRootFolderRequestId = "createRootFolderRequestId"
+    private val createFolderRequestId = "createFolderRequestId"
     private val recorderActivityRequestId = 6731
 
     private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
@@ -162,14 +162,14 @@ class FolderActivity :
 
     private fun showCreateFolderDialog(defaultValue: String = "") {
         val dialog = EditableDialogFragment.newInstance(
-                createRootFolderRequestId,
+                createFolderRequestId,
                 R.string.InitialActivity_Create_root_folder,
                 R.string.InitialActivity_enter_name,
                 R.string.InitialActivity_create,
                 R.string.InitialActivity_cancel,
                 defaultValue
         )
-        dialog.show(supportFragmentManager, "CreateRootFolderDialogTag")
+        dialog.show(supportFragmentManager, "CreateFolderDialogTag")
     }
 
     override fun onDialogPositiveClick(requestId: String, value: String) {

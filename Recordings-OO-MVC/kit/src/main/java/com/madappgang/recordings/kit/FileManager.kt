@@ -26,7 +26,7 @@ class FileManager(private val network: Network) {
         TODO("not implemented")
     }
 
-    fun remove(foldable: Foldable) {
+    fun remove(foldable: Foldable): Result<Unit> {
         TODO("not implemented")
     }
 }

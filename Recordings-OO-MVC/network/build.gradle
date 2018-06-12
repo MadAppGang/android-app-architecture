@@ -41,7 +41,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.4'
 
     //Project
-    compile project(path: ':core')
+    api project(path: ':core')
 }
 repositories {
     mavenCentral()

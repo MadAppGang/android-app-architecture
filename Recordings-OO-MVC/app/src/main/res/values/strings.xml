@@ -14,4 +14,15 @@
     <string name="SelectFoldableTypeDialogFragment_start_recording">Start Recording</string>
 
     <string name="FoldableAdapter_delete">Delete</string>
+
+    <string name="RecorderActivity_start">Start</string>
+    <string name="RecorderActivity_pause">Pause</string>
+    <string name="RecorderActivity_resume">Resume</string>
+    <string name="RecorderActivity_stop">Stop</string>
+
+    <string name="RecorderActivity_save_recording">Save recording</string>
+    <string name="RecorderActivity_enter_name">Enter name</string>
+    <string name="RecorderActivity_cancel">Cancel</string>
+    <string name="RecorderActivity_save">Save</string>
+
 </resources>
