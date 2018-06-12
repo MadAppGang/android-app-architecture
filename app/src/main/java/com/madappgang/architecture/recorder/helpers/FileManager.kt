@@ -47,9 +47,10 @@ class FileManager {
         fun onResult()
     }
 
-    fun renameFile(filePath: String, oldName: String, newName: String, fileManagerCallback: FileManagerCallback? = null) {
-        val oldFile = File(filePath, oldName + recordFormat)
-        val newFile = File(filePath, newName + recordFormat)
+    fun renameFile(oldFilePath: String, newFilePath: String): Boolean {
+        val oldFile = File(oldFilePath)
+        val newFile = File(newFilePath)
         val result = oldFile.renameTo(newFile)
+        return result
     }
 }

@@ -72,12 +72,40 @@ class ViewStateStore {
 //        }
     }
 
-    fun changePlaybackPosition(position: Double) {
-//        if (content.playerView.playState != null) {
-//            val previousState = content.playerView.playState
-//            //content.playerView.playState = PlayerState(isPlaying = previousState.isPlaying, progress = position, duration = previousState.duration)
-//            //commitAction(PlayViewState.Action.changePlaybackPosition)
-//        }
+    fun updateOriginalFilePath(originalFilePath: String) {
+        playerView = playerView.copy(originalFilePath = originalFilePath)
+        playerViewState.value = playerView
     }
+
+    fun updateFilePath(filePath: String) {
+        playerView = playerView.copy(filePath = filePath)
+        playerViewState.value = playerView
+    }
+
+    fun updatePlayState(playState: PlayerViewState.PlayerState) {
+        playerView = playerView.copy(action = PlayerViewState.Action.UPDATE_PLAY_STATE, playerState = playState)
+        playerViewState.value = playerView
+    }
+
+    fun playerResumePlay(position: Int) {
+        playerView = playerView.copy(action = PlayerViewState.Action.RESUME_PLAYING, progress = position)
+        playerViewState.value = playerView
+    }
+
+    fun changePlaybackPosition(position: Int) {
+        playerView = playerView.copy(action = PlayerViewState.Action.CHANGE_PLAYBACK_POSITION, progress = position)
+        playerViewState.value = playerView
+    }
+
+    fun getPlayerProgress(): Int = playerView.progress.let { it } ?: 0
+
+    fun playerSeekTo(position: Int) {
+        playerView = playerView.copy(action = PlayerViewState.Action.PLAYER_SEEK_TO, progress = position)
+        playerViewState.value = playerView
+    }
+
+    fun getPlayState(): PlayerViewState.PlayerState? = playerView.playerState
+    fun getPlayerFilePath(): String = playerView.filePath
+    fun getPlayerStartFilePath(): String = playerView.originalFilePath
 
 }

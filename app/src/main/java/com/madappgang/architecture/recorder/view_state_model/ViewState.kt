@@ -23,10 +23,18 @@ data class RecorderViewState(val recordDuration: Long = 0, val action: RecorderV
     }
 }
 
-data class PlayerViewState(val uuid: String?, var playState: Int? = null) {
+data class PlayerViewState(val uuid: String?, var originalFilePath: String = "", var filePath: String = "", val action: Action? = null, var progress: Int? = null, var playerState: PlayerState? = null) {
     enum class Action {
         UPDATE_PLAY_STATE,
-        TOGGLE_PLAY,
-        CHANGE_PLAYBACK_POSITION
+        RESUME_PLAYING,
+        CHANGE_PLAYBACK_POSITION,
+        UPDATE_FILE_NAME,
+        PLAYER_SEEK_TO
+    }
+
+    enum class PlayerState {
+        PLAY,
+        PAUSE,
+        STOP
     }
 }
