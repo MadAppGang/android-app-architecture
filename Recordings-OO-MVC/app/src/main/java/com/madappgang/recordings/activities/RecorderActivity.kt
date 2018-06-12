@@ -24,7 +24,7 @@ import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.media.AudioRecorder
-import com.madappgang.recordings.network.Result
+import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay

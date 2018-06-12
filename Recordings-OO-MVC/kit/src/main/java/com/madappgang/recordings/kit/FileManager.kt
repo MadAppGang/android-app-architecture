@@ -9,6 +9,7 @@ package com.madappgang.recordings.kit
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Id
+import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.network.*
 
 class FileManager(private val network: Network) {

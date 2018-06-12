@@ -4,9 +4,7 @@
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
  */
 
-package com.madappgang.recordings.network
-
-import com.madappgang.recordings.core.Folder
+package com.madappgang.recordings.core
 
 sealed class NetworkExceptions(message: String) : Throwable(message) {
 

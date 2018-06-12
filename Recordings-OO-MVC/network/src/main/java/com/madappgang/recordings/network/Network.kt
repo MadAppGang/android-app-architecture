@@ -7,6 +7,7 @@
 package com.madappgang.recordings.network
 
 import com.madappgang.recordings.core.Id
+import com.madappgang.recordings.core.Result
 import java.io.File
 
 class Network internal constructor(

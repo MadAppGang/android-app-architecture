@@ -8,7 +8,7 @@ package com.madappgang.recordings.kit
 
 import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.network.Network
-import com.madappgang.recordings.network.Result
+import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
