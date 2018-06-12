@@ -3,7 +3,8 @@ package com.madappgang.architecture.recorder.view_state_model
 import java.io.File
 
 
-data class FolderViewState(val folderUUID: String, val editing: Boolean = false, val scrollOffset: Double = 0.0, val action: Action? = null, val file: File? = null) {
+data class FolderViewState(val folderUUID: String, var editing: Boolean = false, var scrollOffset: Double = 0.0,
+                           var action: Action? = null, var file: File? = null, var dialogAction: Action = Action.DISMISS_ALERT) {
     enum class Action {
         TOGGLE_EDITING,
         SHOW_CREATE_FOLDER,
@@ -12,7 +13,8 @@ data class FolderViewState(val folderUUID: String, val editing: Boolean = false,
         SHOW_SAVE_RECORDING,
         PUSH_FOLDER,
         POP_FOLDER,
-        DISMISS_ALERT
+        DISMISS_ALERT,
+        RESUME_STATE
     }
 }
 
@@ -23,7 +25,8 @@ data class RecorderViewState(val recordDuration: Long = 0, val action: RecorderV
     }
 }
 
-data class PlayerViewState(val uuid: String?, var originalFilePath: String = "", var filePath: String = "", val action: Action? = null, var progress: Int? = null, var playerState: PlayerState? = null) {
+data class PlayerViewState(val uuid: String?, var originalFilePath: String = "", var filePath: String = "",
+                           val action: Action? = null, var progress: Int? = null, var playerState: PlayerState? = null) {
     enum class Action {
         UPDATE_PLAY_STATE,
         RESUME_PLAYING,

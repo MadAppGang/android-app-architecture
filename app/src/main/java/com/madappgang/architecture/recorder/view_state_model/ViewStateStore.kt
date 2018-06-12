@@ -21,43 +21,58 @@ class ViewStateStore {
     }
 
     fun toggleEditing(isEditing: Boolean) {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.TOGGLE_EDITING, editing = isEditing)
+        folderView = folderView.copy(action = FolderViewState.Action.TOGGLE_EDITING, editing = isEditing)
+        folderViewState.value = folderView
     }
 
     fun pushFolder(file: File) {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.PUSH_FOLDER, file = file)
+        folderView = folderView.copy(action = FolderViewState.Action.PUSH_FOLDER, file = file)
+        folderViewState.value = folderView
     }
 
     fun popFolder() {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.POP_FOLDER)
+        folderView = folderView.copy(action = FolderViewState.Action.POP_FOLDER)
+        folderViewState.value = folderView
     }
 
     fun setPlaySelection(file: File) {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_PLAYER_VIEW, file = file)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_PLAYER_VIEW, file = file)
+        folderViewState.value = folderView
     }
 
     fun showCreateFolder() {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_CREATE_FOLDER)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_CREATE_FOLDER, dialogAction = FolderViewState.Action.SHOW_CREATE_FOLDER)
+        folderViewState.value = folderView
     }
 
     fun showRecorder() {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW, dialogAction = FolderViewState.Action.SHOW_RECORD_VIEW)
+        folderViewState.value = folderView
     }
 
     fun showSaveRecording() {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
+        folderViewState.value = folderView
     }
 
     fun dismissAlert() {
-        folderViewState.value = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT)
+        folderView = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT, dialogAction = FolderViewState.Action.DISMISS_ALERT)
+        folderViewState.value = folderView
+    }
+
+    fun resumeState() {
+        folderView = folderView.copy(action = FolderViewState.Action.RESUME_STATE)
+        folderViewState.value = folderView
     }
 
     fun updateRecordDuration(recordDuration: Long) {
-        recorderViewState.value = recorderView.copy(action = RecorderViewState.Action.UPDATE_RECORD_DURATION, recordDuration = recordDuration)
+        recorderView = recorderView.copy(action = RecorderViewState.Action.UPDATE_RECORD_DURATION, recordDuration = recordDuration)
+        recorderViewState.value = recorderView
     }
 
     fun dismissRecording() {
-        recorderViewState.value = recorderView.copy(action = RecorderViewState.Action.DISMISS_RECORDING)
+        recorderView = recorderView.copy(action = RecorderViewState.Action.DISMISS_RECORDING)
+        recorderViewState.value = recorderView
     }
 
     fun updateOriginalFilePath(originalFilePath: String) {
