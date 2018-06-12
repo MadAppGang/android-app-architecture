@@ -3,7 +3,6 @@ package com.madappgang.architecture.recorder.activities
 import android.Manifest
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -61,15 +60,25 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         if (!permissionAccepted) {
             finish()
         } else {
-            recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
-                setHasFixedSize(true)
-                layoutManager = viewManager
-                adapter = viewAdapter
-            }
+            init()
+        }
+    }
 
-            viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
-                it?.let { handle(it) }
-            })
+    private fun init() {
+        recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
+        viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
+            it?.let { handle(it) }
+        })
+
+        if (currentViewState().file != null) {
+            viewStateStore.resumeState()
+        } else {
+            currentViewState().file = File(mainDirectory)
         }
     }
 
@@ -152,12 +161,15 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.setView(dialogView)
         dialogBuilder.setTitle(if (isFolderDialog) R.string.dlg_folder_name_title else R.string.dlg_recording_name_title)
         dialogBuilder.setMessage(if (isFolderDialog) R.string.dlg_folder_name_subtitle else R.string.dlg_recording_name_subtitle)
-        dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
+        dialogBuilder.setPositiveButton(R.string.button_title_save, { dialog, whichButton ->
             val name = editName.text.toString()
             if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
             viewStateStore.dismissAlert()
         })
-        dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
+        dialogBuilder.setNegativeButton(R.string.button_title_cancel, { dialog, whichButton ->
+            viewStateStore.dismissAlert()
+        })
+        dialogBuilder.setOnCancelListener({
             viewStateStore.dismissAlert()
         })
         dialogBuilder.create().show()
@@ -181,23 +193,42 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
                 PlayerActivity.start(this, currentViewState().file!!.absolutePath)
             }
             FolderViewState.Action.TOGGLE_EDITING -> {
-                if (currentViewState().editing) {
-                    viewAdapter.setRemoveMode()
-                    toolbarButton.text = getString(R.string.toolbar_button_select)
-                } else {
-                    viewAdapter.setNormalMode()
-                    toolbarButton.text = getString(R.string.toolbar_button_normal)
-                }
+                toggleEditing()
             }
             FolderViewState.Action.PUSH_FOLDER -> {
-                val file = currentViewState().file!!
-                viewAdapter.setPathForAdapter(file.absolutePath)
-                label.text = file.name
+                pushFolder()
             }
             FolderViewState.Action.POP_FOLDER -> {
                 viewAdapter.setLastPathForAdapter()
                 label.text = File(viewAdapter.currentPath).name
             }
+            FolderViewState.Action.RESUME_STATE -> {
+                pushFolder()
+                toggleEditing()
+                /*if (currentViewState().dialogAction == FolderViewState.Action.SHOW_CREATE_FOLDER) {
+                    showNewNameDialog(true)
+                } else if (currentViewState().dialogAction == FolderViewState.Action.SHOW_SAVE_RECORDING) {
+                    showNewNameDialog(false)
+                }*/
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun pushFolder() {
+        val file = currentViewState().file!!
+        viewAdapter.setPathForAdapter(file.absolutePath)
+        label.text = file.name
+    }
+
+    private fun toggleEditing() {
+        if (currentViewState().editing) {
+            viewAdapter.setRemoveMode()
+            toolbarButton.text = getString(R.string.toolbar_button_select)
+        } else {
+            viewAdapter.setNormalMode()
+            toolbarButton.text = getString(R.string.toolbar_button_normal)
         }
     }
 }
