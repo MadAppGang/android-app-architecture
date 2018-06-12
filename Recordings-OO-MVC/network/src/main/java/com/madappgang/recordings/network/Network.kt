@@ -24,7 +24,7 @@ class Network internal constructor(
         TODO("not implemented")
     }
 
-    fun <T> fetchContent(classContent: Class<T>, classParent: Class<Any>, id: Id): Result<List<T>> {
+    fun <T> fetchList(clazz: Class<T>, fetchingOptions: FetchingOptions): Result<List<T>> {
         TODO("not implemented")
     }
 

@@ -147,7 +147,7 @@ class FolderActivity :
     private fun loadFolderContent() = launch(uiContext) {
         swipeRefresherView.isRefreshing = true
 
-        val result = async(bgContext) { fileManager.fetchContent(folder) }.await()
+        val result = async(bgContext) { fileManager.fetchList(folder) }.await()
 
         when (result) {
             is Result.Success -> {

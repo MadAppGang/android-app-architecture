@@ -9,25 +9,30 @@ package com.madappgang.recordings.kit
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Id
-import com.madappgang.recordings.network.Network
-import com.madappgang.recordings.network.Result
+import com.madappgang.recordings.network.*
 
 class FileManager(private val network: Network) {
 
-    fun <T : Foldable> fetch(id: Id): Result<T> {
-        TODO("not implemented")
+    fun <T : Foldable> fetchEntity(clazz: Class<T>, id: Id): Result<T> {
+        return network.fetchEntity(clazz, id)
     }
 
-    fun fetchContent(folder: Folder): Result<List<Foldable>> {
-        TODO("not implemented")
+    fun fetchList(rootFolder: Folder): Result<List<Foldable>> {
+        val ownerId = rootFolder.folderId ?: Id("")
+
+        val fetchingOptions = FetchingOptions()
+            .add(Constraint.Owner(Folder::class.java))
+            .add(Constraint.OwnerId(ownerId))
+
+        return network.fetchList(Foldable::class.java, fetchingOptions)
     }
 
     fun <T : Foldable> add(foldable: T): Result<T> {
-        TODO("not implemented")
+        return network.createEntity(foldable)
     }
 
     fun remove(foldable: Foldable): Result<Unit> {
-        TODO("not implemented")
+        return network.removeEntity(foldable)
     }
 }
 
