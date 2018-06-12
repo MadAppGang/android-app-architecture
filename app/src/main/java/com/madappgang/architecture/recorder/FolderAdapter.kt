@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
 import java.io.File
 
@@ -17,10 +17,7 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
     private var dataSet: MutableList<File> = mutableListOf()
     private var pathLength: MutableList<Int> = mutableListOf()
     private var isNormalMode: Boolean = true
-
-    init {
-        updateListFiles()
-    }
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -50,6 +47,7 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
             }
             holder.itemRemove.visibility = View.GONE
         } else {
+            holder.itemView.setOnClickListener(null)
             holder.itemFolderIndicator.visibility = View.GONE
             holder.itemRemove.visibility = View.VISIBLE
             holder.itemRemove.setOnClickListener { removeFile(file) }
@@ -70,8 +68,7 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
 
     fun updateListFiles() {
         dataSet.clear()
-        val parentDir = File(currentPath)
-        parentDir.listFiles().forEach { if (it.name != "cache") dataSet.add(it) }
+        dataSet = fileManager.getListFiles(currentPath)
         notifyDataSetChanged()
     }
 
@@ -86,8 +83,7 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
     }
 
     private fun removeFile(file: File) {
-        if (file.isDirectory) file.list().forEach { File(file, it).delete() }
-        file.delete()
+        fileManager.removeFile(file)
         updateListFiles()
     }
 

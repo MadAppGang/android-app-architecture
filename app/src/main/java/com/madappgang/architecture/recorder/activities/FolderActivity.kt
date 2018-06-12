@@ -10,13 +10,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.activities.RecorderActivity.Companion.RECORDER_REQUEST_CODE
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.mainDirectory
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordName
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.timeDirectory
+import com.madappgang.architecture.recorder.helpers.FileManager
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
 import kotlinx.android.synthetic.main.activity_folder.*
 import java.io.File
 
@@ -25,8 +24,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var timeValueName: String
     private var toolbarButtonUse: Boolean = false
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,17 +94,19 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onSaveFolder(name: String) {
-        File(viewAdapter.currentPath, name).mkdirs()
-        viewAdapter.updateListFiles()
+        fileManager.onSaveFolder(viewAdapter.currentPath, name, object : FileManager.FileManagerCallback {
+            override fun onResult() {
+                viewAdapter.updateListFiles()
+            }
+        })
     }
 
     private fun onSaveRecord(name: String) {
-        timeValueName = name
-        val cacheRecord = File(timeDirectory, "$recordName$recordFormat")
-        if (cacheRecord.absoluteFile.exists()) {
-            cacheRecord.copyTo(File(viewAdapter.currentPath, "$name$recordFormat"), true, DEFAULT_BUFFER_SIZE)
-            viewAdapter.updateListFiles()
-        }
+        fileManager.onSaveRecord(viewAdapter.currentPath, name, object : FileManager.FileManagerCallback {
+            override fun onResult() {
+                viewAdapter.updateListFiles()
+            }
+        })
     }
 
     override fun onBackPressed() {

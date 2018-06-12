@@ -4,7 +4,7 @@ import android.media.MediaPlayer
 import android.util.Log
 import java.io.IOException
 
-class Player(private val fileName: String, callback: PlayerCallback) {
+class Player(private var fileName: String, callback: PlayerCallback) {
 
     interface PlayerCallback {
         fun setDuration(duration: Int)
@@ -18,11 +18,14 @@ class Player(private val fileName: String, callback: PlayerCallback) {
             player.setDataSource(fileName)
             player.prepare()
             callback.setDuration(player.duration)
-            player.setOnSeekCompleteListener { }
         } catch (e: IOException) {
             Log.e(LOG_TAG, "prepare() failed")
         }
     }
+
+    fun getCurrentPosition(): Int = player.currentPosition
+
+    fun isPlaying(): Boolean = player.isPlaying
 
     fun play() {
         player.start()
@@ -31,10 +34,6 @@ class Player(private val fileName: String, callback: PlayerCallback) {
     fun pause() {
         player.pause()
     }
-
-    fun getCurrentPosition(): Int = player.currentPosition
-
-    fun isPlaying(): Boolean = player.isPlaying
 
     fun seekTo(time: Int) {
         player.seekTo(time)

@@ -11,11 +11,11 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.R
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import com.madappgang.architecture.recorder.helpers.Player
-import com.madappgang.architecture.recorder.helpers.Recorder.Companion.recordFormat
 import kotlinx.android.synthetic.main.activity_player.*
-import java.io.File
 
 
 class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, TextWatcher, Player.PlayerCallback {
@@ -25,6 +25,8 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     private val handler = Handler()
     private lateinit var filePath: String
     private lateinit var fileName: String
+    private lateinit var originalName: String
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,8 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         setSupportActionBar(toolbar)
 
         val filePath = intent.getStringExtra(FILE_PATH)
-        fileName = filePath.split("/").last().removeSuffix(recordFormat)
+        originalName = filePath.split("/").last().removeSuffix(recordFormat)
+        fileName = originalName
         this.filePath = filePath.substring(0, filePath.length - (fileName.length + recordFormat.length + 1))
         player = Player(filePath, this)
         label.text = fileName
@@ -63,9 +66,9 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
             seekBar.progress = curPos
             currentTime.text = RecorderActivity.getTimeFormat(curPos.toLong())
             val notification = Runnable { startPlayProgressUpdater() }
-            handler.postDelayed(notification, 100)
+            handler.postDelayed(notification, 10)
         } else if (!isClickOnButton) {
-            player.stop()
+            player.pause()
             playButton.text = getString(R.string.player_button_play)
             seekBar.progress = 0
             currentTime.text = RecorderActivity.getTimeFormat(0L)
@@ -84,19 +87,14 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     override fun afterTextChanged(p0: Editable?) {
         val newName = editRecordName.text.toString()
         label.text = newName
-        renameFile(filePath, newName)
+        fileName = newName
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        Log.d("onTextChanged", p0.toString())
-    }
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-    private fun renameFile(filePath: String, name: String) {
-        val oldFile = File(filePath, fileName + recordFormat)
-        val newFile = File(filePath, name + recordFormat)
-        val result = oldFile.renameTo(newFile)
-        fileName = name
+    private fun renameFile() {
+        fileManager.renameFile(filePath, originalName, fileName)
     }
 
     fun onClickPlay(v: View) {
@@ -110,6 +108,11 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
             playButton.text = getString(R.string.player_button_pause)
             startPlayProgressUpdater()
         }
+    }
+
+    override fun onPause() {
+        if (originalName != fileName) renameFile()
+        super.onPause()
     }
 
     override fun onDestroy() {
