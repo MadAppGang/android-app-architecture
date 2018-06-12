@@ -136,9 +136,10 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.setPositiveButton(R.string.button_title_save, DialogInterface.OnClickListener { dialog, whichButton ->
             val name = editName.text.toString()
             if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
+            viewStateStore.dismissAlert()
         })
         dialogBuilder.setNegativeButton(R.string.button_title_cancel, DialogInterface.OnClickListener { dialog, whichButton ->
-            //pass
+            viewStateStore.dismissAlert()
         })
         dialogBuilder.create().show()
     }

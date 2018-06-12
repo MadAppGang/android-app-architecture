@@ -11,7 +11,8 @@ data class FolderViewState(val folderUUID: String, val editing: Boolean = false,
         SHOW_PLAYER_VIEW,
         SHOW_SAVE_RECORDING,
         PUSH_FOLDER,
-        POP_FOLDER
+        POP_FOLDER,
+        DISMISS_ALERT
     }
 }
 

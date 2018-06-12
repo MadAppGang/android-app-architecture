@@ -48,6 +48,9 @@ class ViewStateStore {
         folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
     }
 
+    fun dismissAlert() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT)
+    }
 
     fun dismissRecording() {
         //content.recorderView = null
