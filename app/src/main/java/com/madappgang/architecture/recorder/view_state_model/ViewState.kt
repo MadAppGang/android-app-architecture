@@ -16,9 +16,10 @@ data class FolderViewState(val folderUUID: String, val editing: Boolean = false,
     }
 }
 
-data class RecorderViewState(var recordState: Int, val parentUUID: String) {
+data class RecorderViewState(val recordDuration: Long = 0, val action: RecorderViewState.Action? = null) {
     enum class Action {
-        UPDATE_RECORD_STATE
+        UPDATE_RECORD_DURATION,
+        DISMISS_RECORDING
     }
 }
 
