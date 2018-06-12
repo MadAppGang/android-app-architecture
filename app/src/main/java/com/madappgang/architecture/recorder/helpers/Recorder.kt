@@ -1,15 +1,15 @@
 package com.madappgang.architecture.recorder.helpers
 
-import android.content.Context
 import android.media.MediaRecorder
-import android.os.Environment
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
-import java.io.File
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.testRecordName
 
 
-class Recorder(val context: Context, callback: RecordTimeUpdate) {
+class Recorder(callback: RecordTimeUpdate) {
 
     interface RecordTimeUpdate {
         fun onTimeUpdate(time: Long)
@@ -45,9 +45,7 @@ class Recorder(val context: Context, callback: RecordTimeUpdate) {
     }
 
     private fun setOutputFile() {
-        // Record to the external cache directory for visibility
-        File(timeDirectory).mkdirs()
-        fileName = timeDirectory + "/$recordName$recordFormat"
+        fileName = mainDirectory + "/$testRecordName$recordFormat"
         recorder.setOutputFile(fileName)
     }
 
@@ -60,12 +58,5 @@ class Recorder(val context: Context, callback: RecordTimeUpdate) {
     fun onStopRecord() {
         recorder.stop()
         recorder.release()
-    }
-
-    companion object {
-        val mainDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/Records"
-        val timeDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/Records/cache"
-        val recordName = "audioRecord"
-        val recordFormat = ".3gp"
     }
 }

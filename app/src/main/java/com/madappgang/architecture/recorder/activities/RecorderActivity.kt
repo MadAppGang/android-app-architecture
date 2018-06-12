@@ -19,7 +19,7 @@ class RecorderActivity : AppCompatActivity(), Recorder.RecordTimeUpdate {
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
     private val permissions = arrayOf<String>(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     private var permissionToRecordAccepted = false
-    private val recorder = Recorder(this, this)
+    private val recorder = Recorder(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
