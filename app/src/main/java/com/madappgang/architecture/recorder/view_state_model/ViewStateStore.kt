@@ -1,95 +1,92 @@
 package com.madappgang.architecture.recorder.view_state_model
 
+import android.arch.lifecycle.MutableLiveData
+import java.io.File
+
 
 class ViewStateStore {
 
-    var content = ContentState(folderViews = mutableListOf(FolderViewState(folderUUID = "")), playerView = PlayerViewState(uuid = null))
+    private var folderView = FolderViewState(folderUUID = "")
+    private var playerView = PlayerViewState(uuid = null)
+    private var recorderView = RecorderViewState(recordState = 0, parentUUID = "")
 
-    fun setPlaySelection(uuid: String?, alreadyApplied: Boolean) {
-        content.playerView = PlayerViewState(uuid = uuid)
-        //commitAction(alreadyApplied ? SplitViewState.Action.alreadyDismissedDetailView : SplitViewState.Action.changedPlaySelection)
+    val folderViewState: MutableLiveData<FolderViewState> = MutableLiveData()
+    val playerViewState: MutableLiveData<PlayerViewState> = MutableLiveData()
+    val recorderViewState: MutableLiveData<RecorderViewState> = MutableLiveData()
+
+    init {
+        folderViewState.value = folderView
+        playerViewState.value = playerView
+        recorderViewState.value = recorderView
     }
 
-    fun pushFolder(uuid: String) {
-        content.folderViews.add(FolderViewState(folderUUID = uuid))
-        //commitAction(SplitViewState.Action.pushFolderView)
+    fun toggleEditing(isEditing: Boolean) {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.TOGGLE_EDITING, editing = isEditing)
     }
 
-    fun popToNewDepth(newDepth: Int, alreadyApplied: Boolean) {
-        val popDepth = maxOf(1, minOf(content.folderViews.size, newDepth), newDepth)
-        content.folderViews.dropLast(content.folderViews.size - popDepth)
-        //commitAction(alreadyApplied ? SplitViewState.Action.alreadyPoppedFolderView : SplitViewState.Action.popFolderView)
+    fun pushFolder(file: File) {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.PUSH_FOLDER, file = file)
     }
 
-    fun updateScrollPosition(folderUUID: String, scrollPosition: Double) {
-        val index = content.folderViews.indexOfFirst { it.folderUUID == folderUUID }
-        if (index != -1) {
-            content.folderViews[index].scrollOffset = scrollPosition
-            //commitAction(FolderViewState.Action.alreadyUpdatedScrollPosition(folderUUID))
-        }
+    fun popFolder() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.POP_FOLDER)
     }
 
-    fun toggleEditing(folderUUID: String) {
-        val index = content.folderViews.indexOfFirst { it.folderUUID == folderUUID }
-        if (index != -1) {
-            content.folderViews[index].editing = !content.folderViews[index].editing
-            //commitAction(FolderViewState.Action.toggleEditing(folderUUID))
-        }
+    fun setPlaySelection(file: File) {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_PLAYER_VIEW, file = file)
     }
 
-    fun showCreateFolder(parentUUID: String) {
-        content.textAlert = TextAlertState(text = "", parentUUID = parentUUID, recordingUUID = null)
-        //commitAction(SplitViewState.Action.showTextAlert)
+    fun showCreateFolder() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_CREATE_FOLDER)
     }
 
-    fun showRecorder(parentUUID: String) {
-        content.recorderView = RecorderViewState(recordState = 0, parentUUID = parentUUID)
-        //commitAction(SplitViewState.Action.showRecordView)
+    fun showRecorder() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW)
     }
+
+    fun showSaveRecording() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
+    }
+
 
     fun dismissRecording() {
-        content.recorderView = null
+        //content.recorderView = null
         //commitAction(SplitViewState.Action.dismissRecordView)
     }
 
-    fun showSaveRecording(uuid: String, parentUUID: String) {
-        content.textAlert = TextAlertState(text = "", parentUUID = parentUUID, recordingUUID = uuid)
-        //commitAction(SplitViewState.Action.showTextAlert)
-    }
-
     fun dismissTextAlert() {
-        content.textAlert = null
+        //content.textAlert = null
         //commitAction(SplitViewState.Action.dismissTextAlert)
     }
 
     fun updateAlertText(text: String) {
-        content.textAlert?.text = text
+        //content.textAlert?.text = text
         //commitAction(TextAlertState.Action.updateText)
     }
 
     fun updatePlayState(playState: Int) {
-        content.playerView.playState = playState
+        //content.playerView.playState = playState
         //commitAction(PlayViewState.Action.updatePlayState, sideEffect: true)
     }
 
     fun updateRecordState(recordState: Int) {
-        content.recorderView?.recordState = recordState
+        //content.recorderView?.recordState = recordState
         //commitAction(RecordViewState.Action.updateRecordState, sideEffect: true)
     }
 
     fun togglePlay() {
-        if (content.playerView.playState != null) {
-            content.playerView.playState = 1   //playState.isPlaying = !playState.isPlaying
-            //commitAction(PlayViewState.Action.togglePlay)
-        }
+//        if (content.playerView.playState != null) {
+//            content.playerView.playState = 1   //playState.isPlaying = !playState.isPlaying
+//            //commitAction(PlayViewState.Action.togglePlay)
+//        }
     }
 
     fun changePlaybackPosition(position: Double) {
-        if (content.playerView.playState != null) {
-            val previousState = content.playerView.playState
-            //content.playerView.playState = PlayerState(isPlaying = previousState.isPlaying, progress = position, duration = previousState.duration)
-            //commitAction(PlayViewState.Action.changePlaybackPosition)
-        }
+//        if (content.playerView.playState != null) {
+//            val previousState = content.playerView.playState
+//            //content.playerView.playState = PlayerState(isPlaying = previousState.isPlaying, progress = position, duration = previousState.duration)
+//            //commitAction(PlayViewState.Action.changePlaybackPosition)
+//        }
     }
 
 }

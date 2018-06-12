@@ -1,6 +1,7 @@
 package com.madappgang.architecture.recorder.activities
 
 import android.app.AlertDialog
+import android.arch.lifecycle.Observer
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -16,30 +17,26 @@ import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.activities.RecorderActivity.Companion.RECORDER_REQUEST_CODE
 import com.madappgang.architecture.recorder.helpers.FileManager
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
+import com.madappgang.architecture.recorder.view_state_model.FolderViewState
 import kotlinx.android.synthetic.main.activity_folder.*
 import java.io.File
+
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private var toolbarButtonUse: Boolean = false
     private val fileManager = AppInstance.appInstance.fileManager
+    private val viewStateStore = AppInstance.appInstance.viewStateStore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder)
         setSupportActionBar(toolbar)
         toolbarButton.setOnClickListener {
-            if (toolbarButtonUse) {
-                viewAdapter.setNormalMode()
-                toolbarButton.text = getString(R.string.toolbar_button_normal)
-            } else {
-                viewAdapter.setRemoveMode()
-                toolbarButton.text = getString(R.string.toolbar_button_select)
-            }
-            toolbarButtonUse = !toolbarButtonUse
+            viewStateStore.toggleEditing(!currentViewState().editing)
         }
 
         viewManager = LinearLayoutManager(this)
@@ -51,6 +48,10 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
+            it?.let { handle(it) }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -73,24 +74,26 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onItemClick(file: File) {
         if (file.isDirectory) {
-            viewAdapter.setPathForAdapter(file.absolutePath)
-            label.text = file.name
+            pushFolder(file)
         } else {
-            onClickItem(file)
+            playRecord(file)
         }
     }
 
-    private fun onClickItem(file: File) {
-        PlayerActivity.start(this, file.absolutePath)
+    private fun pushFolder(file: File) {
+        viewStateStore.pushFolder(file)
+    }
+
+    private fun playRecord(file: File) {
+        viewStateStore.setPlaySelection(file)
     }
 
     private fun onClickCreateFolder() {
-        showNewNameDialog(true)
+        viewStateStore.showCreateFolder()
     }
 
     private fun onClickCreateRecord() {
-        val intent = Intent(this, RecorderActivity::class.java)
-        startActivityForResult(intent, RECORDER_REQUEST_CODE)
+        viewStateStore.showRecorder()
     }
 
     private fun onSaveFolder(name: String) {
@@ -111,15 +114,14 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onBackPressed() {
         if (viewAdapter.currentPath != mainDirectory) {
-            viewAdapter.setLastPathForAdapter()
-            label.text = File(viewAdapter.currentPath).name
+            viewStateStore.popFolder()
         } else {
             super.onBackPressed()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) showNewNameDialog(false)
+        if (resultCode == RESULT_OK) viewStateStore.showSaveRecording()
     }
 
     private fun showNewNameDialog(isFolderDialog: Boolean) {
@@ -139,5 +141,43 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
             //pass
         })
         dialogBuilder.create().show()
+    }
+
+    private fun currentViewState(): FolderViewState = viewStateStore.folderViewState.value!!
+
+    private fun handle(viewState: FolderViewState) {
+        when (viewState.action) {
+            FolderViewState.Action.SHOW_CREATE_FOLDER -> {
+                showNewNameDialog(true)
+            }
+            FolderViewState.Action.SHOW_SAVE_RECORDING -> {
+                showNewNameDialog(false)
+            }
+            FolderViewState.Action.SHOW_RECORD_VIEW -> {
+                val intent = Intent(this, RecorderActivity::class.java)
+                startActivityForResult(intent, RECORDER_REQUEST_CODE)
+            }
+            FolderViewState.Action.SHOW_PLAYER_VIEW -> {
+                PlayerActivity.start(this, currentViewState().file!!.absolutePath)
+            }
+            FolderViewState.Action.TOGGLE_EDITING -> {
+                if (currentViewState().editing) {
+                    viewAdapter.setRemoveMode()
+                    toolbarButton.text = getString(R.string.toolbar_button_select)
+                } else {
+                    viewAdapter.setNormalMode()
+                    toolbarButton.text = getString(R.string.toolbar_button_normal)
+                }
+            }
+            FolderViewState.Action.PUSH_FOLDER -> {
+                val file = currentViewState().file!!
+                viewAdapter.setPathForAdapter(file.absolutePath)
+                label.text = file.name
+            }
+            FolderViewState.Action.POP_FOLDER -> {
+                viewAdapter.setLastPathForAdapter()
+                label.text = File(viewAdapter.currentPath).name
+            }
+        }
     }
 }
