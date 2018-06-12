@@ -7,6 +7,7 @@
 package com.madappgang.recordings.network
 
 import com.madappgang.recordings.core.Id
+import java.io.File
 
 class Network internal constructor(
         private val endpoint: Endpoint = Endpoint.Staging,
@@ -32,6 +33,10 @@ class Network internal constructor(
     }
 
     fun <T> removeEntity(entity: T): Result<Unit> {
+        TODO("not implemented")
+    }
+
+    fun downloadFile(url: String, destinition: File): Result<Unit> {
         TODO("not implemented")
     }
 }

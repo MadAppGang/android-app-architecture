@@ -12,7 +12,12 @@ class App : Application() {
 
     companion object {
 
-        val dependencyContainer by lazy { DependencyContainer() }
+        lateinit var dependencyContainer : DependencyContainer
 
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        dependencyContainer = DependencyContainer(getExternalFilesDir(null))
     }
 }

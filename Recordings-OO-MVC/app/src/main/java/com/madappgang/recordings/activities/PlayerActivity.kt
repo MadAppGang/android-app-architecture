@@ -60,10 +60,8 @@ class PlayerActivity : AppCompatActivity() {
     private fun initPlayerCallback() {
         player.onPlay = { audioPlayer.prepare(it.absolutePath) }
 
-        audioPlayer.onPrepared = {
-            initPlayerProgressBar()
-            startAudioPlaying()
-        }
+        audioPlayer.onPrepared = { startAudioPlaying() }
+
         audioPlayer.onCompleted = {
             playerState = PlayerState.COMPLETED
             updateUiJob?.cancel()
@@ -165,7 +163,12 @@ class PlayerActivity : AppCompatActivity() {
 
         startPausePlayer.setOnClickListener {
             when (playerState) {
-                PlayerState.NOT_STARTED -> player.play(track)
+                PlayerState.NOT_STARTED -> {
+                    playerState = PlayerState.PREPARING
+                    initPlayerProgressBar()
+                    player.play(track)
+                }
+
                 PlayerState.PLAYING -> pauseAudioPlaying()
                 else -> startAudioPlaying()
             }
@@ -183,6 +186,7 @@ class PlayerActivity : AppCompatActivity() {
         updateUiJob = createUpdateUiJob()
         audioPlayer.start()
         playerState = PlayerState.PLAYING
+        initPlayerProgressBar()
     }
 
     private fun createUpdateUiJob() = launch(uiContext) {
