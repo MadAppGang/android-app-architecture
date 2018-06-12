@@ -1,10 +1,13 @@
 package com.madappgang.architecture.recorder.activities
 
+import android.Manifest
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -29,6 +32,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val fileManager = AppInstance.appInstance.fileManager
     private val viewStateStore = AppInstance.appInstance.viewStateStore
+    private val REQUEST_PERMISSION = 200
+    private val permissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private var permissionAccepted = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,20 +44,33 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         toolbarButton.setOnClickListener {
             viewStateStore.toggleEditing(!currentViewState().editing)
         }
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = FolderAdapter(mainDirectory)
         viewAdapter.setupItemClickListener(this)
+    }
 
-        recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_PERMISSION -> {
+                permissionAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+            }
         }
+        if (!permissionAccepted) {
+            finish()
+        } else {
+            recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
+                setHasFixedSize(true)
+                layoutManager = viewManager
+                adapter = viewAdapter
+            }
 
-        viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
-            it?.let { handle(it) }
-        })
+            viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
+                it?.let { handle(it) }
+            })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
