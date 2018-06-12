@@ -60,18 +60,6 @@ class ViewStateStore {
         recorderViewState.value = recorderView.copy(action = RecorderViewState.Action.DISMISS_RECORDING)
     }
 
-    fun updatePlayState(playState: Int) {
-        //content.playerView.playState = playState
-        //commitAction(PlayViewState.Action.updatePlayState, sideEffect: true)
-    }
-
-    fun togglePlay() {
-//        if (content.playerView.playState != null) {
-//            content.playerView.playState = 1   //playState.isPlaying = !playState.isPlaying
-//            //commitAction(PlayViewState.Action.togglePlay)
-//        }
-    }
-
     fun updateOriginalFilePath(originalFilePath: String) {
         playerView = playerView.copy(originalFilePath = originalFilePath)
         playerViewState.value = playerView
