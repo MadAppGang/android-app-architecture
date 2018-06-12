@@ -6,7 +6,7 @@ import java.io.File
 
 class ViewStateStore {
 
-    private var folderView = FolderViewState(folderUUID = "")
+    private var folderView = FolderViewState()
     private var playerView = PlayerViewState(uuid = null)
     private var recorderView = RecorderViewState()
 
@@ -30,8 +30,8 @@ class ViewStateStore {
         folderViewState.value = folderView
     }
 
-    fun popFolder() {
-        folderView = folderView.copy(action = FolderViewState.Action.POP_FOLDER)
+    fun popFolder(file: File) {
+        folderView = folderView.copy(action = FolderViewState.Action.POP_FOLDER, file = file)
         folderViewState.value = folderView
     }
 
@@ -41,12 +41,12 @@ class ViewStateStore {
     }
 
     fun showCreateFolder() {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_CREATE_FOLDER, dialogAction = FolderViewState.Action.SHOW_CREATE_FOLDER)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_ALERT, alertType = FolderViewState.AlertType.CREATE_FOLDER)
         folderViewState.value = folderView
     }
 
     fun showRecorder() {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW, dialogAction = FolderViewState.Action.SHOW_RECORD_VIEW)
+        folderView = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW, alertType = FolderViewState.AlertType.SAVE_RECORDING)
         folderViewState.value = folderView
     }
 
@@ -56,12 +56,7 @@ class ViewStateStore {
     }
 
     fun dismissAlert() {
-        folderView = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT, dialogAction = FolderViewState.Action.DISMISS_ALERT)
-        folderViewState.value = folderView
-    }
-
-    fun resumeState() {
-        folderView = folderView.copy(action = FolderViewState.Action.RESUME_STATE)
+        folderView = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT, alertType = FolderViewState.AlertType.NO_ALERT)
         folderViewState.value = folderView
     }
 

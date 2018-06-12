@@ -3,18 +3,22 @@ package com.madappgang.architecture.recorder.view_state_model
 import java.io.File
 
 
-data class FolderViewState(val folderUUID: String, var editing: Boolean = false, var scrollOffset: Double = 0.0,
-                           var action: Action? = null, var file: File? = null, var dialogAction: Action = Action.DISMISS_ALERT) {
+data class FolderViewState(var editing: Boolean = false, var file: File? = null, var action: Action? = null, var alertType: AlertType = AlertType.NO_ALERT) {
     enum class Action {
         TOGGLE_EDITING,
-        SHOW_CREATE_FOLDER,
         SHOW_RECORD_VIEW,
         SHOW_PLAYER_VIEW,
         SHOW_SAVE_RECORDING,
         PUSH_FOLDER,
         POP_FOLDER,
-        DISMISS_ALERT,
-        RESUME_STATE
+        SHOW_ALERT,
+        DISMISS_ALERT
+    }
+
+    enum class AlertType {
+        NO_ALERT,
+        CREATE_FOLDER,
+        SAVE_RECORDING
     }
 }
 

@@ -75,11 +75,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
             it?.let { handle(it) }
         })
 
-        if (currentViewState().file != null) {
-            viewStateStore.resumeState()
-        } else {
-            currentViewState().file = File(mainDirectory)
-        }
+        restoreState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -125,7 +121,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onSaveFolder(name: String) {
-        fileManager.onSaveFolder(viewAdapter.currentPath, name, object : FileManager.FileManagerCallback {
+        fileManager.onSaveFolder(viewAdapter.getCurrentPath(), name, object : FileManager.FileManagerCallback {
             override fun onResult() {
                 viewAdapter.updateListFiles()
             }
@@ -133,7 +129,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onSaveRecord(name: String) {
-        fileManager.onSaveRecord(viewAdapter.currentPath, name, object : FileManager.FileManagerCallback {
+        fileManager.onSaveRecord(viewAdapter.getCurrentPath(), name, object : FileManager.FileManagerCallback {
             override fun onResult() {
                 viewAdapter.updateListFiles()
             }
@@ -141,8 +137,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     override fun onBackPressed() {
-        if (viewAdapter.currentPath != mainDirectory) {
-            viewStateStore.popFolder()
+        if (viewAdapter.getCurrentPath() != mainDirectory) {
+            val prevPath = viewAdapter.prevPath()
+            viewStateStore.popFolder(File(prevPath))
         } else {
             super.onBackPressed()
         }
@@ -179,11 +176,12 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     private fun handle(viewState: FolderViewState) {
         when (viewState.action) {
-            FolderViewState.Action.SHOW_CREATE_FOLDER -> {
-                showNewNameDialog(true)
-            }
-            FolderViewState.Action.SHOW_SAVE_RECORDING -> {
-                showNewNameDialog(false)
+            FolderViewState.Action.SHOW_ALERT -> {
+                if (currentViewState().alertType == FolderViewState.AlertType.CREATE_FOLDER) {
+                    showNewNameDialog(true)
+                } else if (currentViewState().alertType == FolderViewState.AlertType.SAVE_RECORDING) {
+                    showNewNameDialog(false)
+                }
             }
             FolderViewState.Action.SHOW_RECORD_VIEW -> {
                 val intent = Intent(this, RecorderActivity::class.java)
@@ -199,17 +197,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
                 pushFolder()
             }
             FolderViewState.Action.POP_FOLDER -> {
-                viewAdapter.setLastPathForAdapter()
-                label.text = File(viewAdapter.currentPath).name
-            }
-            FolderViewState.Action.RESUME_STATE -> {
-                pushFolder()
-                toggleEditing()
-                /*if (currentViewState().dialogAction == FolderViewState.Action.SHOW_CREATE_FOLDER) {
-                    showNewNameDialog(true)
-                } else if (currentViewState().dialogAction == FolderViewState.Action.SHOW_SAVE_RECORDING) {
-                    showNewNameDialog(false)
-                }*/
+                viewAdapter.setPathForAdapter(currentViewState().file!!.absolutePath)
+                label.text = File(viewAdapter.getCurrentPath()).name
             }
             else -> {
             }
@@ -217,7 +206,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun pushFolder() {
-        val file = currentViewState().file!!
+        val file = currentViewState().file ?: File(mainDirectory)
         viewAdapter.setPathForAdapter(file.absolutePath)
         label.text = file.name
     }
@@ -229,6 +218,17 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         } else {
             viewAdapter.setNormalMode()
             toolbarButton.text = getString(R.string.toolbar_button_normal)
+        }
+    }
+
+    private fun restoreState() {
+        pushFolder()
+        toggleEditing()
+
+        if (currentViewState().alertType == FolderViewState.AlertType.CREATE_FOLDER) {
+            showNewNameDialog(true)
+        } else if (currentViewState().alertType == FolderViewState.AlertType.SAVE_RECORDING) {
+            showNewNameDialog(false)
         }
     }
 }

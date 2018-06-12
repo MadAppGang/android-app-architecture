@@ -9,13 +9,14 @@ import android.widget.TextView
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
 import java.io.File
+import java.io.File.separator
 
 
-class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
+class FolderAdapter(var basePath: String) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
 
     private lateinit var clickListener: ItemClickListener
     private var dataSet: MutableList<File> = mutableListOf()
-    private var pathLength: MutableList<Int> = mutableListOf()
+    private var currentPath: String = ""
     private var isNormalMode: Boolean = true
     private val fileManager = AppInstance.appInstance.fileManager
 
@@ -55,15 +56,17 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
     }
 
     fun setPathForAdapter(path: String) {
-        pathLength.add(currentPath.length)
         currentPath = path
         updateListFiles()
     }
 
-    fun setLastPathForAdapter() {
-        currentPath = currentPath.substring(0, pathLength.last())
-        pathLength.remove(pathLength.size - 1)
-        updateListFiles()
+    fun prevPath() : String {
+        if (currentPath == basePath) return basePath
+
+        var folders: MutableList<String> = currentPath.split("/").map { it.trim() }.toMutableList()
+        folders.removeAt(folders.size - 1)
+
+        return folders.joinToString("/")
     }
 
     fun updateListFiles() {
@@ -71,6 +74,8 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
         dataSet = fileManager.getListFiles(currentPath)
         notifyDataSetChanged()
     }
+
+    fun getCurrentPath() = currentPath
 
     fun setNormalMode() {
         isNormalMode = true
