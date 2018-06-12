@@ -25,4 +25,7 @@
     <string name="RecorderActivity_cancel">Cancel</string>
     <string name="RecorderActivity_save">Save</string>
 
+    <string name="PlayerActivity_start">Start</string>
+    <string name="PlayerActivity_pause">Pause</string>
+
 </resources>
