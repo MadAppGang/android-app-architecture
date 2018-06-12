@@ -7,8 +7,8 @@ import java.io.File
 class ViewStateStore {
 
     private var folderView = FolderViewState(folderUUID = "")
-    var playerView = PlayerViewState(uuid = null)
-    private var recorderView = RecorderViewState(recordState = 0, parentUUID = "")
+    private var playerView = PlayerViewState(uuid = null)
+    private var recorderView = RecorderViewState()
 
     val folderViewState: MutableLiveData<FolderViewState> = MutableLiveData()
     val playerViewState: MutableLiveData<PlayerViewState> = MutableLiveData()
@@ -48,20 +48,16 @@ class ViewStateStore {
         folderViewState.value = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
     }
 
+    fun dismissAlert() {
+        folderViewState.value = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT)
+    }
+
+    fun updateRecordDuration(recordDuration: Long) {
+        recorderViewState.value = recorderView.copy(action = RecorderViewState.Action.UPDATE_RECORD_DURATION, recordDuration = recordDuration)
+    }
 
     fun dismissRecording() {
-        //content.recorderView = null
-        //commitAction(SplitViewState.Action.dismissRecordView)
-    }
-
-    fun dismissTextAlert() {
-        //content.textAlert = null
-        //commitAction(SplitViewState.Action.dismissTextAlert)
-    }
-
-    fun updateAlertText(text: String) {
-        //content.textAlert?.text = text
-        //commitAction(TextAlertState.Action.updateText)
+        recorderViewState.value = recorderView.copy(action = RecorderViewState.Action.DISMISS_RECORDING)
     }
 
     fun updateRecordState(recordState: Int) {
