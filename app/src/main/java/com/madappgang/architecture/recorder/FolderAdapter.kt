@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.madappgang.architecture.recorder.helpers.FileManager
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
 import java.io.File
@@ -18,7 +17,7 @@ class FolderAdapter(var currentPath: String) : RecyclerView.Adapter<FolderAdapte
     private var dataSet: MutableList<File> = mutableListOf()
     private var pathLength: MutableList<Int> = mutableListOf()
     private var isNormalMode: Boolean = true
-    private val fileManager = FileManager()
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)

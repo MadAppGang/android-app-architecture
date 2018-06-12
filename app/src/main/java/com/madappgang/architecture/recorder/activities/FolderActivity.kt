@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.activities.RecorderActivity.Companion.RECORDER_REQUEST_CODE
@@ -24,7 +25,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
     private var toolbarButtonUse: Boolean = false
-    private val fileManager = FileManager()
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

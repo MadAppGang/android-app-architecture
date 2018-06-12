@@ -11,8 +11,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.helpers.FileManager
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import com.madappgang.architecture.recorder.helpers.Player
 import kotlinx.android.synthetic.main.activity_player.*
@@ -26,7 +26,7 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     private lateinit var filePath: String
     private lateinit var fileName: String
     private lateinit var originalName: String
-    private val fileManager = FileManager()
+    private val fileManager = AppInstance.appInstance.fileManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
