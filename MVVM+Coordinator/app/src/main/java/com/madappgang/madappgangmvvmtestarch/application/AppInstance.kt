@@ -19,18 +19,19 @@ import org.kodein.di.generic.provider
 /**
  * Created by Serhii Chaban sc@madappgang.com on 30.05.18.
  */
-val coroutines by lazy {
-    Kodein.Module {
-        bind<CoroutineDispatcher>("uiContext") with provider { UI }
-        bind<CoroutineDispatcher>("bgContext") with provider { CommonPool }
-    }
-}
-val providers = Kodein.Module {
-    bind<RecordingRepository>() with provider { RecordingRepositoryImpl() }
-}
+
 
 class AppInstance : Application(), KodeinAware {
-    override val kodein: Kodein = Kodein.lazy {
+    val coroutines by lazy {
+        Kodein.Module {
+            bind<CoroutineDispatcher>("uiContext") with provider { UI }
+            bind<CoroutineDispatcher>("bgContext") with provider { CommonPool }
+        }
+    }
+    val providers = Kodein.Module {
+        bind<RecordingRepository>() with provider { RecordingRepositoryImpl() }
+    }
+    override val kodein: Kodein =  Kodein.lazy(allowSilentOverride = true) {
         import(androidModule(this@AppInstance))
         import(coroutines)
         import(providers)

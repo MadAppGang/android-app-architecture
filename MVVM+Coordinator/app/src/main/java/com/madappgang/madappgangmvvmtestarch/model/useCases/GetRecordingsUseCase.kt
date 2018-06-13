@@ -15,7 +15,7 @@ class GetRecordingsUseCase(private val recordingRepository: RecordingRepository)
 
     operator fun invoke(folderPath: String): Result<List<SourceFile>, Throwable> {
         return try {
-            val value = recordingRepository[AllData(folderPath)]
+            val value = recordingRepository.get(AllData(folderPath))
             Result.Success(value)
         } catch (e: Throwable) {
             Result.Error(e)

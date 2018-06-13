@@ -8,9 +8,8 @@ import com.madappgang.madappgangmvvmtestarch.model.models.SourceFile
 interface RecordingRepository {
     sealed class DataPortion(val folder: String) {
         class AllData(folder: String) : DataPortion(folder)
-        class SingleFile(folder: String, val id: String) : DataPortion(folder)
-        //class Page(val offset: Int, val limit: Int) : DataPortion()
     }
 
-    operator fun get(portion: DataPortion): List<SourceFile>
+    fun get(portion: DataPortion): List<SourceFile>
+    fun get(folder: String, id: String): SourceFile
 }
