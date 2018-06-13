@@ -34,7 +34,7 @@ class Recorder {
         val outputFileName = getOutputFileName()
         mergeAudioFiles(sourceFiles, outputFileName)
         removeParts(sourceFiles)
-        return Track(url = outputFileName)
+        return Track(path = outputFileName)
     }
 
     private fun getOutputFileName(): String {

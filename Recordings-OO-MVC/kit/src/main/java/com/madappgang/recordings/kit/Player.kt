@@ -33,7 +33,7 @@ class Player(
         val destination = getTempFile(track)
 
         loadFileJob = async(bgContext) {
-            val result = network.downloadFile(track.url, destination)
+            val result = network.downloadFile(track.path, destination)
 
             when (result) {
                 is Result.Success -> onPlay?.invoke(destination)

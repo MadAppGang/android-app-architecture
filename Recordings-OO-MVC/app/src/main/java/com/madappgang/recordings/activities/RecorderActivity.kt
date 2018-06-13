@@ -284,7 +284,7 @@ class RecorderActivity :
     }
 
     private fun removeTrack() {
-        val tmpTrack = File(track.url)
+        val tmpTrack = File(track.path)
         if (tmpTrack.exists()) {
             tmpTrack.delete()
         }

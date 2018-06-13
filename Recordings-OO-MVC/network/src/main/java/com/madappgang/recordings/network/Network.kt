@@ -106,9 +106,9 @@ class Network internal constructor(
         }
     }
 
-    fun downloadFile(url: String, destination: File): Result<Unit> {
+    fun downloadFile(path: String, destination: File): Result<Unit> {
         val request = try {
-            requestFactory.makeForDownload(url)
+            requestFactory.makeForDownload(path)
         } catch (e: Throwable) {
             return Result.Failure(e)
         }

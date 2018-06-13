@@ -14,7 +14,7 @@ data class Track(
         var id: Id? = null,
         var folderId: Id? = null,
         override var name: String = "",
-        var url: String = ""
+        var path: String = ""
 ) : Foldable, Parcelable {
 
     override fun equals(other: Any?): Boolean {

@@ -47,8 +47,8 @@ internal class RequestFactory(
         else -> throw IllegalArgumentException()
     }
 
-    fun makeForDownload(url: String) =
-        Request(url, RequestMethod.GET)
+    fun makeForDownload(path: String) =
+        Request(buildUrl(endpoint, "api/download/$path"), RequestMethod.GET)
 
     private fun makeForFetchingFoldable(id: Id) =
         Request(buildUrl(endpoint, "api/foldable/${id.id}"), RequestMethod.GET)
