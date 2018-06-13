@@ -1,15 +1,15 @@
 package com.madappgang.architecture.recorder.helpers
 
-import android.content.Context
 import android.media.MediaRecorder
-import android.os.Environment
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
-import java.io.File
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
+import com.madappgang.architecture.recorder.helpers.FileManager.Companion.testRecordName
 
 
-class Recorder(val context: Context, callback: RecordTimeUpdate) {
+class Recorder {
 
     interface RecordTimeUpdate {
         fun onTimeUpdate(time: Long)
@@ -22,6 +22,8 @@ class Recorder(val context: Context, callback: RecordTimeUpdate) {
     private var startTime = 0L
     private val delay = 100L
     private var currentTime = 0L
+    private var isStartRecord: Boolean = false
+    private lateinit var callback: RecordTimeUpdate
 
     private val updateTimerThread = object : Runnable {
         override fun run() {
@@ -31,41 +33,38 @@ class Recorder(val context: Context, callback: RecordTimeUpdate) {
         }
     }
 
-    fun init() {
+    fun init(callback: RecordTimeUpdate) {
         try {
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            setOutputFile()
-            recorder.prepare()
-            onStartRecord()
+            this.callback = callback
+            if (!isStartRecord) {
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                setOutputFile()
+                recorder.prepare()
+                onStartRecord()
+            }
         } catch (e: Throwable) {
-            Log.e(LOG_TAG, "prepare() failed")
+            Log.e(LOG_TAG, "init() failed")
         }
     }
 
     private fun setOutputFile() {
-        // Record to the external cache directory for visibility
-        File(timeDirectory).mkdirs()
-        fileName = timeDirectory + "/$recordName$recordFormat"
+        fileName = mainDirectory + "/$testRecordName$recordFormat"
         recorder.setOutputFile(fileName)
     }
 
-    fun onStartRecord() {
+    private fun onStartRecord() {
+        isStartRecord = true
         recorder.start()
         startTime = SystemClock.uptimeMillis()
         handler.postDelayed(updateTimerThread, 0)
     }
 
     fun onStopRecord() {
-        recorder.stop()
-        recorder.release()
-    }
-
-    companion object {
-        val mainDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/Records"
-        val timeDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath + "/Records/cache"
-        val recordName = "audioRecord"
-        val recordFormat = ".3gp"
+        if (isStartRecord) recorder.stop()
+        isStartRecord = false
+        handler.removeCallbacks(updateTimerThread)
+        callback.onTimeUpdate(0)
     }
 }

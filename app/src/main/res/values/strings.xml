@@ -15,4 +15,6 @@
     <string name="dlg_recording_name_title">Save recording</string>
     <string name="dlg_folder_name_subtitle">enter folder name below</string>
     <string name="dlg_recording_name_subtitle">enter name of recording below</string>
+    <string name="toolbar_button_normal">Edit</string>
+    <string name="toolbar_button_select">Done</string>
 </resources>
