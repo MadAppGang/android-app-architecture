@@ -16,7 +16,6 @@ import android.widget.EditText
 import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.activities.RecorderActivity.Companion.RECORDER_REQUEST_CODE
 import com.madappgang.architecture.recorder.helpers.FileManager
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
 import com.madappgang.architecture.recorder.view_state_model.FolderViewState
@@ -32,7 +31,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private val fileManager = AppInstance.appInstance.fileManager
     private val viewStateStore = AppInstance.appInstance.viewStateStore
     private val REQUEST_PERMISSION = 200
-    private val permissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private val permissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
     private var permissionAccepted = false
 
 
@@ -109,7 +108,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun playRecord(file: File) {
-        viewStateStore.setPlaySelection(file)
+        PlayerActivity.start(this, file.absolutePath)
     }
 
     private fun onClickCreateFolder() {
@@ -117,7 +116,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun onClickCreateRecord() {
-        viewStateStore.showRecorder()
+        val intent = Intent(this, RecorderActivity::class.java)
+        startActivityForResult(intent, RecorderActivity.RECORDER_REQUEST_CODE)
     }
 
     private fun onSaveFolder(name: String) {
@@ -146,7 +146,11 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) viewStateStore.showSaveRecording()
+        if (resultCode == RESULT_OK) {
+            viewStateStore.showSaveRecording()
+        } else {
+            AppInstance.appInstance.recorder.onStopRecord()
+        }
     }
 
     private fun showNewNameDialog(isFolderDialog: Boolean) {
@@ -183,13 +187,6 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
                     showNewNameDialog(false)
                 }
             }
-            FolderViewState.Action.SHOW_RECORD_VIEW -> {
-                val intent = Intent(this, RecorderActivity::class.java)
-                startActivityForResult(intent, RECORDER_REQUEST_CODE)
-            }
-            FolderViewState.Action.SHOW_PLAYER_VIEW -> {
-                PlayerActivity.start(this, currentViewState().file!!.absolutePath)
-            }
             FolderViewState.Action.TOGGLE_EDITING -> {
                 toggleEditing()
             }
@@ -222,13 +219,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun restoreState() {
-        pushFolder()
+        val file = currentViewState().file ?: File(mainDirectory)
+        viewAdapter.setCurrentPath(file.absolutePath)
+        label.text = file.name
         toggleEditing()
-
-        if (currentViewState().alertType == FolderViewState.AlertType.CREATE_FOLDER) {
-            showNewNameDialog(true)
-        } else if (currentViewState().alertType == FolderViewState.AlertType.SAVE_RECORDING) {
-            showNewNameDialog(false)
-        }
     }
 }

@@ -2,6 +2,7 @@ package com.madappgang.architecture.recorder
 
 import android.app.Application
 import com.madappgang.architecture.recorder.helpers.FileManager
+import com.madappgang.architecture.recorder.helpers.Recorder
 import com.madappgang.architecture.recorder.view_state_model.ViewStateStore
 
 /**
@@ -14,4 +15,5 @@ class AppInstance : Application() {
 
     val fileManager by lazy { FileManager() }
     val viewStateStore by lazy { ViewStateStore() }
+    val recorder by lazy { Recorder() }
 }
