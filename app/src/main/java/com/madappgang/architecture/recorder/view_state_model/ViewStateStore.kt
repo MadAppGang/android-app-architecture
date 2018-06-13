@@ -6,104 +6,61 @@ import java.io.File
 
 class ViewStateStore {
 
-    private var folderView = FolderViewState()
-    private var playerView = PlayerViewState(uuid = null)
-    private var recorderView = RecorderViewState()
-
     val folderViewState: MutableLiveData<FolderViewState> = MutableLiveData()
     val playerViewState: MutableLiveData<PlayerViewState> = MutableLiveData()
     val recorderViewState: MutableLiveData<RecorderViewState> = MutableLiveData()
 
     init {
-        folderViewState.value = folderView
-        playerViewState.value = playerView
-        recorderViewState.value = recorderView
+        folderViewState.value = FolderViewState()
+        playerViewState.value = PlayerViewState()
+        recorderViewState.value = RecorderViewState()
     }
 
     fun toggleEditing(isEditing: Boolean) {
-        folderView = folderView.copy(action = FolderViewState.Action.TOGGLE_EDITING, editing = isEditing)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.TOGGLE_EDITING, editing = isEditing)
     }
 
     fun pushFolder(file: File) {
-        folderView = folderView.copy(action = FolderViewState.Action.PUSH_FOLDER, file = file)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.PUSH_FOLDER, file = file)
     }
 
     fun popFolder(file: File) {
-        folderView = folderView.copy(action = FolderViewState.Action.POP_FOLDER, file = file)
-        folderViewState.value = folderView
-    }
-
-    fun setPlaySelection(file: File) {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_PLAYER_VIEW, file = file)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.POP_FOLDER, file = file)
     }
 
     fun showCreateFolder() {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_ALERT, alertType = FolderViewState.AlertType.CREATE_FOLDER)
-        folderViewState.value = folderView
-    }
-
-    fun showRecorder() {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_RECORD_VIEW, alertType = FolderViewState.AlertType.SAVE_RECORDING)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.SHOW_ALERT, alertType = FolderViewState.AlertType.CREATE_FOLDER)
     }
 
     fun showSaveRecording() {
-        folderView = folderView.copy(action = FolderViewState.Action.SHOW_SAVE_RECORDING)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.SHOW_ALERT, alertType = FolderViewState.AlertType.SAVE_RECORDING)
     }
 
     fun dismissAlert() {
-        folderView = folderView.copy(action = FolderViewState.Action.DISMISS_ALERT, alertType = FolderViewState.AlertType.NO_ALERT)
-        folderViewState.value = folderView
+        folderViewState.value = folderViewState.value!!.copy(action = FolderViewState.Action.DISMISS_ALERT, alertType = FolderViewState.AlertType.NO_ALERT)
     }
 
     fun updateRecordDuration(recordDuration: Long) {
-        recorderView = recorderView.copy(action = RecorderViewState.Action.UPDATE_RECORD_DURATION, recordDuration = recordDuration)
-        recorderViewState.value = recorderView
-    }
-
-    fun dismissRecording() {
-        recorderView = recorderView.copy(action = RecorderViewState.Action.DISMISS_RECORDING)
-        recorderViewState.value = recorderView
+        recorderViewState.value = recorderViewState.value!!.copy(action = RecorderViewState.Action.UPDATE_RECORD_DURATION, recordDuration = recordDuration)
     }
 
     fun updateOriginalFilePath(originalFilePath: String) {
-        playerView = playerView.copy(originalFilePath = originalFilePath)
-        playerViewState.value = playerView
+        playerViewState.value = playerViewState.value!!.copy(originalFilePath = originalFilePath)
     }
 
     fun updateFilePath(filePath: String) {
-        playerView = playerView.copy(filePath = filePath)
-        playerViewState.value = playerView
+        playerViewState.value = playerViewState.value!!.copy(filePath = filePath)
     }
 
     fun updatePlayState(playState: PlayerViewState.PlayerState) {
-        playerView = playerView.copy(action = PlayerViewState.Action.UPDATE_PLAY_STATE, playerState = playState)
-        playerViewState.value = playerView
-    }
-
-    fun playerResumePlay(position: Int) {
-        playerView = playerView.copy(action = PlayerViewState.Action.RESUME_PLAYING, progress = position)
-        playerViewState.value = playerView
+        playerViewState.value = playerViewState.value!!.copy(action = PlayerViewState.Action.UPDATE_PLAY_STATE, playerState = playState)
     }
 
     fun changePlaybackPosition(position: Int) {
-        playerView = playerView.copy(action = PlayerViewState.Action.CHANGE_PLAYBACK_POSITION, progress = position)
-        playerViewState.value = playerView
+        playerViewState.value = playerViewState.value!!.copy(action = PlayerViewState.Action.CHANGE_PLAYBACK_POSITION, progress = position)
     }
-
-    fun getPlayerProgress(): Int = playerView.progress.let { it } ?: 0
 
     fun playerSeekTo(position: Int) {
-        playerView = playerView.copy(action = PlayerViewState.Action.PLAYER_SEEK_TO, progress = position)
-        playerViewState.value = playerView
+        playerViewState.value = playerViewState.value!!.copy(action = PlayerViewState.Action.PLAYER_SEEK_TO, progress = position)
     }
-
-    fun getPlayState(): PlayerViewState.PlayerState? = playerView.playerState
-    fun getPlayerFilePath(): String = playerView.filePath
-    fun getPlayerStartFilePath(): String = playerView.originalFilePath
-
 }

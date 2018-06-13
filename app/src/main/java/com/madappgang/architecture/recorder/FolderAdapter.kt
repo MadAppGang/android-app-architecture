@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
 import java.io.File
-import java.io.File.separator
 
 
 class FolderAdapter(var basePath: String) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
@@ -60,7 +59,7 @@ class FolderAdapter(var basePath: String) : RecyclerView.Adapter<FolderAdapter.V
         updateListFiles()
     }
 
-    fun prevPath() : String {
+    fun prevPath(): String {
         if (currentPath == basePath) return basePath
 
         var folders: MutableList<String> = currentPath.split("/").map { it.trim() }.toMutableList()
@@ -76,6 +75,9 @@ class FolderAdapter(var basePath: String) : RecyclerView.Adapter<FolderAdapter.V
     }
 
     fun getCurrentPath() = currentPath
+    fun setCurrentPath(path: String) {
+        currentPath = path
+    }
 
     fun setNormalMode() {
         isNormalMode = true

@@ -43,11 +43,7 @@ class Player(var fileName: String, callback: PlayerCallback) {
         player.seekTo(time)
     }
 
-    fun stop() {
-        player.stop()
-    }
-
-    fun destroy() {
+    fun release() {
         player.release()
     }
 }

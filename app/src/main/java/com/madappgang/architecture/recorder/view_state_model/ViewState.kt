@@ -7,7 +7,6 @@ data class FolderViewState(var editing: Boolean = false, var file: File? = null,
     enum class Action {
         TOGGLE_EDITING,
         SHOW_RECORD_VIEW,
-        SHOW_PLAYER_VIEW,
         SHOW_SAVE_RECORDING,
         PUSH_FOLDER,
         POP_FOLDER,
@@ -29,11 +28,10 @@ data class RecorderViewState(val recordDuration: Long = 0, val action: RecorderV
     }
 }
 
-data class PlayerViewState(val uuid: String?, var originalFilePath: String = "", var filePath: String = "",
+data class PlayerViewState(val uuid: String? = null, var originalFilePath: String = "", var filePath: String = "",
                            val action: Action? = null, var progress: Int? = null, var playerState: PlayerState? = null) {
     enum class Action {
         UPDATE_PLAY_STATE,
-        RESUME_PLAYING,
         CHANGE_PLAYBACK_POSITION,
         UPDATE_FILE_NAME,
         PLAYER_SEEK_TO

@@ -38,19 +38,17 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         setContentView(R.layout.activity_player)
         setSupportActionBar(playerToolbar)
 
-        viewStateStore.playerViewState.observe(this, Observer<PlayerViewState> {
-            it?.let { handle(it) }
-        })
-
         val path = intent.getStringExtra(FILE_PATH)
-        val resumePlay = viewStateStore.getPlayerStartFilePath().isNotEmpty()
-                && viewStateStore.getPlayerFilePath().isNotEmpty()
-                && path == viewStateStore.getPlayerStartFilePath()
+        val resumePlay = currentViewState().originalFilePath.isNotEmpty()
+                && currentViewState().filePath.isNotEmpty()
+                && path == currentViewState().originalFilePath
         filePath = if (resumePlay) {
-            viewStateStore.getPlayerFilePath()
+            currentViewState().filePath
         } else {
             viewStateStore.updateFilePath(path)
             viewStateStore.updateOriginalFilePath(path)
+            playButton.text = getString(R.string.player_button_play)
+            viewStateStore.changePlaybackPosition(0)
             path
         }
 
@@ -64,14 +62,20 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         editRecordName.addTextChangedListener(this)
         seekBar.setOnSeekBarChangeListener(this)
 
-        if (viewStateStore.getPlayState() != STOP && resumePlay) {
-            if (viewStateStore.getPlayState() == PLAY) {
-                viewStateStore.playerResumePlay(viewStateStore.getPlayerProgress())
+        if (resumePlay && currentViewState().playerState != null && currentViewState().playerState != STOP) {
+            seekToPosition(currentViewState().progress.let { it } ?: 0)
+            if (currentViewState().playerState == PLAY) {
+                startPlaying()
             } else {
-                viewStateStore.playerSeekTo(viewStateStore.getPlayerProgress())
+                player.play()
+                player.pause()
                 playButton.text = getString(R.string.player_button_resume_play)
             }
         }
+
+        viewStateStore.playerViewState.observe(this, Observer<PlayerViewState> {
+            it?.let { handle(it) }
+        })
     }
 
     override fun setDuration(duration: Int) {
@@ -120,15 +124,14 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
 
     private fun renameFile() {
         val newFile = "$fileDirectory/$fileName$recordFormat"
-        if (viewStateStore.getPlayerFilePath() != newFile) {
-            if (fileManager.renameFile(viewStateStore.getPlayerFilePath(), newFile)) {
+        if (currentViewState().filePath != newFile) {
+            if (fileManager.renameFile(currentViewState().filePath, newFile)) {
                 viewStateStore.updateFilePath(newFile)
             }
         }
     }
 
     fun onClickPlay(v: View) {
-        isClickOnButton = true
         if (player.isPlaying()) {
             viewStateStore.updatePlayState(PAUSE)
         } else {
@@ -138,14 +141,17 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
 
     override fun onPause() {
         renameFile()
+        isClickOnButton = true
+        player.pause()
         super.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player.destroy()
-        isClickOnButton = true
+        player.release()
     }
+
+    private fun currentViewState(): PlayerViewState = viewStateStore.playerViewState.value!!
 
     private fun handle(viewState: PlayerViewState) {
         when (viewState.action) {
@@ -157,16 +163,14 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
             PlayerViewState.Action.PLAYER_SEEK_TO -> {
                 seekToPosition(viewState.progress.let { it } ?: 0)
             }
-            PlayerViewState.Action.RESUME_PLAYING -> {
-                seekToPosition(viewState.progress.let { it } ?: 0)
-                startPlaying()
-            }
             PlayerViewState.Action.UPDATE_PLAY_STATE -> {
                 when (viewState.playerState) {
                     PLAY -> {
+                        isClickOnButton = true
                         startPlaying()
                     }
                     PAUSE -> {
+                        isClickOnButton = true
                         player.pause()
                         playButton.text = getString(R.string.player_button_resume_play)
                     }
@@ -188,6 +192,7 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
 
     private fun seekToPosition(progress: Int) {
         player.seekTo(progress)
+        seekBar.progress = progress
         currentTime.text = RecorderActivity.getTimeFormat(progress.toLong())
     }
 

@@ -9,7 +9,7 @@ import com.madappgang.architecture.recorder.helpers.FileManager.Companion.record
 import com.madappgang.architecture.recorder.helpers.FileManager.Companion.testRecordName
 
 
-class Recorder(callback: RecordTimeUpdate) {
+class Recorder {
 
     interface RecordTimeUpdate {
         fun onTimeUpdate(time: Long)
@@ -22,6 +22,8 @@ class Recorder(callback: RecordTimeUpdate) {
     private var startTime = 0L
     private val delay = 100L
     private var currentTime = 0L
+    private var isStartRecord: Boolean = false
+    private lateinit var callback: RecordTimeUpdate
 
     private val updateTimerThread = object : Runnable {
         override fun run() {
@@ -31,16 +33,19 @@ class Recorder(callback: RecordTimeUpdate) {
         }
     }
 
-    fun init() {
+    fun init(callback: RecordTimeUpdate) {
         try {
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            setOutputFile()
-            recorder.prepare()
-            onStartRecord()
+            this.callback = callback
+            if (!isStartRecord) {
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                setOutputFile()
+                recorder.prepare()
+                onStartRecord()
+            }
         } catch (e: Throwable) {
-            Log.e(LOG_TAG, "prepare() failed")
+            Log.e(LOG_TAG, "init() failed")
         }
     }
 
@@ -49,14 +54,17 @@ class Recorder(callback: RecordTimeUpdate) {
         recorder.setOutputFile(fileName)
     }
 
-    fun onStartRecord() {
+    private fun onStartRecord() {
+        isStartRecord = true
         recorder.start()
         startTime = SystemClock.uptimeMillis()
         handler.postDelayed(updateTimerThread, 0)
     }
 
     fun onStopRecord() {
-        recorder.stop()
-        recorder.release()
+        if (isStartRecord) recorder.stop()
+        isStartRecord = false
+        handler.removeCallbacks(updateTimerThread)
+        callback.onTimeUpdate(0)
     }
 }
