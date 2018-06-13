@@ -14,8 +14,8 @@ import com.madappgang.recordings.network.*
 
 class FileManager(private val network: Network) {
 
-    fun <T : Foldable> fetchEntity(clazz: Class<T>, id: Id): Result<T> {
-        return network.fetchEntity(clazz, id)
+    fun <T : Foldable> fetchEntity(entityType: Class<T>, id: Id): Result<T> {
+        return network.fetchEntity(entityType, id)
     }
 
     fun fetchList(rootFolder: Folder): Result<List<Foldable>> {
@@ -28,12 +28,12 @@ class FileManager(private val network: Network) {
         return network.fetchList(Foldable::class.java, fetchingOptions)
     }
 
-    fun <T : Foldable> add(foldable: T): Result<T> {
-        return network.createEntity(foldable)
+    fun <T : Foldable> add(foldable: T, entityType: Class<T>): Result<T> {
+        return network.createEntity(foldable, entityType)
     }
 
     fun remove(foldable: Foldable): Result<Unit> {
-        return network.removeEntity(foldable)
+        return network.removeEntity(foldable, Foldable::class.java)
     }
 }
 

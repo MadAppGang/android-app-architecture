@@ -97,7 +97,7 @@ class InitialActivity :
             this.name = name
         }
         progressBar.makeVisible()
-        val result = async(bgContext) { fileManager.add(folder) }.await()
+        val result = async(bgContext) { fileManager.add(folder, Folder::class.java) }.await()
 
         when (result) {
             is Result.Success -> startFolderActivity(result.value)

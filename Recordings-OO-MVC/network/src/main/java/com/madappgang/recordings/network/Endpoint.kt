@@ -10,4 +10,9 @@ sealed class Endpoint(val scheme: String, val host: String, val port: String) {
 
     object Staging: Endpoint("http", "localhost", "8000")
 
+    override fun toString(): String {
+        return "$scheme://$host:$port"
+    }
+
+
 }

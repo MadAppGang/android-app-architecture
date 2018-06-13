@@ -195,7 +195,7 @@ class RecorderActivity :
     private fun saveTrack(track: Track) = launch(uiContext) {
         progressBar.makeVisible()
 
-        val result = async(bgContext) { fileManager.add(track) }.await()
+        val result = async(bgContext) { fileManager.add(track, Track::class.java) }.await()
 
         when (result) {
             is Result.Success -> {

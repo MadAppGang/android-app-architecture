@@ -6,11 +6,8 @@
 
 package com.madappgang.recordings.network
 
-import okhttp3.Request
-import okhttp3.Response
-
 interface NetworkSession {
 
-    fun makeRequest(request: Request, completionHandler: (Response?, Throwable?) -> Unit)
+    fun <T, R: Response<T>> makeRequest(request: Request, requestType: Class<R>) : R
 
 }
