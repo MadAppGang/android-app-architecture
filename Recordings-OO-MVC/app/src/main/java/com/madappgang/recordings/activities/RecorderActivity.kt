@@ -197,7 +197,7 @@ class RecorderActivity :
 
     private fun updateTime() {
         val totalRecordingTime = recordingTime + audioRecorder.getProgress()
-        time.text = time.formatMilliseconds(totalRecordingTime)
+        time.text = time.formatMilliseconds(totalRecordingTime.toInt())
     }
 
     private fun applyNotStartedStateForButton() {

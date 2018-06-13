@@ -22,7 +22,7 @@ class DependencyContainer(private val tempDirectory: File) {
 
     val fileManager by lazy { FileManager(network) }
     val recorder by lazy { Recorder() }
-    val player by lazy { Player(tempDirectory, network, bgContext) }
+    val player by lazy { Player(tempDirectory, network) }
 
 
     private val network: Network = Network()

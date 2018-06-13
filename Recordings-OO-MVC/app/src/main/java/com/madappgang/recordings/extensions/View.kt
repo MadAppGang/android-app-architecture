@@ -27,7 +27,7 @@ fun View.getPxFromDp(dp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.displayMetrics)
 }
 
-fun View.formatMilliseconds(milliseconds: Long): String {
+fun View.formatMilliseconds(milliseconds: Int): String {
     val seconds = (milliseconds / 1000) % 60
     val minutes = (milliseconds / (1000 * 60) % 60)
     val hours = (milliseconds / (1000 * 60 * 60) % 24)

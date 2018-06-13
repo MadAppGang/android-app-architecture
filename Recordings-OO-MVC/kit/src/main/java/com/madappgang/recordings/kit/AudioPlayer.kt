@@ -4,13 +4,14 @@
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/12/18.
  */
 
-package com.madappgang.recordings.media
+package com.madappgang.recordings.kit
 
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 
-class AudioPlayer : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+class AudioPlayer : MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnCompletionListener {
     var onPrepared: () -> Unit = {}
     var onCompleted: () -> Unit = {}
 
@@ -48,13 +49,17 @@ class AudioPlayer : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionList
         }
     }
 
+    fun reset() {
+        player.reset()
+    }
+
     fun seekTo(millisecond: Int) {
         player.seekTo(millisecond)
     }
 
-    fun getCurrentPosition() = player.currentPosition.toLong()
+    fun getCurrentPosition() = player.currentPosition
 
-    fun getDuration() = player.duration.toLong()
+    fun getDuration() = player.duration
 
     override fun onPrepared(mp: MediaPlayer?) {
         onPrepared.invoke()

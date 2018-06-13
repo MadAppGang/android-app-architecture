@@ -6,6 +6,7 @@
 
 package com.madappgang.recordings.activities
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,7 +23,7 @@ import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
-import com.madappgang.recordings.media.AudioPlayer
+import com.madappgang.recordings.kit.Player
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -44,156 +45,29 @@ class PlayerActivity : AppCompatActivity() {
     private val playerSeekBar by lazy { findViewById<SeekBar>(R.id.playerProgress) }
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
-    private val audioPlayer by lazy { AudioPlayer() }
-    private var playerState = PlayerState.NOT_STARTED
     private var updateUiJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        initPlayerCallback()
         initToolbar()
-        initUi()
-    }
-
-    private fun initPlayerCallback() {
-        player.onPlay = { audioPlayer.prepare(it.absolutePath) }
-
-        audioPlayer.onPrepared = { startAudioPlaying() }
-
-        audioPlayer.onCompleted = {
-            playerState = PlayerState.COMPLETED
-            updateUiJob?.cancel()
-            updateUi()
-        }
-    }
-
-    private fun initToolbar() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbarTitle.text = track.name
-    }
-
-    private fun initUi() {
-        updateUi()
-        initStartPauseButton()
         initPlayerProgressBar()
-    }
+        initStartResumeButton()
 
-    private fun updateUi() {
-        updateProgressBar()
-        updatePlayerTimePositionView()
-        updateTrackDurationView()
-        updatePlayerSeekBar()
-        updateStartPauseButton()
-    }
-
-    private fun updateProgressBar() {
-        if (playerState == PlayerState.PREPARING) {
-            progressBar.makeVisible()
-        } else {
-            progressBar.makeGone()
-        }
-    }
-
-    private fun updatePlayerTimePositionView() {
-        val position = audioPlayer.getCurrentPosition()
-        playerPosition.text = playerPosition.formatMilliseconds(position)
-    }
-
-    private fun updateTrackDurationView() {
-        val duration = audioPlayer.getDuration()
-        trackDuration.text = trackDuration.formatMilliseconds(duration)
-    }
-
-    private fun updatePlayerSeekBar() {
-        playerSeekBar.progress = if (playerState ==PlayerState.NOT_STARTED ||
-            playerState == PlayerState.PREPARING
-        ) {
-            0
-        } else{
-            audioPlayer.getCurrentPosition().toInt()
-        }
-    }
-
-    private fun updateStartPauseButton() {
-        startPausePlayer.isEnabled =
-            playerState == PlayerState.PLAYING ||
-            playerState == PlayerState.PAUSED ||
-            playerState == PlayerState.COMPLETED ||
-            playerState == PlayerState.NOT_STARTED
-
-        startPausePlayer.text = if (playerState == PlayerState.NOT_STARTED ||
-            playerState == PlayerState.PAUSED ||
-            playerState == PlayerState.COMPLETED
-        ) {
-            getString(R.string.PlayerActivity_start)
-        } else {
-            getString(R.string.PlayerActivity_pause)
-        }
-    }
-
-    private fun initPlayerProgressBar() {
-        playerSeekBar.max = audioPlayer.getDuration().toInt()
-
-        playerSeekBar.setOnTouchListener { v, event ->
-            return@setOnTouchListener playerState == PlayerState.NOT_STARTED
-        }
-
-        playerSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    audioPlayer.seekTo(progress)
-                    updatePlayerTimePositionView()
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        player.state.observe(this, Observer<Player.State> {
+            playerSeekBar.max = player.getDuration()
+            updateRefreshLayout()
+            updatePlayerPosition()
+            trackDuration.text = trackDuration.formatMilliseconds(player.getDuration())
+            updatePlayerSeekBar()
+            updateStartPauseButton()
+            if (it == Player.State.PLAYING) {
+                updateUiJob = createUpdateUiJob()
+            } else {
+                updateUiJob?.cancel()
             }
         })
-    }
-
-    private fun initStartPauseButton() {
-        updateStartPauseButton()
-
-        startPausePlayer.setOnClickListener {
-            when (playerState) {
-                PlayerState.NOT_STARTED -> {
-                    playerState = PlayerState.PREPARING
-                    initPlayerProgressBar()
-                    player.play(track)
-                }
-
-                PlayerState.PLAYING -> pauseAudioPlaying()
-                else -> startAudioPlaying()
-            }
-            updateUi()
-        }
-    }
-
-    private fun pauseAudioPlaying() {
-        updateUiJob?.cancel()
-        playerState = PlayerState.PAUSED
-        audioPlayer.pause()
-    }
-
-    private fun startAudioPlaying() {
-        updateUiJob = createUpdateUiJob()
-        audioPlayer.start()
-        playerState = PlayerState.PLAYING
-        initPlayerProgressBar()
-    }
-
-    private fun createUpdateUiJob() = launch(uiContext) {
-        while (true) {
-            updateUi()
-            delay(300, TimeUnit.MILLISECONDS)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -209,10 +83,85 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         updateUiJob?.cancel()
-        if (playerState != PlayerState.NOT_STARTED) {
-            audioPlayer.stop()
-        }
         player.stop()
+        player.clearData()
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbarTitle.text = track.name
+    }
+
+    private fun updatePlayerPosition() {
+        playerPosition.text = playerPosition.formatMilliseconds(player.getCurrentPosition())
+    }
+
+    private fun updateRefreshLayout() {
+        if (player.state.value == Player.State.PREPARING) {
+            progressBar.makeVisible()
+        } else {
+            progressBar.makeGone()
+        }
+    }
+
+    private fun updatePlayerSeekBar() {
+        playerSeekBar.progress = player.getCurrentPosition()
+    }
+
+    private fun updateStartPauseButton() {
+        val state = player.state.value
+        startPausePlayer.isEnabled = state != Player.State.PREPARING
+
+        startPausePlayer.text = if (state == Player.State.NOT_STARTED ||
+            state == Player.State.PAUSED ||
+            state == Player.State.COMPLETED ||
+            state == Player.State.STOPPED
+        ) {
+            getString(R.string.PlayerActivity_start)
+        } else {
+            getString(R.string.PlayerActivity_pause)
+        }
+    }
+
+    private fun initStartResumeButton() {
+        startPausePlayer.setOnClickListener {
+            when (player.state.value) {
+                Player.State.NOT_STARTED -> player.play(track)
+                Player.State.PLAYING -> player.pause()
+                else -> player.start()
+            }
+        }
+    }
+
+    private fun initPlayerProgressBar() {
+        playerSeekBar.setOnTouchListener { v, event ->
+            return@setOnTouchListener player.state == Player.State.NOT_STARTED
+        }
+
+        playerSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    player.seekTo(progress)
+                    updatePlayerSeekBar()
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+    }
+
+    private fun createUpdateUiJob() = launch(uiContext) {
+        while (true) {
+            updatePlayerSeekBar()
+            updatePlayerPosition()
+            delay(300, TimeUnit.MILLISECONDS)
+        }
     }
 
     companion object {
@@ -225,12 +174,4 @@ class PlayerActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
-}
-
-private enum class PlayerState {
-    NOT_STARTED,
-    PREPARING,
-    PLAYING,
-    PAUSED,
-    COMPLETED
 }
