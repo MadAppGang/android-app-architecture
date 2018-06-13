@@ -24,6 +24,8 @@
     <string name="RecorderActivity_enter_name">Enter name</string>
     <string name="RecorderActivity_cancel">Cancel</string>
     <string name="RecorderActivity_save">Save</string>
+    <string name="RecorderActivity_explanation_permission_request">Please grant permissions first, to enable this feature</string>
+    <string name="RecorderActivity_ok">Ok</string>
 
     <string name="PlayerActivity_start">Start</string>
     <string name="PlayerActivity_pause">Pause</string>

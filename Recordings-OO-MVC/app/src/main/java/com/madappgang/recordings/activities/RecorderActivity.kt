@@ -6,9 +6,14 @@
 
 package com.madappgang.recordings.activities
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.ProgressBar
@@ -33,10 +38,11 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class RecorderActivity :
-        AppCompatActivity(),
-        EditableDialogFragment.CompletionHandler,
-        EditableDialogFragment.FieldValidationHandler {
+    AppCompatActivity(),
+    EditableDialogFragment.CompletionHandler,
+    EditableDialogFragment.FieldValidationHandler {
 
+    private val permissionsRequestRecordAudio = 3526
     private val saveTrackRequestId = "saveTrackRequestId"
 
     private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
@@ -78,11 +84,63 @@ class RecorderActivity :
 
     private fun initStartRecordingButton() {
         startRecording.setOnClickListener {
-            updateTimeJob = createUpdateTimeJob()
-            recorder.start()
-            audioRecorder.startRecording()
-            recordingStatus = RecordingStatus.STARTED
-            updateButton()
+            if (isMicrophonePermissionGranted()) {
+                startRecording()
+            } else {
+                requestMicrophonePermission()
+            }
+        }
+    }
+
+    private fun isMicrophonePermissionGranted() =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+            PackageManager.PERMISSION_GRANTED
+
+    private fun startRecording() {
+        updateTimeJob = createUpdateTimeJob()
+        recorder.start()
+        audioRecorder.startRecording()
+        recordingStatus = RecordingStatus.STARTED
+        updateButton()
+    }
+
+    private fun requestMicrophonePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            )
+        ) {
+            AlertDialog.Builder(this@RecorderActivity)
+                .setMessage(R.string.RecorderActivity_explanation_permission_request)
+                .setPositiveButton(R.string.RecorderActivity_ok, { _, _ ->
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.RECORD_AUDIO),
+                        permissionsRequestRecordAudio
+                    )
+                })
+                .setNegativeButton(R.string.RecorderActivity_cancel, { _, _ -> })
+                .show()
+
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                permissionsRequestRecordAudio
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionsRequestRecordAudio &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startRecording()
+
         }
     }
 
@@ -172,12 +230,12 @@ class RecorderActivity :
 
     private fun showSaveTrackDialog(defaultName: String = "") {
         val dialog = EditableDialogFragment.newInstance(
-                saveTrackRequestId,
-                R.string.RecorderActivity_save_recording,
-                R.string.RecorderActivity_enter_name,
-                R.string.RecorderActivity_save,
-                R.string.RecorderActivity_cancel,
-                defaultName
+            saveTrackRequestId,
+            R.string.RecorderActivity_save_recording,
+            R.string.RecorderActivity_enter_name,
+            R.string.RecorderActivity_save,
+            R.string.RecorderActivity_cancel,
+            defaultName
         )
         dialog.show(supportFragmentManager, "SaveTrackDialogTag")
     }
