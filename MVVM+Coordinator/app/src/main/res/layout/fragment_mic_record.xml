@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.madappgang.madappgangmvvmtestarch.ui.micRecord.MicRecordViewModel.RecorderState" />
+
+        <import type="com.madappgang.madappgangmvvmtestarch.utils.timeUtils.TimeConverters" />
+
+        <variable
+            name="viewModel"
+            type="com.madappgang.madappgangmvvmtestarch.ui.micRecord.MicRecordViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.micRecord.MicRecordFragment">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="00:00" />
+
+        <ImageView
+            android:id="@+id/playRecord"
+            visible="false"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:onClick="@{(v)->viewModel.playAvailableRecord()}"
+            android:src="@drawable/ic_play_circle_filled_black_24dp"
+            android:tint="@color/play_enabled_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/recordPauseButton"
+            app:layout_constraintEnd_toStartOf="@+id/recordPauseButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recordPauseButton" />
+
+        <ImageView
+            android:id="@+id/stopRecord"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{(v)->viewModel.stopRecord()}"
+            android:src="@drawable/ic_library_add_black_24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/recordPauseButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/recordPauseButton"
+            app:layout_constraintTop_toTopOf="@+id/recordPauseButton" />
+
+        <ImageView
+            android:id="@+id/recordPauseButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_record"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{(v)->viewModel.startPauseRecord()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

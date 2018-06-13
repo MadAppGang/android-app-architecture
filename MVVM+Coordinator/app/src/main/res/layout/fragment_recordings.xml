@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.madappgang.madappgangmvvmtestarch.ui.recordings.RecordingsViewModel" />
+
+        <variable
+            name="adapter"
+            type="com.madappgang.madappgangmvvmtestarch.ui.recordings.RecordingsAdapter" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.recordings.RecordingsFragment">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/message"
+            singleItemAdapter="@{adapter}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/list_item_recording" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Base.Widget.AppCompat.ProgressBar"
+            visible="@{viewModel.isLoading()}"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.18" />
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
