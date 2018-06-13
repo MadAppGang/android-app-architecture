@@ -8,6 +8,7 @@ package com.madappgang.recordings.activities
 
 import android.Manifest
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -21,19 +22,17 @@ import android.widget.TextView
 import com.madappgang.recordings.R
 import com.madappgang.recordings.application.App
 import com.madappgang.recordings.core.Folder
+import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.dialogs.EditableDialogFragment
 import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
+import com.madappgang.recordings.kit.Recorder
 import com.madappgang.recordings.kit.validName
-import com.madappgang.recordings.media.AudioRecorder
-import com.madappgang.recordings.core.Result
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -47,8 +46,8 @@ class RecorderActivity :
 
     private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
 
-    private val uiContext by lazy { App.dependencyContainer.uiContext }
-    private val bgContext by lazy { App.dependencyContainer.bgContext }
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
     private val fileManager by lazy { App.dependencyContainer.fileManager }
     private val recorder by lazy { App.dependencyContainer.recorder }
 
@@ -59,9 +58,6 @@ class RecorderActivity :
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
     private lateinit var track: Track
-    private val audioRecorder by lazy { AudioRecorder(getExternalFilesDir(null)) }
-    private var recordingStatus = RecordingStatus.NOT_STARTED
-    private var recordingTime = 0L
 
     private var updateTimeJob: Job? = null
     private var saveTrackJob: Job? = null
@@ -70,16 +66,61 @@ class RecorderActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recorder)
 
-        initButton()
+        recorder.reset()
+        recorder.status.observe(this, Observer<Recorder.Status> { updateButton() })
         updateTime()
+        initButton()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionsRequestRecordAudio &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            startRecording()
+
+        }
+    }
+
+    override fun onDialogPositiveClick(requestId: String, value: String) {
+        if (requestId == saveTrackRequestId) {
+            track.folderId = folder.id
+            track.name = value
+            saveTrackJob?.cancel()
+            saveTrackJob = saveTrack(track)
+        }
+    }
+
+    override fun onDialogNegativeClick(requestId: String) {
+        if (requestId == saveTrackRequestId) {
+            removeTrack()
+            setResult(Activity.RESULT_CANCELED)
+            onBackPressed()
+        }
+    }
+
+    override fun onValidField(requestId: String, value: String) = try {
+        fileManager.validName(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        updateTimeJob?.cancel()
+        recorder.reset()
+        removeTrack()
     }
 
     private fun initButton() {
         initStartRecordingButton()
         initPauseResumeRecordingButton()
         initStopRecordingButton()
-
-        updateButton()
     }
 
     private fun initStartRecordingButton() {
@@ -92,17 +133,35 @@ class RecorderActivity :
         }
     }
 
-    private fun isMicrophonePermissionGranted() =
-        ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
-            PackageManager.PERMISSION_GRANTED
+    private fun initPauseResumeRecordingButton() {
+        pauseResumeRecording.setOnClickListener {
+            if (recorder.status.value == Recorder.Status.STARTED) {
+                recorder.pause()
+                updateTimeJob?.cancel()
+            } else if (recorder.status.value == Recorder.Status.PAUSED) {
+                updateTimeJob = createUpdateTimeJob()
+                recorder.resume()
+            }
+        }
+    }
+
+    private fun initStopRecordingButton() {
+        stopRecording.setOnClickListener {
+            track = recorder.stop()
+            updateTimeJob?.cancel()
+            showSaveTrackDialog()
+        }
+    }
 
     private fun startRecording() {
         updateTimeJob = createUpdateTimeJob()
         recorder.start()
-        audioRecorder.startRecording()
-        recordingStatus = RecordingStatus.STARTED
         updateButton()
     }
+
+    private fun isMicrophonePermissionGranted() =
+        ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+            PackageManager.PERMISSION_GRANTED
 
     private fun requestMicrophonePermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -131,60 +190,12 @@ class RecorderActivity :
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == permissionsRequestRecordAudio &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startRecording()
-
-        }
-    }
-
-    private fun initPauseResumeRecordingButton() {
-        pauseResumeRecording.setOnClickListener {
-            if (recordingStatus == RecordingStatus.STARTED) {
-                recordingTime += audioRecorder.getProgress()
-                val filePath = audioRecorder.stopRecording()
-                recorder.addPart(File(filePath))
-                updateTimeJob?.cancel()
-                recordingStatus = RecordingStatus.PAUSED
-            } else if (recordingStatus == RecordingStatus.PAUSED) {
-                updateTimeJob = createUpdateTimeJob()
-                audioRecorder.startRecording()
-                recordingStatus = RecordingStatus.STARTED
-            }
-            updateButton()
-        }
-    }
-
-    private fun initStopRecordingButton() {
-        stopRecording.setOnClickListener {
-            recordingTime += audioRecorder.getProgress()
-
-            if (recordingStatus == RecordingStatus.STARTED) {
-                val filePath = audioRecorder.stopRecording()
-                recorder.addPart(File(filePath))
-            }
-            track = recorder.stop()
-            recordingStatus = RecordingStatus.COMPLETED
-
-            updateTimeJob?.cancel()
-            updateButton()
-            updateTime()
-            showSaveTrackDialog()
-        }
-    }
-
     private fun updateButton() {
-        when (recordingStatus) {
-            RecordingStatus.NOT_STARTED -> applyNotStartedStateForButton()
-            RecordingStatus.STARTED -> applyStartedStateForButton()
-            RecordingStatus.PAUSED -> applyPausedStateForButton()
-            RecordingStatus.COMPLETED -> applyCompletedStateForButton()
+        when (recorder.status.value) {
+            Recorder.Status.NOT_STARTED -> applyNotStartedStateForButton()
+            Recorder.Status.STARTED -> applyStartedStateForButton()
+            Recorder.Status.PAUSED -> applyPausedStateForButton()
+            Recorder.Status.COMPLETED -> applyCompletedStateForButton()
         }
     }
 
@@ -196,8 +207,7 @@ class RecorderActivity :
     }
 
     private fun updateTime() {
-        val totalRecordingTime = recordingTime + audioRecorder.getProgress()
-        time.text = time.formatMilliseconds(totalRecordingTime.toInt())
+        time.text = time.formatMilliseconds(recorder.getRecordingTime())
     }
 
     private fun applyNotStartedStateForButton() {
@@ -240,16 +250,6 @@ class RecorderActivity :
         dialog.show(supportFragmentManager, "SaveTrackDialogTag")
     }
 
-
-    override fun onDialogPositiveClick(requestId: String, value: String) {
-        if (requestId == saveTrackRequestId) {
-            track.folderId = folder.id
-            track.name = value
-            saveTrackJob?.cancel()
-            saveTrackJob = saveTrack(track)
-        }
-    }
-
     private fun saveTrack(track: Track) = launch(uiContext) {
         progressBar.makeVisible()
 
@@ -268,32 +268,13 @@ class RecorderActivity :
         progressBar.makeGone()
     }
 
-    override fun onDialogNegativeClick(requestId: String) {
-        if (requestId == saveTrackRequestId) {
-            removeTrack()
-            setResult(Activity.RESULT_CANCELED)
-            onBackPressed()
-        }
-    }
-
-    override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validName(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
     private fun removeTrack() {
-        val tmpTrack = File(track.path)
-        if (tmpTrack.exists()) {
-            tmpTrack.delete()
+        if (::track.isInitialized) {
+            val tmpTrack = File(track.path)
+            if (tmpTrack.exists()) {
+                tmpTrack.delete()
+            }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        updateTimeJob?.cancel()
-        removeTrack()
     }
 
     companion object {
@@ -306,11 +287,4 @@ class RecorderActivity :
             activity.startActivityForResult(intent, requestCode)
         }
     }
-}
-
-private enum class RecordingStatus {
-    NOT_STARTED,
-    STARTED,
-    PAUSED,
-    COMPLETED
 }

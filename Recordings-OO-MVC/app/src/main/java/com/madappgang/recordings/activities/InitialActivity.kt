@@ -20,7 +20,9 @@ import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.core.NetworkExceptions
 import com.madappgang.recordings.core.Result
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 
@@ -31,8 +33,8 @@ class InitialActivity :
 
     private val createRootFolderRequestId = "createRootFolderRequestId"
 
-    private val uiContext by lazy { App.dependencyContainer.uiContext }
-    private val bgContext by lazy { App.dependencyContainer.bgContext }
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
     private val fileManager by lazy { App.dependencyContainer.fileManager }
 
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }

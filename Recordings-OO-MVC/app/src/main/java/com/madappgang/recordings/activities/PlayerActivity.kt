@@ -24,7 +24,9 @@ import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.kit.Player
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.TimeUnit
@@ -33,8 +35,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private val track by lazy { intent.getParcelableExtra(TRACK_KEY) as Track }
 
-    private val uiContext by lazy { App.dependencyContainer.uiContext }
-    private val bgContext by lazy { App.dependencyContainer.bgContext }
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
     private val player by lazy { App.dependencyContainer.player }
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
@@ -84,7 +86,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onDestroy()
         updateUiJob?.cancel()
         player.stop()
-        player.clearData()
+        player.release()
     }
 
     private fun initToolbar() {

@@ -77,7 +77,7 @@ class Player(
         audioPlayer.seekTo(millisecond)
     }
 
-    fun clearData() {
+    fun release() {
         audioPlayer.reset()
         loadFileJob?.cancel()
         tempFile?.let {
@@ -98,7 +98,14 @@ class Player(
         audioPlayer.getCurrentPosition()
     }
 
-    fun getDuration() = audioPlayer.getDuration()
+    fun getDuration() = if (state.value == State.PLAYING ||
+        state.value == State.PAUSED ||
+        state.value == State.STOPPED
+    ) {
+        audioPlayer.getDuration()
+    } else {
+        0
+    }
 
     private fun createCacheDestanition(track: Track): File {
         val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmssSSS")

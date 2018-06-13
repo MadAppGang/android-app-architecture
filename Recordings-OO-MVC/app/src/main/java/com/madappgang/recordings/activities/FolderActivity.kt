@@ -29,9 +29,8 @@ import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.core.Result
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 
 class FolderActivity :
         AppCompatActivity(),
@@ -43,8 +42,8 @@ class FolderActivity :
 
     private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
 
-    private val uiContext by lazy { App.dependencyContainer.uiContext }
-    private val bgContext by lazy { App.dependencyContainer.bgContext }
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
     private val fileManager by lazy { App.dependencyContainer.fileManager }
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
