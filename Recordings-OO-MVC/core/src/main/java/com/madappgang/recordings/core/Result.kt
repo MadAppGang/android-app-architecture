@@ -4,7 +4,7 @@
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
  */
 
-package com.madappgang.recordings.network
+package com.madappgang.recordings.core
 
 sealed class Result<T> {
 
