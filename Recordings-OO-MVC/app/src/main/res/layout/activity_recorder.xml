@@ -6,58 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activities.RecorderActivity">
 
-    <TextView
-        android:id="@+id/time"
-        style="@style/AppTheme.TextAppearance.LargeHeader"
-        android:layout_width="wrap_content"
+    <com.madappgang.recordings.layoutmanagers.RecorderView
+        android:id="@+id/recorderView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/startRecording"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="00:00:00" />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/startRecording"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/RecorderActivity_start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pauseResumeRecording"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time" />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/pauseResumeRecording"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/RecorderActivity_pause"
-        app:layout_constraintBottom_toBottomOf="@+id/startRecording"
-        app:layout_constraintEnd_toStartOf="@+id/stopRecording"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/startRecording"
-        app:layout_constraintTop_toTopOf="@+id/startRecording" />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/stopRecording"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="@string/RecorderActivity_stop"
-        app:layout_constraintBottom_toBottomOf="@+id/pauseResumeRecording"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pauseResumeRecording"
-        app:layout_constraintTop_toTopOf="@+id/pauseResumeRecording" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <ProgressBar
         android:id="@+id/progressBar"
