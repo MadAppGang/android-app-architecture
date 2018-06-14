@@ -51,7 +51,7 @@ internal class RequestFactory(
         Request(buildUrl(endpoint, "api/download/$path"), RequestMethod.GET)
 
     private fun makeForFetchingFoldable(id: Id) =
-        Request(buildUrl(endpoint, "api/foldable/${id.id}"), RequestMethod.GET)
+        Request(buildUrl(endpoint, "api/foldable/${id.value}"), RequestMethod.GET)
 
     private fun makeForFetchingFoldable(fetchingOptions: FetchingOptions): Request {
         val ownerId = fetchingOptions.options.firstOrNull { it is Constraint.OwnerId }
@@ -78,7 +78,7 @@ internal class RequestFactory(
 
 
     private fun makeForRemoveFoldable(id: Id?) = id?.let {
-        Request(buildUrl(endpoint, "api/foldable/${id.id}"), RequestMethod.DELETE)
+        Request(buildUrl(endpoint, "api/foldable/${id.value}"), RequestMethod.DELETE)
     } ?: let {
         throw IllegalArgumentException()
     }

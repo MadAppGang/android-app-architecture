@@ -20,8 +20,8 @@ internal class FolderMapper : JsonSerializer<Folder>, JsonDeserializer<Folder> {
     ) = src?.let {
         JsonObject().apply {
             with(src) {
-                id?.let { addProperty("id", it.id) }
-                folderId?.let { addProperty("folder_id", it.id) }
+                id?.let { addProperty("value", it.value) }
+                folderId?.let { addProperty("folder_id", it.value) }
                 addProperty("name", name)
                 addProperty("type", FileType.FOLDER.type)
             }
@@ -36,7 +36,7 @@ internal class FolderMapper : JsonSerializer<Folder>, JsonDeserializer<Folder> {
         context: JsonDeserializationContext?
     ): Folder {
         val jsonObject = json as JsonObject
-        val id = if (jsonObject.has("id")) Id(jsonObject["id"].asString) else null
+        val id = if (jsonObject.has("value")) Id(jsonObject["id"].asString) else null
         val folderId = if (jsonObject.has("folder_Id")) {
             Id(jsonObject["folder_Id"].asString)
         } else {

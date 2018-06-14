@@ -20,8 +20,8 @@ internal class TrackMapper : JsonSerializer<Track>, JsonDeserializer<Track> {
     ) = src?.let {
         JsonObject().apply {
             with(src) {
-                id?.let { addProperty("id", it.id) }
-                folderId?.let { addProperty("folder_id", it.id) }
+                id?.let { addProperty("id", it.value) }
+                folderId?.let { addProperty("folder_id", it.value) }
                 addProperty("name", name)
                 addProperty("path", path)
                 addProperty("type", FileType.TRACK.type)
