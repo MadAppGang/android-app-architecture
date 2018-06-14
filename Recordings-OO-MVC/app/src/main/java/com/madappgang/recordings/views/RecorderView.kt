@@ -27,12 +27,13 @@ internal class RecorderView @JvmOverloads constructor(
     var onStopRecording: () -> Unit = {}
     var onPauseResumeRecording: () -> Unit = {}
 
-    private var status = Recorder.Status.NOT_STARTED
-
     private val time by lazy { findViewById<TextView>(R.id.time) }
+
     private val startRecording by lazy { findViewById<Button>(R.id.startRecording) }
     private val pauseResumeRecording by lazy { findViewById<Button>(R.id.pauseResumeRecording) }
     private val stopRecording by lazy { findViewById<Button>(R.id.stopRecording) }
+
+    private var status = Recorder.Status.NOT_STARTED
 
 
     init {

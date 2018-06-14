@@ -37,16 +37,6 @@ internal class FolderActivity :
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {
 
-    private val createFolderRequestId = "createFolderRequestId"
-    private val recorderActivityRequestId = 6731
-
-    private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
-
-    private val uiContext by lazy { UI }
-    private val bgContext by lazy { CommonPool }
-    private val fileManager by lazy { App.dependencyContainer.fileManager }
-
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val toolbarTitle by lazy { findViewById<TextView>(R.id.toolbarTitle) }
     private val swipeRefresherView by lazy { findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout) }
     private val foldableListView by lazy { findViewById<RecyclerView>(R.id.itemsList) }
@@ -54,11 +44,22 @@ internal class FolderActivity :
     private val createFolder by lazy { findViewById<FloatingActionButton>(R.id.createFolder) }
     private val floatingMenu by lazy { findViewById<FloatingActionButton>(R.id.floatingMenu) }
 
+    private val fileManager by lazy { App.dependencyContainer.fileManager }
+    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+
     private var isFloatingMenuOpen = false
     private val adapter = FoldableAdapter()
 
     private var loadFolderContentJob: Job? = null
     private var removeFoldableJob: Job? = null
+
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
+
+    private val createFolderRequestId = "createFolderRequestId"
+    private val recorderActivityRequestId = 6731
+
+    private val folder by lazy { intent.getParcelableExtra(FOLDER_KEY) as Folder }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +68,41 @@ internal class FolderActivity :
         initFloatingMenu()
         initList()
         loadFolderContentJob = loadFolderContent()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDialogPositiveClick(requestId: String, value: String) {
+        createFolder(value)
+    }
+
+    override fun onValidField(requestId: String, value: String) = try {
+        fileManager.validName(value)
+        true
+    } catch (e: Throwable) {
+        false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == recorderActivityRequestId && resultCode == RESULT_OK) {
+            loadFolderContentJob?.cancel()
+            loadFolderContentJob = loadFolderContent()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        loadFolderContentJob?.cancel()
+        removeFoldableJob?.cancel()
     }
 
     private fun initToolbar() {
@@ -134,6 +170,18 @@ internal class FolderActivity :
         }
     }
 
+    private fun showCreateFolderDialog(defaultValue: String = "") {
+        val dialog = EditableDialogFragment.newInstance(
+            createFolderRequestId,
+            R.string.InitialActivity_Create_root_folder,
+            R.string.InitialActivity_enter_name,
+            R.string.InitialActivity_create,
+            R.string.InitialActivity_cancel,
+            defaultValue
+        )
+        dialog.show(supportFragmentManager, "CreateFolderDialogTag")
+    }
+
     private fun removeFoldable(foldable: Foldable) = launch(uiContext) {
         val result = async(bgContext) { fileManager.remove(foldable) }.await()
         when (result) {
@@ -159,29 +207,6 @@ internal class FolderActivity :
         swipeRefresherView.isRefreshing = false
     }
 
-    private fun showCreateFolderDialog(defaultValue: String = "") {
-        val dialog = EditableDialogFragment.newInstance(
-                createFolderRequestId,
-                R.string.InitialActivity_Create_root_folder,
-                R.string.InitialActivity_enter_name,
-                R.string.InitialActivity_create,
-                R.string.InitialActivity_cancel,
-                defaultValue
-        )
-        dialog.show(supportFragmentManager, "CreateFolderDialogTag")
-    }
-
-    override fun onDialogPositiveClick(requestId: String, value: String) {
-        createFolder(value)
-    }
-
-    override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validName(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
     private fun createFolder(name: String) = launch(uiContext) {
         swipeRefresherView.isRefreshing = true
 
@@ -203,30 +228,6 @@ internal class FolderActivity :
             }
         }
         swipeRefresherView.isRefreshing = false
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        loadFolderContentJob?.cancel()
-        removeFoldableJob?.cancel()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == recorderActivityRequestId && resultCode == RESULT_OK) {
-            loadFolderContentJob?.cancel()
-            loadFolderContentJob = loadFolderContent()
-        }
     }
 
     companion object {

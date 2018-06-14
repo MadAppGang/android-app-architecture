@@ -31,28 +31,23 @@ internal class InitialActivity :
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {
 
-    private val createRootFolderRequestId = "createRootFolderRequestId"
-
-    private val uiContext by lazy { UI }
-    private val bgContext by lazy { CommonPool }
-    private val fileManager by lazy { App.dependencyContainer.fileManager }
-
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
+
+    private val fileManager by lazy { App.dependencyContainer.fileManager }
 
     private var getRootFolderJob: Job? = null
     private var createRootFolderJob: Job? = null
+
+    private val uiContext by lazy { UI }
+    private val bgContext by lazy { CommonPool }
+
+    private val createRootFolderRequestId = "createRootFolderRequestId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_initial)
 
         getRootFolderJob = getRootFolder()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        getRootFolderJob?.cancel()
-        createRootFolderJob?.cancel()
     }
 
     override fun onDialogPositiveClick(requestId: String, value: String) {
@@ -70,6 +65,27 @@ internal class InitialActivity :
         } catch (e: Throwable) {
             false
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        getRootFolderJob?.cancel()
+        createRootFolderJob?.cancel()
+    }
+
+    private fun startFolderActivity(folder: Folder) =
+        FolderActivity.start(this@InitialActivity, folder, true)
+
+    private fun showCreateRootFolderDialog(defaultValue: String = "") {
+        val dialog = EditableDialogFragment.newInstance(
+            createRootFolderRequestId,
+            R.string.InitialActivity_Create_root_folder,
+            R.string.InitialActivity_enter_name,
+            R.string.InitialActivity_create,
+            R.string.InitialActivity_cancel,
+            defaultValue
+        )
+        dialog.show(supportFragmentManager, "CreateRootFolderDialogTag")
     }
 
     private fun getRootFolder() = launch(uiContext) {
@@ -111,20 +127,5 @@ internal class InitialActivity :
         }
 
         progressBar.makeGone()
-    }
-
-    private fun startFolderActivity(folder: Folder) =
-            FolderActivity.start(this@InitialActivity, folder, true)
-
-    private fun showCreateRootFolderDialog(defaultValue: String = "") {
-        val dialog = EditableDialogFragment.newInstance(
-                createRootFolderRequestId,
-                R.string.InitialActivity_Create_root_folder,
-                R.string.InitialActivity_enter_name,
-                R.string.InitialActivity_create,
-                R.string.InitialActivity_cancel,
-                defaultValue
-        )
-        dialog.show(supportFragmentManager, "CreateRootFolderDialogTag")
     }
 }

@@ -27,13 +27,6 @@ import com.madappgang.recordings.extensions.getArgument
 
 internal class EditableDialogFragment : DialogFragment() {
 
-    private val requestId by lazy { getArgument(REQUST_ID, "") }
-    private val defaultValue by lazy { getArgument(EDIT_TEXT_VALUE_STRING_ID, "") }
-    private val titleTextId by lazy { getArgument(TITLE_STRING_ID, 0) }
-    private val hintTextId by lazy { getArgument(EDIT_TEXT_HINT_STRING_ID, 0) }
-    private val positiveButtonTextId by lazy { getArgument(POSITIVE_BUTTON_STRING_ID, 0) }
-    private val negativeButtonTextId by lazy { getArgument(NEGATIVE_BUTTON_STRING_ID, 0) }
-
     private lateinit var dialogTitle: TextView
     private lateinit var negativeButton: AppCompatButton
     private lateinit var positiveButton: AppCompatButton
@@ -41,6 +34,13 @@ internal class EditableDialogFragment : DialogFragment() {
 
     private var completionHandler: CompletionHandler? = null
     private var fieldValidationHandler: FieldValidationHandler? = null
+
+    private val requestId by lazy { getArgument(REQUST_ID, "") }
+    private val defaultValue by lazy { getArgument(EDIT_TEXT_VALUE_STRING_ID, "") }
+    private val titleTextId by lazy { getArgument(TITLE_STRING_ID, 0) }
+    private val hintTextId by lazy { getArgument(EDIT_TEXT_HINT_STRING_ID, 0) }
+    private val positiveButtonTextId by lazy { getArgument(POSITIVE_BUTTON_STRING_ID, 0) }
+    private val negativeButtonTextId by lazy { getArgument(NEGATIVE_BUTTON_STRING_ID, 0) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val layoutInflater = LayoutInflater.from(requireContext())
@@ -66,6 +66,20 @@ internal class EditableDialogFragment : DialogFragment() {
         fieldValidationHandler = context as? FieldValidationHandler
         completionHandler = context as? CompletionHandler
     }
+
+    private fun createDialog(view: View?) =
+        AlertDialog.Builder(requireContext())
+            .setView(view)
+            .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_BACK &&
+                    event.action == KeyEvent.ACTION_UP
+                ) {
+                    completionHandler?.onDialogNegativeClick(requestId)
+                    return@OnKeyListener true
+                }
+                return@OnKeyListener false
+            })
+            .create()
 
     private fun initDialogTitle() {
         dialogTitle.setText(titleTextId)
@@ -111,20 +125,6 @@ internal class EditableDialogFragment : DialogFragment() {
         positiveButton.isEnabled = isFieldValid
     }
 
-    private fun createDialog(view: View?) =
-            AlertDialog.Builder(requireContext())
-                    .setView(view)
-                    .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                        if (keyCode == KeyEvent.KEYCODE_BACK &&
-                                event.action == KeyEvent.ACTION_UP
-                        ) {
-                            completionHandler?.onDialogNegativeClick(requestId)
-                            return@OnKeyListener true
-                        }
-                        return@OnKeyListener false
-                    })
-                    .create()
-
     interface CompletionHandler {
 
         fun onDialogPositiveClick(requestId: String, value: String) {
@@ -140,6 +140,7 @@ internal class EditableDialogFragment : DialogFragment() {
     }
 
     companion object {
+
         private val REQUST_ID = "request_Id"
         private val TITLE_STRING_ID = "title_string_id"
         private val EDIT_TEXT_VALUE_STRING_ID = "edit_text_value_string_id"

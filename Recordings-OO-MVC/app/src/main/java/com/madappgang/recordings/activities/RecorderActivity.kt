@@ -207,6 +207,15 @@ internal class RecorderActivity :
         dialog.show(supportFragmentManager, "SaveTrackDialogTag")
     }
 
+    private fun removeTrack() {
+        if (::track.isInitialized) {
+            val tmpTrack = File(track.path)
+            if (tmpTrack.exists()) {
+                tmpTrack.delete()
+            }
+        }
+    }
+
     private fun saveTrack(track: Track) = launch(uiContext) {
         progressBar.makeVisible()
 
@@ -223,15 +232,6 @@ internal class RecorderActivity :
             }
         }
         progressBar.makeGone()
-    }
-
-    private fun removeTrack() {
-        if (::track.isInitialized) {
-            val tmpTrack = File(track.path)
-            if (tmpTrack.exists()) {
-                tmpTrack.delete()
-            }
-        }
     }
 
     companion object {

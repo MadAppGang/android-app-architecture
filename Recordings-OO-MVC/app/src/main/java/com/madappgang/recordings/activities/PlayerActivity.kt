@@ -34,18 +34,17 @@ import java.util.concurrent.TimeUnit
 
 internal class PlayerActivity : AppCompatActivity() {
 
-    private val track by lazy { intent.getParcelableExtra(TRACK_KEY) as Track }
-
-    private val player by lazy { App.dependencyContainer.player }
-
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
-
     private val toolbarTitle by lazy { findViewById<TextView>(R.id.toolbarTitle) }
     private val playerView by lazy { findViewById<PlayerView>(R.id.playerView) }
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
+    private val player by lazy { App.dependencyContainer.player }
+
     private var updateUiJob: Job? = null
     private val uiContext by lazy { UI }
+
+    private val track by lazy { intent.getParcelableExtra(TRACK_KEY) as Track }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,14 +101,6 @@ internal class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateRefreshLayout() {
-        if (player.state.value == Player.State.PREPARING) {
-            progressBar.makeVisible()
-        } else {
-            progressBar.makeGone()
-        }
-    }
-
     private fun updateUiJob() {
         updateUiJob?.cancel()
         if (player.state.value == Player.State.PLAYING) {
@@ -121,6 +112,14 @@ internal class PlayerActivity : AppCompatActivity() {
         while (true) {
             delay(300, TimeUnit.MILLISECONDS)
             updateUi()
+        }
+    }
+
+    private fun updateRefreshLayout() {
+        if (player.state.value == Player.State.PREPARING) {
+            progressBar.makeVisible()
+        } else {
+            progressBar.makeGone()
         }
     }
 
