@@ -16,7 +16,7 @@ import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.kit.Recorder
 
 
-class RecorderView @JvmOverloads constructor(
+internal class RecorderView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

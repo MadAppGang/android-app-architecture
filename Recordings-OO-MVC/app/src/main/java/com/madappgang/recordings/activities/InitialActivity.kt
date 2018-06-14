@@ -26,7 +26,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 
-class InitialActivity :
+internal class InitialActivity :
         AppCompatActivity(),
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {

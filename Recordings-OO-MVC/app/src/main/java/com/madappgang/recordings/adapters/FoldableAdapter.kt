@@ -16,7 +16,7 @@ import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Track
 import kotlinx.android.synthetic.main.item_foldable_adapter.view.*
 
-class FoldableAdapter : RecyclerView.Adapter<FoldableAdapter.FileViewHolder>() {
+internal class FoldableAdapter : RecyclerView.Adapter<FoldableAdapter.FileViewHolder>() {
 
     var onFolderItemClicked: (Folder) -> Unit = { folder -> }
     var onTrackItemClicked: (Track) -> Unit = { recording -> }

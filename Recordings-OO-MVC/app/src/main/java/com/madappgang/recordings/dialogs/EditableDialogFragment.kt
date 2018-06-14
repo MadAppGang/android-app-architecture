@@ -25,7 +25,7 @@ import androidx.core.os.bundleOf
 import com.madappgang.recordings.R
 import com.madappgang.recordings.extensions.getArgument
 
-class EditableDialogFragment : DialogFragment() {
+internal class EditableDialogFragment : DialogFragment() {
 
     private val requestId by lazy { getArgument(REQUST_ID, "") }
     private val defaultValue by lazy { getArgument(EDIT_TEXT_VALUE_STRING_ID, "") }

@@ -16,7 +16,7 @@ import com.madappgang.recordings.R
 import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.kit.Player
 
-class PlayerView @JvmOverloads constructor(
+internal class PlayerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,

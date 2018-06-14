@@ -32,7 +32,7 @@ import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 
-class FolderActivity :
+internal class FolderActivity :
         AppCompatActivity(),
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {

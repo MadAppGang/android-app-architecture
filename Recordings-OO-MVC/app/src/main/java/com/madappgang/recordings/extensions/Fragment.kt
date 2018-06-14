@@ -9,7 +9,7 @@ package com.madappgang.recordings.extensions
 import android.support.v4.app.Fragment
 import java.lang.IllegalArgumentException
 
-fun <T: Any> Fragment.getArgument(key: String, defaultValue: T?): T {
+internal fun <T: Any> Fragment.getArgument(key: String, defaultValue: T?): T {
     return when (defaultValue) {
         is String -> (arguments?.getString(key, defaultValue) ?: defaultValue) as T
         is Int -> (arguments?.getInt(key, defaultValue) ?: defaultValue) as T

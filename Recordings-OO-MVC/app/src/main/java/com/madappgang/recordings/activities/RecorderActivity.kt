@@ -37,7 +37,7 @@ import kotlinx.coroutines.experimental.android.UI
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class RecorderActivity :
+internal class RecorderActivity :
     AppCompatActivity(),
     EditableDialogFragment.CompletionHandler,
     EditableDialogFragment.FieldValidationHandler {
