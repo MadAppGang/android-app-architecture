@@ -6,7 +6,7 @@
 
 package com.madappgang.recordings.network
 
-interface NetworkSession {
+internal interface NetworkSession {
 
     fun <T, R: Response<T>> makeRequest(request: Request, requestType: Class<R>) : R
 

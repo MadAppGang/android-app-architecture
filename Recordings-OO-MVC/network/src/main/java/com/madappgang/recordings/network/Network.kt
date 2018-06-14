@@ -6,34 +6,21 @@
 
 package com.madappgang.recordings.network
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.core.NetworkExceptions
 import com.madappgang.recordings.core.Result
-import com.madappgang.recordings.network.mapper.FoldableMapper
-import com.madappgang.recordings.network.mapper.FolderMapper
 import com.madappgang.recordings.network.mapper.NetworkMapper
-import com.madappgang.recordings.network.mapper.TrackMapper
-import java.io.File
 import okio.Okio
+import java.io.File
 
 class Network internal constructor(
     private val endpoint: Endpoint = Endpoint.Staging,
-    private val networkSession: NetworkSession = OkHttpSession(),
-    private val requestFactory: RequestFactory = RequestFactory(endpoint, createGson()),
-    private val networkMapper: NetworkMapper = NetworkMapper(createGson())
+    private val networkSession: NetworkSession = OkHttpSession()
 ) {
 
-    constructor(
-        endpoint: Endpoint = Endpoint.Staging,
-        networkSession: NetworkSession = OkHttpSession()
-    ) : this(
-        endpoint,
-        networkSession,
-        RequestFactory(endpoint, createGson()),
-        NetworkMapper(createGson())
-    )
+    private val networkMapper: NetworkMapper = NetworkMapper()
+    private val requestFactory: RequestFactory = RequestFactory(endpoint, networkMapper)
+
 
     fun <T> fetchEntity(requestType: Class<T>, id: Id): Result<T> {
         val request = try {
@@ -126,6 +113,13 @@ class Network internal constructor(
             Result.Failure(e)
         }
     }
+
+    companion object {
+
+        fun newInstance(endpoint: Endpoint = Endpoint.Staging): Network {
+            return Network(endpoint)
+        }
+    }
 }
 
 internal fun <T, R : Response<T>> Network.handleResponse(response: R): R {
@@ -135,10 +129,3 @@ internal fun <T, R : Response<T>> Network.handleResponse(response: R): R {
         response
     }
 }
-
-internal fun createGson() = GsonBuilder()
-    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    .registerTypeAdapter(FoldableMapper::class.java, FoldableMapper())
-    .registerTypeAdapter(FolderMapper::class.java, FolderMapper())
-    .registerTypeAdapter(TrackMapper::class.java, TrackMapper())
-    .create()

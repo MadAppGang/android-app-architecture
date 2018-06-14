@@ -7,14 +7,14 @@
 package com.madappgang.recordings.network
 
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import java.io.File
 
 internal class OkHttpSession(
     private val client: OkHttpClient = OkHttpClient().newBuilder().build()
 ) : NetworkSession {
-
-    private val mediaTypeJson = MediaType.parse("application/json; charset=utf-8")
 
     override fun <T, R : Response<T>> makeRequest(request: Request, requestType: Class<R>): R {
         val call = client.newCall(convertRequest(request))
@@ -53,7 +53,11 @@ internal class OkHttpSession(
     }
 
     private fun convertRequest(request: Request): okhttp3.Request {
-        val requestBody = RequestBody.create(mediaTypeJson, request.body)
+        val requestBody = if (request.dataParts.size == 1) {
+            buildRequestBody(request.dataParts.first())
+        } else {
+            buildMultipartRequestBody(request)
+        }
 
         val builder = when (request.requestMethod) {
             RequestMethod.GET -> okhttp3.Request.Builder().get()
@@ -65,6 +69,25 @@ internal class OkHttpSession(
 
         builder.url(request.path)
         return builder.build()
+    }
+
+    private fun buildMultipartRequestBody(request: Request): RequestBody {
+        val multipartBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+        request.dataParts.forEach {
+            val body = buildRequestBody(it)
+            multipartBody.addFormDataPart(it.partName, it.partName, body)
+        }
+
+        return multipartBody.build()
+    }
+
+    private fun buildRequestBody(dataPart: DataPart<*>): RequestBody {
+        val mediaType = MediaType.parse(dataPart.bodyType.type)
+        return when (dataPart) {
+            is DataPart.JsonPart -> RequestBody.create(mediaType, dataPart.value)
+            is DataPart.AudioPart -> RequestBody.create(mediaType, File(dataPart.value))
+        }
     }
 }
 

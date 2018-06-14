@@ -6,14 +6,15 @@
 
 package com.madappgang.recordings.network
 
-import com.google.gson.Gson
+import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.core.Track
+import com.madappgang.recordings.network.mapper.NetworkMapper
 
 internal class RequestFactory(
     private val endpoint: Endpoint,
-    private val gson: Gson
+    private val mapper: NetworkMapper
 ) {
 
     fun <T> makeForFetching(clazz: Class<T>, id: Id) = when (clazz) {
@@ -31,10 +32,9 @@ internal class RequestFactory(
     }
 
     fun <T> makeForCreate(entity: T): Request {
-        val data = gson.toJson(entity)
         return when (entity) {
-            is Folder,
-            is Track -> makeForCreateFoldable(data)
+            is Foldable,
+            is Track -> makeForCreateFoldable(entity as Foldable)
 
             else -> throw IllegalArgumentException()
         }
@@ -65,8 +65,16 @@ internal class RequestFactory(
         }
     }
 
-    private fun makeForCreateFoldable(data: String) =
-        Request(buildUrl(endpoint, "api/foldable"), RequestMethod.POST, data)
+    private fun makeForCreateFoldable(foldable: Foldable): Request {
+        val dataParts = mutableListOf<DataPart<*>>()
+        dataParts.add(DataPart.JsonPart("body", mapper.toJson(foldable)))
+
+        if (foldable is Track) {
+            dataParts.add(DataPart.AudioPart("track", foldable.name))
+        }
+
+        return Request(buildUrl(endpoint, "api/foldable"), RequestMethod.POST, dataParts)
+    }
 
 
     private fun makeForRemoveFoldable(id: Id?) = id?.let {
