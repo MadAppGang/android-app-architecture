@@ -116,7 +116,7 @@ class RecordingsFragment : Fragment(), KodeinAware {
     @Throws(Exception::class)
     private fun requestPermissionForReadExternalStorage() {
         try {
-            ActivityCompat.requestPermissions(context as Activity, arrayOf(WRITE_EXTERNAL_STORAGE),
+            requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE),
                     READ_STORAGE_PERMISSION_REQUEST_CODE)
         } catch (e: Exception) {
             e.printStackTrace()
