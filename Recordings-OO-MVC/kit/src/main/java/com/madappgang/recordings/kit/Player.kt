@@ -98,13 +98,12 @@ class Player(
         audioPlayer.getCurrentPosition()
     }
 
-    fun getDuration() = if (state.value == State.PLAYING ||
-        state.value == State.PAUSED ||
-        state.value == State.STOPPED
+    fun getDuration() = if (state.value == State.NOT_STARTED ||
+        state.value == State.PREPARING
     ) {
-        audioPlayer.getDuration()
-    } else {
         0
+    } else {
+        audioPlayer.getDuration()
     }
 
     private fun createCacheDestanition(track: Track): File {
