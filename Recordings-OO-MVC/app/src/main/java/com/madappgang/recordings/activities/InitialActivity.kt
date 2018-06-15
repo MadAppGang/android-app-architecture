@@ -18,7 +18,7 @@ import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.validName
-import com.madappgang.recordings.core.NetworkExceptions
+import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job

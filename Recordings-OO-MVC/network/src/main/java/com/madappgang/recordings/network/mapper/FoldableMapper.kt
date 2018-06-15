@@ -10,7 +10,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
-import com.madappgang.recordings.core.NetworkExceptions
+import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Track
 import java.lang.reflect.Type
 

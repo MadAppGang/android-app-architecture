@@ -7,7 +7,6 @@
 package com.madappgang.recordings.network
 
 import com.madappgang.recordings.core.Id
-import com.madappgang.recordings.core.NetworkExceptions
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.network.mapper.NetworkMapper
 import okio.Okio

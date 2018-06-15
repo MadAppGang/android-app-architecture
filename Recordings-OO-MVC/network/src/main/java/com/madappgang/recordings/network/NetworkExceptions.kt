@@ -4,7 +4,9 @@
  * Created by Andrii Fedorov afedorov@madappgang.com on 6/8/18.
  */
 
-package com.madappgang.recordings.core
+package com.madappgang.recordings.network
+
+import com.madappgang.recordings.core.Folder
 
 sealed class NetworkExceptions(message: String) : Throwable(message) {
 
@@ -13,5 +15,5 @@ sealed class NetworkExceptions(message: String) : Throwable(message) {
 
     class ObjectParsingException : NetworkExceptions("Object Parsing Exception")
 
-    class UnknownException: NetworkExceptions("Unknown Exception")
+    class UnknownException : NetworkExceptions("Unknown Exception")
 }
