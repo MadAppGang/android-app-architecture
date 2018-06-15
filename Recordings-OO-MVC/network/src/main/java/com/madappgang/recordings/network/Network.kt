@@ -12,7 +12,7 @@ import com.madappgang.recordings.network.mapper.NetworkMapper
 import okio.Okio
 import java.io.File
 
-class Network internal constructor(
+class Network constructor(
     private val endpoint: Endpoint = Endpoint.Staging,
     private val networkSession: NetworkSession = OkHttpSession()
 ) {
@@ -112,17 +112,10 @@ class Network internal constructor(
             Result.Failure(e)
         }
     }
-
-    companion object {
-
-        fun newInstance(endpoint: Endpoint = Endpoint.Staging): Network {
-            return Network(endpoint)
-        }
-    }
 }
 
 internal fun <T, R : Response<T>> Network.handleResponse(response: R): R {
-    return if (response.statusCode > 400) {
+    return if (response.statusCode >= 400) {
         throw NetworkExceptions.UnknownException()
     } else {
         response

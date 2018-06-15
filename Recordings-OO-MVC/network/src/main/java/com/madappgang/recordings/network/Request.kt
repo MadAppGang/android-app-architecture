@@ -6,7 +6,7 @@
 
 package com.madappgang.recordings.network
 
-internal open class Request(
+open class Request(
     var path: String,
     var requestMethod: RequestMethod,
     var dataParts: List<DataPart<*>> = emptyList()
@@ -14,7 +14,7 @@ internal open class Request(
 
 
 
-internal sealed class DataPart<T>(val partName: String, val value: T, val bodyType: BodyType) {
+sealed class DataPart<T>(val partName: String, val value: T, val bodyType: BodyType) {
 
     class JsonPart(partName: String = "body", value: String): DataPart<String>(partName, value, BodyType.JSON)
 
@@ -22,12 +22,12 @@ internal sealed class DataPart<T>(val partName: String, val value: T, val bodyTy
 
 }
 
-internal enum class BodyType(val type: String) {
+enum class BodyType(val type: String) {
     JSON("application/json; charset=utf-8"),
     FILE("audio/mp4")
 }
 
-internal enum class RequestMethod {
+enum class RequestMethod {
     GET,
     POST,
     PATCH,

@@ -25,7 +25,7 @@ internal class DependencyContainer private constructor() {
     companion object {
 
         fun newInstance(configurator: Configurator): DependencyContainer {
-            val network = Network.newInstance()
+            val network = Network()
             val fileManager = FileManager(network)
             val recorder = Recorder(configurator.cacheDirectory)
             val player = Player(configurator.cacheDirectory, network)
