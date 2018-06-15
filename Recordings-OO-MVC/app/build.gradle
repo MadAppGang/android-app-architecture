@@ -44,6 +44,9 @@ dependencies {
     implementation 'ru.rambler.android:swipe-layout:1.0.14'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
+    //Time
+    implementation 'joda-time:joda-time:2.10'
+
     //Observing
     implementation "android.arch.lifecycle:livedata:1.1.1"
 

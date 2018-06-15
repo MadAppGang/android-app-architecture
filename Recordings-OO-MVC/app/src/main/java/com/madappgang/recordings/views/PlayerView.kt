@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import com.madappgang.recordings.R
-import com.madappgang.recordings.extensions.formatMilliseconds
+import com.madappgang.recordings.formatters.TimeFormatter
 import com.madappgang.recordings.kit.Player
 import kotlinx.android.synthetic.main.view_player.view.*
 
@@ -43,11 +43,11 @@ internal class PlayerView @JvmOverloads constructor(
 
     fun setTrackDuration(duration: Int) {
         playerProgress.max = duration
-        trackDuration.text = trackDuration.formatMilliseconds(duration)
+        trackDuration.text = TimeFormatter().formatMilliseconds(duration)
     }
 
     fun setCurrentPosition(position: Int) {
-        playerPosition.text = playerPosition.formatMilliseconds(position)
+        playerPosition.text = TimeFormatter().formatMilliseconds(position)
         playerProgress.progress = position
     }
 

@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.madappgang.recordings.R
-import com.madappgang.recordings.extensions.formatMilliseconds
+import com.madappgang.recordings.formatters.TimeFormatter
 import com.madappgang.recordings.kit.Recorder
 import kotlinx.android.synthetic.main.view_recorder.view.*
 
@@ -42,7 +42,7 @@ internal class RecorderView @JvmOverloads constructor(
     }
 
     fun setTime(millisecond: Int) {
-        time.text = time.formatMilliseconds(millisecond)
+        time.text = TimeFormatter().formatMilliseconds(millisecond)
     }
 
     private fun updateButton(status: Recorder.Status) {
