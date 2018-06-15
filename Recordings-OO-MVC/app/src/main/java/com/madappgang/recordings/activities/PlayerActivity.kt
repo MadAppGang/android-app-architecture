@@ -27,6 +27,17 @@ import java.util.concurrent.TimeUnit
 
 internal class PlayerActivity : AppCompatActivity() {
 
+    companion object {
+
+        private val TRACK_KEY = "track_key"
+
+        fun start(context: Context, track: Track) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra(TRACK_KEY, track)
+            context.startActivity(intent)
+        }
+    }
+
     private val player by lazy { App.dependencyContainer.player }
 
     private var updateUiJob: Job? = null
@@ -114,16 +125,5 @@ internal class PlayerActivity : AppCompatActivity() {
         player.state.value?.let { playerView.setState(it) }
         playerView.setTrackDuration(player.getDuration())
         playerView.setCurrentPosition(player.getCurrentPosition())
-    }
-
-    companion object {
-
-        private val TRACK_KEY = "track_key"
-
-        fun start(context: Context, track: Track) {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra(TRACK_KEY, track)
-            context.startActivity(intent)
-        }
     }
 }

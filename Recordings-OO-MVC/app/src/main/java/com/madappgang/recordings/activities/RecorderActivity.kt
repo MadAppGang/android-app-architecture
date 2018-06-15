@@ -37,6 +37,17 @@ internal class RecorderActivity :
     EditableDialogFragment.CompletionHandler,
     EditableDialogFragment.FieldValidationHandler {
 
+    companion object {
+
+        private val FOLDER_KEY = "folder_key"
+
+        fun startForResult(activity: AppCompatActivity, folder: Folder, requestCode: Int) {
+            val intent = Intent(activity, RecorderActivity::class.java)
+            intent.putExtra(FOLDER_KEY, folder)
+            activity.startActivityForResult(intent, requestCode)
+        }
+    }
+
     private val recorder by lazy { App.dependencyContainer.recorder }
     private val fileManager by lazy { App.dependencyContainer.fileManager }
 
@@ -226,16 +237,5 @@ internal class RecorderActivity :
             }
         }
         progressBar.makeGone()
-    }
-
-    companion object {
-
-        private val FOLDER_KEY = "folder_key"
-
-        fun startForResult(activity: AppCompatActivity, folder: Folder, requestCode: Int) {
-            val intent = Intent(activity, RecorderActivity::class.java)
-            intent.putExtra(FOLDER_KEY, folder)
-            activity.startActivityForResult(intent, requestCode)
-        }
     }
 }
