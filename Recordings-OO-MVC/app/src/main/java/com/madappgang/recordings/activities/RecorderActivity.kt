@@ -80,12 +80,12 @@ internal class RecorderActivity :
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == permissionsRequestRecordAudio &&
+        val isRecordAudioPermissionGranted = requestCode == permissionsRequestRecordAudio &&
             grantResults.isNotEmpty() &&
             grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            startRecording()
 
+        if (isRecordAudioPermissionGranted) {
+            startRecording()
         }
     }
 
@@ -142,11 +142,10 @@ internal class RecorderActivity :
             PackageManager.PERMISSION_GRANTED
 
     private fun requestMicrophonePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            )
-        ) {
+        val isShouldShowRequestPermissionRationale = ActivityCompat
+            .shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)
+
+        if (isShouldShowRequestPermissionRationale) {
             AlertDialog.Builder(this@RecorderActivity)
                 .setMessage(R.string.RecorderActivity_explanation_permission_request)
                 .setPositiveButton(R.string.RecorderActivity_ok, { _, _ ->

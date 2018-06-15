@@ -78,19 +78,16 @@ internal class PlayerView @JvmOverloads constructor(
     }
 
     private fun updateStartPauseButton(state: Player.State) {
-        startPausePlayer.isEnabled =
-            state == Player.State.PLAYING ||
-            state == Player.State.PAUSED ||
-            state == Player.State.COMPLETED ||
-            state == Player.State.NOT_STARTED
+        startPausePlayer.isEnabled = state != Player.State.PREPARING
 
-        startPausePlayer.text = if (state == Player.State.NOT_STARTED ||
+        val isShowStart = state == Player.State.NOT_STARTED ||
             state == Player.State.PAUSED ||
             state == Player.State.COMPLETED
-        ) {
-            context.getString(R.string.PlayerActivity_start)
+
+        if (isShowStart) {
+            startPausePlayer.text = context.getString(R.string.PlayerActivity_start)
         } else {
-            context.getString(R.string.PlayerActivity_pause)
+            startPausePlayer.text = context.getString(R.string.PlayerActivity_pause)
         }
     }
 }

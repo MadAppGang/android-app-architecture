@@ -13,6 +13,6 @@ import android.view.ViewGroup
 
 internal fun AppCompatActivity.showError(throwable: Throwable) {
     val rootView = findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
-    val message = throwable.message ?: "Undefined error "
+    val message = throwable.message ?: "Undefined error"
     Snackbar.make(rootView, message, Snackbar.LENGTH_INDEFINITE).show()
 }

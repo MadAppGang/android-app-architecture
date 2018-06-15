@@ -20,6 +20,7 @@ internal fun <T: Any> Fragment.getArgument(key: String, defaultValue: T?): T {
         else -> {
             val valueType = defaultValue?.let { it::class.java.simpleName }
             val message = "Type of defaultValue $valueType is not supported"
+
             throw  IllegalArgumentException(message)
         }
     }

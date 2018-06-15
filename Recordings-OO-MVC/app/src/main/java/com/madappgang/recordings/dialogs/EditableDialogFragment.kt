@@ -41,10 +41,14 @@ internal class EditableDialogFragment : DialogFragment() {
 
     class Configurator {
         var requestId: String = ""
-        @StringRes var titleTextId: Int = R.string.EditableDialogFragment_title
-        @StringRes var hintTextId: Int = R.string.EditableDialogFragment_hint
-        @StringRes var positiveButtonTextId: Int = R.string.EditableDialogFragment_save
-        @StringRes var negativeButtonTextId: Int = R.string.EditableDialogFragment_cancel
+        @StringRes
+        var titleTextId: Int = R.string.EditableDialogFragment_title
+        @StringRes
+        var hintTextId: Int = R.string.EditableDialogFragment_hint
+        @StringRes
+        var positiveButtonTextId: Int = R.string.EditableDialogFragment_save
+        @StringRes
+        var negativeButtonTextId: Int = R.string.EditableDialogFragment_cancel
         var defaultValue: String = ""
     }
 
@@ -105,9 +109,9 @@ internal class EditableDialogFragment : DialogFragment() {
         AlertDialog.Builder(requireContext())
             .setView(view)
             .setOnKeyListener(DialogInterface.OnKeyListener { dialog, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_BACK &&
+                val isBackPressed = keyCode == KeyEvent.KEYCODE_BACK &&
                     event.action == KeyEvent.ACTION_UP
-                ) {
+                if (isBackPressed) {
                     completionHandler?.onDialogNegativeClick(requestId)
                     return@OnKeyListener true
                 }
@@ -155,8 +159,8 @@ internal class EditableDialogFragment : DialogFragment() {
     }
 
     private fun updatePositiveButton(view: View?) {
-        val isFieldValid = fieldValidationHandler
-                ?.onValidField(requestId, view?.field?.text.toString()) ?: true
+        val fieldValue = view?.field?.text.toString()
+        val isFieldValid = fieldValidationHandler?.onValidField(requestId, fieldValue) ?: true
         view?.positiveButton?.isEnabled = isFieldValid
     }
 }

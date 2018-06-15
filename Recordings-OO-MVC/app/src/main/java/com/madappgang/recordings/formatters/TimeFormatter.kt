@@ -15,6 +15,7 @@ internal class TimeFormatter {
         val hours = duration.toStandardHours()
         val minutes = duration.toStandardMinutes().minus(hours.toStandardMinutes())
         val seconds = duration.toStandardSeconds().minus(minutes.toStandardSeconds())
+
         return String.format("%02d:%02d:%02d", hours.hours, minutes.minutes, seconds.seconds)
     }
 }

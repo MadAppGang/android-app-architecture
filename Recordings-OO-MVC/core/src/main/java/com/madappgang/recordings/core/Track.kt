@@ -11,11 +11,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Track(
-        var id: Id? = null,
-        var folderId: Id? = null,
-        override var name: String = "",
-        var path: String = ""
-) : Foldable, Parcelable {
+    var id: Id? = null,
+    var folderId: Id? = null,
+    override var name: String = "",
+    var path: String = ""
+) : Foldable,
+    Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

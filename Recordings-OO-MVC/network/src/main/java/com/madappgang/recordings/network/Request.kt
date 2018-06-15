@@ -13,12 +13,13 @@ open class Request(
 )
 
 
-
 sealed class DataPart<T>(val partName: String, val value: T, val bodyType: BodyType) {
 
-    class JsonPart(partName: String = "body", value: String): DataPart<String>(partName, value, BodyType.JSON)
+    class JsonPart(partName: String = "body", value: String) :
+        DataPart<String>(partName, value, BodyType.JSON)
 
-    class AudioPart(partName: String = "body", value: String): DataPart<String>(partName, value, BodyType.JSON)
+    class AudioPart(partName: String = "body", value: String) :
+        DataPart<String>(partName, value, BodyType.JSON)
 
 }
 

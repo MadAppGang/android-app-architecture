@@ -12,10 +12,7 @@ import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.network.mapper.NetworkMapper
 
-internal class RequestFactory(
-    private val endpoint: Endpoint,
-    private val mapper: NetworkMapper
-) {
+internal class RequestFactory(private val endpoint: Endpoint, private val mapper: NetworkMapper) {
 
     /**
      * @throws IllegalStateException if [requestType] is not supported
@@ -30,12 +27,13 @@ internal class RequestFactory(
     /**
      * @throws IllegalStateException if [requestType] or [fetchingOptions] is not supported
      */
-    fun <T> makeForFetching(requestType: Class<T>, fetchingOptions: FetchingOptions) = when (requestType) {
-        Folder::class.java,
-        Track::class.java -> makeForFetchingFoldable(fetchingOptions)
+    fun <T> makeForFetching(requestType: Class<T>, fetchingOptions: FetchingOptions) =
+        when (requestType) {
+            Folder::class.java,
+            Track::class.java -> makeForFetchingFoldable(fetchingOptions)
 
-        else -> throw IllegalArgumentException()
-    }
+            else -> throw IllegalArgumentException()
+        }
 
     /**
      * @throws IllegalStateException if type [entity] is not supported
@@ -68,10 +66,12 @@ internal class RequestFactory(
     private fun makeForFetchingFoldable(fetchingOptions: FetchingOptions): Request {
         val ownerId = fetchingOptions.options.firstOrNull { it is Constraint.OwnerId }
 
-        return if (fetchingOptions.options.contains(Constraint.Owner(Folder::class.java)) &&
-            ownerId != null
-        ) {
-            Request(buildUrl(endpoint, "api/foldable/${ownerId.value}/contents"), RequestMethod.GET)
+        val isConstraintExist =
+            fetchingOptions.options.contains(Constraint.Owner(Folder::class.java))
+
+        return if (isConstraintExist && ownerId != null) {
+            val pathSegment = "api/foldable/${ownerId.value}/contents"
+            Request(buildUrl(endpoint, pathSegment), RequestMethod.GET)
         } else {
             throw IllegalArgumentException()
         }

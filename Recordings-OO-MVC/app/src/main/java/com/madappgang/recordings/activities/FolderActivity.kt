@@ -31,9 +31,23 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 
 internal class FolderActivity :
-        AppCompatActivity(),
-        EditableDialogFragment.CompletionHandler,
-        EditableDialogFragment.FieldValidationHandler {
+    AppCompatActivity(),
+    EditableDialogFragment.CompletionHandler,
+    EditableDialogFragment.FieldValidationHandler {
+
+    companion object {
+
+        private val FOLDER_KEY = "folder_key"
+
+        fun start(context: Context, folder: Folder, asRoot: Boolean = false) {
+            val intent = Intent(context, FolderActivity::class.java)
+            intent.putExtra(FOLDER_KEY, folder)
+            if (asRoot) {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            context.startActivity(intent)
+        }
+    }
 
     private val fileManager by lazy { App.dependencyContainer.fileManager }
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
@@ -84,7 +98,9 @@ internal class FolderActivity :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == recorderActivityRequestId && resultCode == RESULT_OK) {
+
+        val isTrackRecorded = requestCode == recorderActivityRequestId && resultCode == RESULT_OK
+        if (isTrackRecorded) {
             loadFolderContentJob?.cancel()
             loadFolderContentJob = loadFolderContent()
         }
@@ -222,19 +238,5 @@ internal class FolderActivity :
             }
         }
         swipeRefreshLayout.isRefreshing = false
-    }
-
-    companion object {
-
-        private val FOLDER_KEY = "folder_key"
-
-        fun start(context: Context, folder: Folder, asRoot: Boolean = false) {
-            val intent = Intent(context, FolderActivity::class.java)
-            intent.putExtra(FOLDER_KEY, folder)
-            if (asRoot) {
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            context.startActivity(intent)
-        }
     }
 }

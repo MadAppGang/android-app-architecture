@@ -23,8 +23,10 @@ import java.util.*
 
 
 class Player(
-    private val cacheDirectory: File, private val network: Network
-) : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+    private val cacheDirectory: File,
+    private val network: Network
+) : MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnCompletionListener {
 
     enum class State {
         /**
@@ -129,20 +131,15 @@ class Player(
         state.value = State.NOT_STARTED
     }
 
-    fun getCurrentPosition() = if (state.value == State.NOT_STARTED ||
-        state.value == State.PREPARING
-    ) {
-        0
-    } else {
-        audioPlayer.getCurrentPosition()
+    fun getCurrentPosition(): Int {
+        val isProgressZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+
+        return if (isProgressZero) 0 else audioPlayer.currentPosition
     }
 
-    fun getDuration() = if (state.value == State.NOT_STARTED ||
-        state.value == State.PREPARING
-    ) {
-        0
-    } else {
-        audioPlayer.getDuration()
+    fun getDuration(): Int {
+        val isDurationZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+        return if (isDurationZero) 0 else audioPlayer.duration
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
