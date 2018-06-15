@@ -69,7 +69,6 @@ internal class PlayerActivity : AppCompatActivity() {
         super.onDestroy()
         updateUiJob?.cancel()
         if (isFinishing) {
-            player.stop()
             player.release()
         }
     }

@@ -54,6 +54,7 @@ class Player(
 
         audioPlayer.setAudioAttributes(audioAttributes)
         audioPlayer.setOnPreparedListener(this)
+        audioPlayer.setOnCompletionListener(this)
         audioPlayer.isLooping = false
     }
 
@@ -111,9 +112,7 @@ class Player(
     }
 
     fun getCurrentPosition() = if (state.value == State.NOT_STARTED ||
-        state.value == State.PREPARING ||
-        state.value == State.STOPPED ||
-        state.value == State.COMPLETED
+        state.value == State.PREPARING
     ) {
         0
     } else {
