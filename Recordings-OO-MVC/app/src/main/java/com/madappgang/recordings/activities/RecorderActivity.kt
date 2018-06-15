@@ -30,7 +30,6 @@ import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.Recorder
-import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.layoutmanagers.RecorderView
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -115,7 +114,7 @@ internal class RecorderActivity :
     }
 
     override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validName(value)
+        fileManager.validateName(value)
         true
     } catch (e: Throwable) {
         false

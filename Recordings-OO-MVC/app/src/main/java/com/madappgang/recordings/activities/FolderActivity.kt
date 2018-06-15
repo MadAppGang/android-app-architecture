@@ -27,7 +27,6 @@ import com.madappgang.recordings.dialogs.EditableDialogFragment
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
-import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -85,7 +84,7 @@ internal class FolderActivity :
     }
 
     override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validName(value)
+        fileManager.validateName(value)
         true
     } catch (e: Throwable) {
         false
@@ -185,7 +184,7 @@ internal class FolderActivity :
     private fun removeFoldable(foldable: Foldable) = launch(uiContext) {
         val result = async(bgContext) { fileManager.remove(foldable) }.await()
         when (result) {
-            is Result.Failure -> {
+            is Result.Failure<*> -> {
                 showError(result.throwable)
             }
         }

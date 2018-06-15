@@ -35,16 +35,19 @@ class FileManager(private val network: Network) {
     fun remove(foldable: Foldable): Result<Unit> {
         return network.removeEntity(foldable, Foldable::class.java)
     }
+
+    /**
+     * @throws FileExceptions.FileNameIsEmptyException if name is empty
+     */
+    fun validateName(name: String) {
+        if (name.isEmpty()) {
+            throw FileExceptions.FileNameIsEmptyException
+        }
+    }
 }
 
 sealed class FileExceptions(message: String) : Throwable(message) {
 
     object FileNameIsEmptyException : FileExceptions("")
 
-}
-
-fun FileManager.validName(name: String) {
-    if (name.isEmpty()) {
-        throw FileExceptions.FileNameIsEmptyException
-    }
 }

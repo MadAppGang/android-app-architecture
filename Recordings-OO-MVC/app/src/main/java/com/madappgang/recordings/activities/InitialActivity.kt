@@ -17,7 +17,6 @@ import com.madappgang.recordings.dialogs.EditableDialogFragment
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
-import com.madappgang.recordings.kit.validName
 import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Result
 import kotlinx.coroutines.experimental.CommonPool
@@ -60,7 +59,7 @@ internal class InitialActivity :
 
     override fun onValidField(requestId: String, value: String): Boolean {
         return try {
-            fileManager.validName(value)
+            fileManager.validateName(value)
             true
         } catch (e: Throwable) {
             false
