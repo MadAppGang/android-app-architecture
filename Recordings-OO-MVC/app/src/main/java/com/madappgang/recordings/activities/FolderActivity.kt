@@ -170,14 +170,17 @@ internal class FolderActivity :
     }
 
     private fun showCreateFolderDialog(defaultValue: String = "") {
-        val dialog = EditableDialogFragment.newInstance(
-            createFolderRequestId,
-            R.string.InitialActivity_Create_root_folder,
-            R.string.InitialActivity_enter_name,
-            R.string.InitialActivity_create,
-            R.string.InitialActivity_cancel,
-            defaultValue
-        )
+        val configurator = EditableDialogFragment.Configurator().apply {
+            requestId = createFolderRequestId
+            titleTextId = R.string.InitialActivity_Create_root_folder
+            hintTextId = R.string.InitialActivity_enter_name
+            positiveButtonTextId = R.string.InitialActivity_create
+            negativeButtonTextId = R.string.InitialActivity_cancel
+            this.defaultValue = defaultValue
+        }
+
+        val dialog = EditableDialogFragment.newInstance(configurator)
+
         dialog.show(supportFragmentManager, "CreateFolderDialogTag")
     }
 

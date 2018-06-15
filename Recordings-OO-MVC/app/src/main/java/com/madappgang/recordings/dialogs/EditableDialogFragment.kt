@@ -27,6 +27,52 @@ import com.madappgang.recordings.extensions.getArgument
 
 internal class EditableDialogFragment : DialogFragment() {
 
+    interface CompletionHandler {
+
+        fun onDialogPositiveClick(requestId: String, value: String) {
+        }
+
+        fun onDialogNegativeClick(requestId: String) {
+        }
+    }
+
+    interface FieldValidationHandler {
+
+        fun onValidField(requestId: String, value: String): Boolean
+    }
+
+    class Configurator {
+        var requestId: String = ""
+        @StringRes var titleTextId: Int = R.string.EditableDialogFragment_title
+        @StringRes var hintTextId: Int = R.string.EditableDialogFragment_hint
+        @StringRes var positiveButtonTextId: Int = R.string.EditableDialogFragment_save
+        @StringRes var negativeButtonTextId: Int = R.string.EditableDialogFragment_cancel
+        var defaultValue: String = ""
+    }
+
+    companion object {
+
+        private val REQUST_ID = "request_Id"
+        private val TITLE_STRING_ID = "title_string_id"
+        private val EDIT_TEXT_VALUE_STRING_ID = "edit_text_value_string_id"
+        private val EDIT_TEXT_HINT_STRING_ID = "edit_text_hint_string_id"
+        private val POSITIVE_BUTTON_STRING_ID = "positive_button_string_id"
+        private val NEGATIVE_BUTTON_STRING_ID = "negative_button_string_id"
+
+        fun newInstance(configurator: Configurator): EditableDialogFragment {
+            return EditableDialogFragment().apply {
+                arguments = bundleOf(
+                    REQUST_ID to configurator.requestId,
+                    TITLE_STRING_ID to configurator.titleTextId,
+                    EDIT_TEXT_HINT_STRING_ID to configurator.hintTextId,
+                    POSITIVE_BUTTON_STRING_ID to configurator.positiveButtonTextId,
+                    NEGATIVE_BUTTON_STRING_ID to configurator.negativeButtonTextId,
+                    EDIT_TEXT_VALUE_STRING_ID to configurator.defaultValue
+                )
+            }
+        }
+    }
+
     private lateinit var dialogTitle: TextView
     private lateinit var negativeButton: AppCompatButton
     private lateinit var positiveButton: AppCompatButton
@@ -123,49 +169,5 @@ internal class EditableDialogFragment : DialogFragment() {
         val isFieldValid = fieldValidationHandler
                 ?.onValidField(requestId, editTextField.text.toString()) ?: true
         positiveButton.isEnabled = isFieldValid
-    }
-
-    interface CompletionHandler {
-
-        fun onDialogPositiveClick(requestId: String, value: String) {
-        }
-
-        fun onDialogNegativeClick(requestId: String) {
-        }
-    }
-
-    interface FieldValidationHandler {
-
-        fun onValidField(requestId: String, value: String): Boolean
-    }
-
-    companion object {
-
-        private val REQUST_ID = "request_Id"
-        private val TITLE_STRING_ID = "title_string_id"
-        private val EDIT_TEXT_VALUE_STRING_ID = "edit_text_value_string_id"
-        private val EDIT_TEXT_HINT_STRING_ID = "edit_text_hint_string_id"
-        private val POSITIVE_BUTTON_STRING_ID = "positive_button_string_id"
-        private val NEGATIVE_BUTTON_STRING_ID = "negative_button_string_id"
-
-        fun newInstance(
-                requestId: String,
-                @StringRes titleTextId: Int,
-                @StringRes hintTextId: Int,
-                @StringRes positiveButtonTextId: Int = R.string.EditableDialogFragment_save,
-                @StringRes negativeButtonTextId: Int = R.string.EditableDialogFragment_cancel,
-                defaultValue: String = ""
-        ): EditableDialogFragment {
-            return EditableDialogFragment().apply {
-                arguments = bundleOf(
-                        REQUST_ID to requestId,
-                        TITLE_STRING_ID to titleTextId,
-                        EDIT_TEXT_HINT_STRING_ID to hintTextId,
-                        POSITIVE_BUTTON_STRING_ID to positiveButtonTextId,
-                        NEGATIVE_BUTTON_STRING_ID to negativeButtonTextId,
-                        EDIT_TEXT_VALUE_STRING_ID to defaultValue
-                )
-            }
-        }
     }
 }

@@ -21,6 +21,7 @@ internal class DependencyContainer private constructor() {
     lateinit var recorder: Recorder
     lateinit var player: Player
 
+    internal data class Configurator(val cacheDirectory: File)
 
     companion object {
 
@@ -37,7 +38,4 @@ internal class DependencyContainer private constructor() {
             }
         }
     }
-
 }
-
-internal data class Configurator(val cacheDirectory: File)

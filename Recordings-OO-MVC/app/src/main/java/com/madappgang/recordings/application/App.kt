@@ -18,7 +18,7 @@ internal class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val configurator = Configurator(cacheDir)
+        val configurator = DependencyContainer.Configurator(cacheDir)
 
         dependencyContainer = DependencyContainer.newInstance(configurator)
     }

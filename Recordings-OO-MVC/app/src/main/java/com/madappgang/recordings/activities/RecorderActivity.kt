@@ -195,14 +195,17 @@ internal class RecorderActivity :
     }
 
     private fun showSaveTrackDialog(defaultName: String = "") {
-        val dialog = EditableDialogFragment.newInstance(
-            saveTrackRequestId,
-            R.string.RecorderActivity_save_recording,
-            R.string.RecorderActivity_enter_name,
-            R.string.RecorderActivity_save,
-            R.string.RecorderActivity_cancel,
-            defaultName
-        )
+        val configurator = EditableDialogFragment.Configurator().apply {
+            requestId = saveTrackRequestId
+            titleTextId = R.string.RecorderActivity_save_recording
+            hintTextId = R.string.RecorderActivity_enter_name
+            positiveButtonTextId = R.string.RecorderActivity_save
+            negativeButtonTextId = R.string.RecorderActivity_cancel
+            this.defaultValue = defaultName
+        }
+
+        val dialog = EditableDialogFragment.newInstance(configurator)
+
         dialog.show(supportFragmentManager, "SaveTrackDialogTag")
     }
 
