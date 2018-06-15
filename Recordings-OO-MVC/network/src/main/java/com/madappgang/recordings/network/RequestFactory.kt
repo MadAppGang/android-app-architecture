@@ -17,20 +17,29 @@ internal class RequestFactory(
     private val mapper: NetworkMapper
 ) {
 
-    fun <T> makeForFetching(clazz: Class<T>, id: Id) = when (clazz) {
+    /**
+     * @throws IllegalStateException if [requestType] is not supported
+     */
+    fun <T> makeForFetching(requestType: Class<T>, id: Id) = when (requestType) {
         Folder::class.java,
         Track::class.java -> makeForFetchingFoldable(id)
 
         else -> throw IllegalArgumentException()
     }
 
-    fun <T> makeForFetching(clazz: Class<T>, fetchingOptions: FetchingOptions) = when (clazz) {
+    /**
+     * @throws IllegalStateException if [requestType] or [fetchingOptions] is not supported
+     */
+    fun <T> makeForFetching(requestType: Class<T>, fetchingOptions: FetchingOptions) = when (requestType) {
         Folder::class.java,
         Track::class.java -> makeForFetchingFoldable(fetchingOptions)
 
         else -> throw IllegalArgumentException()
     }
 
+    /**
+     * @throws IllegalStateException if type [entity] is not supported
+     */
     fun <T> makeForCreate(entity: T): Request {
         return when (entity) {
             is Foldable,
@@ -40,6 +49,9 @@ internal class RequestFactory(
         }
     }
 
+    /**
+     * @throws IllegalStateException if type [entity] is not supported
+     */
     fun <T> makeForRemove(entity: T) = when (entity) {
         is Folder -> makeForRemoveFoldable(entity.id)
         is Track -> makeForRemoveFoldable(entity.id)

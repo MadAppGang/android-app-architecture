@@ -27,11 +27,29 @@ class Player(
 ) : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     enum class State {
+        /**
+         * Default state of just created [Player]
+         */
         NOT_STARTED,
+        /**
+         * Preparing track for playing
+         */
         PREPARING,
+        /**
+         * Playing track
+         */
         PLAYING,
+        /**
+         * Paused track
+         */
         PAUSED,
+        /**
+         * Roll back to start track and stop playing
+         */
         STOPPED,
+        /**
+         * Track playing completed
+         */
         COMPLETED
     }
 

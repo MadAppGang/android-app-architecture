@@ -23,9 +23,21 @@ import java.util.*
 class Recorder(val cacheDirectory: File) {
 
     enum class Status {
+        /**
+         * Default state of just created [Recorder]
+         */
         NOT_STARTED,
+        /**
+         * Recording track
+         */
         STARTED,
+        /**
+         * Paused recording
+         */
         PAUSED,
+        /**
+         * Track recording completed
+         */
         COMPLETED
     }
 
@@ -38,6 +50,9 @@ class Recorder(val cacheDirectory: File) {
     private lateinit var part: File
     private var startTime = 0L
 
+    /**
+     * @throws IllegalStateException  if it is called after [start] without call [reset].
+     */
     fun start() {
         if (status.value != Status.NOT_STARTED) {
             throw IllegalStateException()
@@ -47,6 +62,9 @@ class Recorder(val cacheDirectory: File) {
         recordsPartsTime = 0
     }
 
+    /**
+     * @throws IllegalStateException  if it is called before [start] or after [stop] or after [reset].
+     */
     fun pause() {
         if (status.value != Status.STARTED) {
             throw IllegalStateException()
@@ -56,6 +74,9 @@ class Recorder(val cacheDirectory: File) {
         status.value = Status.PAUSED
     }
 
+    /**
+     * @throws IllegalStateException  if it is called before [start] or after [stop] or after [reset].
+     */
     fun resume() {
         if (status.value != Status.PAUSED) {
             throw IllegalStateException()
@@ -64,6 +85,9 @@ class Recorder(val cacheDirectory: File) {
         status.value = Status.STARTED
     }
 
+    /**
+     * @throws IllegalStateException  if it is called before [start] or after [reset].
+     */
     fun stop(): Track {
         if (status.value != Status.STARTED && status.value != Status.PAUSED) {
             throw IllegalStateException()

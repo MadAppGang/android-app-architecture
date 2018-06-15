@@ -59,6 +59,10 @@ internal enum class FileType(val type: String) {
     TRACK("track");
 
     companion object {
+
+        /**
+         * @throws IllegalStateException if type [type] is not supported
+         */
         fun ofValue(type: String): FileType {
             return when (type) {
                 FOLDER.type -> FOLDER

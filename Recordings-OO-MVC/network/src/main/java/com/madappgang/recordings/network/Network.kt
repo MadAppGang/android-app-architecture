@@ -114,6 +114,9 @@ class Network constructor(
     }
 }
 
+/**
+ * @throws NetworkExceptions.UnknownException if response status code  more equals than 400
+ */
 internal fun <T, R : Response<T>> Network.handleResponse(response: R): R {
     return if (response.statusCode >= 400) {
         throw NetworkExceptions.UnknownException()
