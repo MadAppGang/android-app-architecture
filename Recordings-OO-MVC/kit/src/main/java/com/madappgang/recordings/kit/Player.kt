@@ -7,6 +7,9 @@
 package com.madappgang.recordings.kit
 
 import android.arch.lifecycle.MutableLiveData
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.network.Network
@@ -20,13 +23,22 @@ import java.util.*
 
 
 class Player(
-    private val cacheDirectory: File,
-    private val network: Network
-) {
+    private val cacheDirectory: File, private val network: Network
+) : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+
+    enum class State {
+        NOT_STARTED,
+        PREPARING,
+        PLAYING,
+        PAUSED,
+        STOPPED,
+        COMPLETED
+    }
+
     var state: MutableLiveData<State> = MutableLiveData()
     var onError: ((Throwable) -> Unit)? = null
 
-    private val audioPlayer = AudioPlayer()
+    private val audioPlayer: MediaPlayer = MediaPlayer()
     private var tempFile: File? = null
     private var loadFileJob: Job? = null
 
@@ -35,8 +47,14 @@ class Player(
     init {
         state.value = State.NOT_STARTED
 
-        audioPlayer.onPrepared = { start() }
-        audioPlayer.onCompleted = { state.value = State.COMPLETED }
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+            .build()
+
+        audioPlayer.setAudioAttributes(audioAttributes)
+        audioPlayer.setOnPreparedListener(this)
+        audioPlayer.isLooping = false
     }
 
     fun play(track: Track) {
@@ -49,7 +67,10 @@ class Player(
             val result = network.downloadFile(track.path, destination)
 
             when (result) {
-                is Result.Success -> audioPlayer.prepare(destination.absolutePath)
+                is Result.Success -> {
+                    audioPlayer.setDataSource(destination.absolutePath)
+                    audioPlayer.prepareAsync()
+                }
                 is Result.Failure -> onError?.invoke(result.throwable)
             }
             tempFile = destination
@@ -70,7 +91,8 @@ class Player(
     fun stop() {
         state.value = State.STOPPED
         audioPlayer.pause()
-        audioPlayer.seekTo(audioPlayer.getCurrentPosition() * -1)
+        val startPosition = audioPlayer.currentPosition * -1
+        audioPlayer.seekTo(startPosition)
     }
 
     fun seekTo(millisecond: Int) {
@@ -106,19 +128,18 @@ class Player(
         audioPlayer.getDuration()
     }
 
+    override fun onPrepared(mp: MediaPlayer?) {
+        start()
+    }
+
+    override fun onCompletion(mp: MediaPlayer?) {
+        state.value = State.COMPLETED
+    }
+
     private fun createCacheDestanition(track: Track): File {
         val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmssSSS")
         val fileName = "track_${track.folderId}_${track.name}_${dateFormat.format(Date())}.m4a"
         return File(cacheDirectory, fileName)
-    }
-
-    enum class State {
-        NOT_STARTED,
-        PREPARING,
-        PLAYING,
-        PAUSED,
-        STOPPED,
-        COMPLETED
     }
 }
 
