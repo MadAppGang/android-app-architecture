@@ -16,21 +16,17 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.madappgang.recordings.R
 import com.madappgang.recordings.application.App
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.core.Track
 import com.madappgang.recordings.dialogs.EditableDialogFragment
-import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.kit.Recorder
-import com.madappgang.recordings.layoutmanagers.RecorderView
+import kotlinx.android.synthetic.main.activity_recorder.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.io.File
@@ -40,9 +36,6 @@ internal class RecorderActivity :
     AppCompatActivity(),
     EditableDialogFragment.CompletionHandler,
     EditableDialogFragment.FieldValidationHandler {
-
-    private val recorderView by lazy { findViewById<RecorderView>(R.id.recorderView) }
-    private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
     private val recorder by lazy { App.dependencyContainer.recorder }
     private val fileManager by lazy { App.dependencyContainer.fileManager }

@@ -13,17 +13,15 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatButton
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import com.madappgang.recordings.R
 import com.madappgang.recordings.extensions.getArgument
+import kotlinx.android.synthetic.main.dialog_fragment_editable.view.*
 
 internal class EditableDialogFragment : DialogFragment() {
 
@@ -73,11 +71,6 @@ internal class EditableDialogFragment : DialogFragment() {
         }
     }
 
-    private lateinit var dialogTitle: TextView
-    private lateinit var negativeButton: AppCompatButton
-    private lateinit var positiveButton: AppCompatButton
-    private lateinit var editTextField: EditText
-
     private var completionHandler: CompletionHandler? = null
     private var fieldValidationHandler: FieldValidationHandler? = null
 
@@ -92,15 +85,10 @@ internal class EditableDialogFragment : DialogFragment() {
         val layoutInflater = LayoutInflater.from(requireContext())
         val view = layoutInflater.inflate(R.layout.dialog_fragment_editable, null)
 
-        dialogTitle = view.findViewById(R.id.title)
-        negativeButton = view.findViewById(R.id.negativeButton)
-        positiveButton = view.findViewById(R.id.positiveButton)
-        editTextField = view.findViewById(R.id.field)
-
-        initDialogTitle()
-        initNegativeButton()
-        initPositiveButton()
-        initEditTextField()
+        initDialogTitle(view)
+        initNegativeButton(view)
+        initPositiveButton(view)
+        initEditTextField(view)
 
         val dialog = createDialog(view)
         dialog.setCanceledOnTouchOutside(false)
@@ -127,31 +115,32 @@ internal class EditableDialogFragment : DialogFragment() {
             })
             .create()
 
-    private fun initDialogTitle() {
-        dialogTitle.setText(titleTextId)
+    private fun initDialogTitle(view: View?) {
+        view?.title?.setText(titleTextId)
     }
 
-    private fun initNegativeButton() {
-        negativeButton.setText(negativeButtonTextId)
-        negativeButton.setOnClickListener {
+    private fun initNegativeButton(view: View?) {
+        view?.negativeButton?.setText(negativeButtonTextId)
+        view?.negativeButton?.setOnClickListener {
             completionHandler?.onDialogNegativeClick(requestId)
             dismiss()
         }
     }
 
-    private fun initPositiveButton() {
-        positiveButton.setText(positiveButtonTextId)
-        positiveButton.setOnClickListener {
-            completionHandler?.onDialogPositiveClick(requestId, editTextField.text.toString())
+    private fun initPositiveButton(view: View?) {
+        view?.positiveButton?.setText(positiveButtonTextId)
+        view?.positiveButton?.setOnClickListener {
+            val fieldValue = view.field?.text.toString()
+            completionHandler?.onDialogPositiveClick(requestId, fieldValue)
             dismiss()
         }
-        updatePositiveButton()
+        updatePositiveButton(view)
     }
 
-    private fun initEditTextField() {
-        editTextField.setText(defaultValue)
-        editTextField.setHint(hintTextId)
-        editTextField.addTextChangedListener(object : TextWatcher {
+    private fun initEditTextField(view: View?) {
+        view?.field?.setText(defaultValue)
+        view?.field?.setHint(hintTextId)
+        view?.field?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -159,15 +148,15 @@ internal class EditableDialogFragment : DialogFragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updatePositiveButton()
+                updatePositiveButton(view)
             }
         })
-        updatePositiveButton()
+        updatePositiveButton(view)
     }
 
-    private fun updatePositiveButton() {
+    private fun updatePositiveButton(view: View?) {
         val isFieldValid = fieldValidationHandler
-                ?.onValidField(requestId, editTextField.text.toString()) ?: true
-        positiveButton.isEnabled = isFieldValid
+                ?.onValidField(requestId, view?.field?.text.toString()) ?: true
+        view?.positiveButton?.isEnabled = isFieldValid
     }
 }

@@ -25,6 +25,7 @@ import com.madappgang.recordings.extensions.makeGone
 import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.kit.Player
 import com.madappgang.recordings.views.PlayerView
+import kotlinx.android.synthetic.main.activity_player.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
@@ -33,11 +34,6 @@ import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.TimeUnit
 
 internal class PlayerActivity : AppCompatActivity() {
-
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
-    private val toolbarTitle by lazy { findViewById<TextView>(R.id.toolbarTitle) }
-    private val playerView by lazy { findViewById<PlayerView>(R.id.playerView) }
-    private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
     private val player by lazy { App.dependencyContainer.player }
 

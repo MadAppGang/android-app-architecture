@@ -9,39 +9,31 @@ package com.madappgang.recordings.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.widget.TextView
+import android.view.View
 import com.madappgang.recordings.R
 import com.madappgang.recordings.adapters.FoldableAdapter
 import com.madappgang.recordings.application.App
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
-import com.madappgang.recordings.dialogs.EditableDialogFragment
-import com.madappgang.recordings.extensions.makeGone
-import com.madappgang.recordings.extensions.makeVisible
-import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.core.Result
-import kotlinx.coroutines.experimental.*
+import com.madappgang.recordings.dialogs.EditableDialogFragment
+import com.madappgang.recordings.extensions.showError
+import kotlinx.android.synthetic.main.activity_folder.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 internal class FolderActivity :
         AppCompatActivity(),
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {
-
-    private val toolbarTitle by lazy { findViewById<TextView>(R.id.toolbarTitle) }
-    private val swipeRefresherView by lazy { findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout) }
-    private val foldableListView by lazy { findViewById<RecyclerView>(R.id.itemsList) }
-    private val recordTrack by lazy { findViewById<FloatingActionButton>(R.id.recordTrack) }
-    private val createFolder by lazy { findViewById<FloatingActionButton>(R.id.createFolder) }
-    private val floatingMenu by lazy { findViewById<FloatingActionButton>(R.id.floatingMenu) }
 
     private val fileManager by lazy { App.dependencyContainer.fileManager }
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
@@ -133,13 +125,13 @@ internal class FolderActivity :
 
     private fun updateFloatingMenu() {
         val floatingMenuIcon = if (isFloatingMenuOpen) {
-            createFolder.makeGone()
-            recordTrack.makeGone()
+            createFolder.visibility = View.GONE
+            recordTrack.visibility = View.GONE
             ContextCompat.getDrawable(this, R.drawable.ic_add_white_24dp)
 
         } else {
-            createFolder.makeVisible()
-            recordTrack.makeVisible()
+            createFolder.visibility = View.VISIBLE
+            recordTrack.visibility = View.VISIBLE
             ContextCompat.getDrawable(this, R.drawable.ic_close_white_24dp)
         }
         floatingMenu.setImageDrawable(floatingMenuIcon)
@@ -160,10 +152,10 @@ internal class FolderActivity :
                 removeFoldableJob = removeFoldable(foldable)
             }
         }
-        foldableListView.layoutManager = LinearLayoutManager(this)
-        foldableListView.adapter = adapter
+        itemsList.layoutManager = LinearLayoutManager(this)
+        itemsList.adapter = adapter
 
-        swipeRefresherView.setOnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             loadFolderContentJob?.cancel()
             loadFolderContentJob = loadFolderContent()
         }
@@ -194,7 +186,7 @@ internal class FolderActivity :
     }
 
     private fun loadFolderContent() = launch(uiContext) {
-        swipeRefresherView.isRefreshing = true
+        swipeRefreshLayout.isRefreshing = true
 
         val result = async(bgContext) { fileManager.fetchList(folder) }.await()
 
@@ -206,11 +198,11 @@ internal class FolderActivity :
                 showError(result.throwable)
             }
         }
-        swipeRefresherView.isRefreshing = false
+        swipeRefreshLayout.isRefreshing = false
     }
 
     private fun createFolder(name: String) = launch(uiContext) {
-        swipeRefresherView.isRefreshing = true
+        swipeRefreshLayout.isRefreshing = true
 
         val folder = Folder().apply {
             this.folderId = folder.id
@@ -229,7 +221,7 @@ internal class FolderActivity :
                 showError(result.throwable)
             }
         }
-        swipeRefresherView.isRefreshing = false
+        swipeRefreshLayout.isRefreshing = false
     }
 
     companion object {

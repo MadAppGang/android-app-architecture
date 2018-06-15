@@ -7,14 +7,13 @@
 package com.madappgang.recordings.views
 
 import android.content.Context
-import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.SeekBar
-import android.widget.TextView
 import com.madappgang.recordings.R
 import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.kit.Player
+import kotlinx.android.synthetic.main.view_player.view.*
 
 internal class PlayerView @JvmOverloads constructor(
     context: Context,
@@ -26,12 +25,7 @@ internal class PlayerView @JvmOverloads constructor(
     var onStartPausePlayer: () -> Unit = {}
     var onProgressChanged: (Int) -> Unit = {}
 
-    private val playerPosition by lazy { findViewById<TextView>(R.id.playerPosition) }
-    private val trackDuration by lazy { findViewById<TextView>(R.id.trackDuration) }
-    private val startPausePlayer by lazy { findViewById<AppCompatButton>(R.id.startPausePlayer) }
-    private val playerSeekBar by lazy { findViewById<SeekBar>(R.id.playerProgress) }
-
-    private var state: Player.State = Player.State.NOT_STARTED
+    private var isAllowTouch = false
 
     init {
         inflate(getContext(), R.layout.view_player, this)
@@ -43,28 +37,28 @@ internal class PlayerView @JvmOverloads constructor(
     }
 
     fun setState(state: Player.State) {
-        this.state = state
-        updateStartPauseButton()
+        isAllowTouch = state != Player.State.NOT_STARTED
+        updateStartPauseButton(state)
     }
 
     fun setTrackDuration(duration: Int) {
-        playerSeekBar.max = duration
+        playerProgress.max = duration
         trackDuration.text = trackDuration.formatMilliseconds(duration)
     }
 
     fun setCurrentPosition(position: Int) {
         playerPosition.text = playerPosition.formatMilliseconds(position)
-        playerSeekBar.progress = position
+        playerProgress.progress = position
     }
 
     private fun init() {
         startPausePlayer.setOnClickListener { onStartPausePlayer.invoke() }
 
-        playerSeekBar.setOnTouchListener { v, event ->
-            return@setOnTouchListener state == Player.State.NOT_STARTED
+        playerProgress.setOnTouchListener { v, event ->
+            return@setOnTouchListener !isAllowTouch
         }
 
-        playerSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        playerProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar?,
                 progress: Int,
@@ -83,7 +77,7 @@ internal class PlayerView @JvmOverloads constructor(
         })
     }
 
-    private fun updateStartPauseButton() {
+    private fun updateStartPauseButton(state: Player.State) {
         startPausePlayer.isEnabled =
             state == Player.State.PLAYING ||
             state == Player.State.PAUSED ||

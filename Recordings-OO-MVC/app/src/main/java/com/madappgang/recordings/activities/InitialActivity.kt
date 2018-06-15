@@ -19,6 +19,7 @@ import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Result
+import kotlinx.android.synthetic.main.activity_initial.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
@@ -29,8 +30,6 @@ internal class InitialActivity :
         AppCompatActivity(),
         EditableDialogFragment.CompletionHandler,
         EditableDialogFragment.FieldValidationHandler {
-
-    private val progressBar by lazy { findViewById<ProgressBar>(R.id.progressBar) }
 
     private val fileManager by lazy { App.dependencyContainer.fileManager }
 

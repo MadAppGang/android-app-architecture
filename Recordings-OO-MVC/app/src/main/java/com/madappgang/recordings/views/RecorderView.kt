@@ -8,12 +8,12 @@ package com.madappgang.recordings.layoutmanagers
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.madappgang.recordings.R
 import com.madappgang.recordings.extensions.formatMilliseconds
 import com.madappgang.recordings.kit.Recorder
+import kotlinx.android.synthetic.main.view_recorder.view.*
 
 
 internal class RecorderView @JvmOverloads constructor(
@@ -29,13 +29,6 @@ internal class RecorderView @JvmOverloads constructor(
 
     private val time by lazy { findViewById<TextView>(R.id.time) }
 
-    private val startRecording by lazy { findViewById<Button>(R.id.startRecording) }
-    private val pauseResumeRecording by lazy { findViewById<Button>(R.id.pauseResumeRecording) }
-    private val stopRecording by lazy { findViewById<Button>(R.id.stopRecording) }
-
-    private var status = Recorder.Status.NOT_STARTED
-
-
     init {
         inflate(getContext(), R.layout.view_recorder, this)
 
@@ -45,15 +38,14 @@ internal class RecorderView @JvmOverloads constructor(
     }
 
     fun setStatus(status: Recorder.Status) {
-        this.status = status
-        updateButton()
+        updateButton(status)
     }
 
     fun setTime(millisecond: Int) {
         time.text = time.formatMilliseconds(millisecond)
     }
 
-    private fun updateButton() {
+    private fun updateButton(status: Recorder.Status) {
         when (status) {
             Recorder.Status.NOT_STARTED -> applyNotStartedStateForButton()
             Recorder.Status.STARTED -> applyStartedStateForButton()
