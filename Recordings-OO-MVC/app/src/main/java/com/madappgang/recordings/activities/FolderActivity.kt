@@ -148,7 +148,7 @@ internal class FolderActivity :
             }
 
             onRemoveItemClicked = { foldable, index ->
-                adapter.removeAt(index)
+                adapter.remove(index)
                 removeFoldableJob = removeFoldable(foldable)
             }
         }
@@ -192,7 +192,7 @@ internal class FolderActivity :
 
         when (result) {
             is Result.Success -> {
-                adapter.setData(result.value)
+                adapter.set(result.value)
             }
             is Result.Failure -> {
                 showError(result.throwable)

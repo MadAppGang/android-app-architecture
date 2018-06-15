@@ -41,14 +41,14 @@ internal class FoldableAdapter : RecyclerView.Adapter<FoldableAdapter.FileViewHo
         holder.init(data[position])
     }
 
-    fun setData(items: List<Foldable>) {
+    fun set(items: List<Foldable>) {
         data.clear()
         data.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun removeAt(index: Int) {
-        data.remove(data.get(index))
+    fun remove(index: Int) {
+        data.remove(data[index])
         notifyItemRemoved(index)
     }
 
@@ -66,22 +66,22 @@ internal class FoldableAdapter : RecyclerView.Adapter<FoldableAdapter.FileViewHo
 
         fun init(foldable: Foldable) {
             when (foldable) {
-                is Folder -> initAs(foldable)
-                is Track -> initAs(foldable)
+                is Folder -> init(foldable)
+                is Track -> init(foldable)
             }
             delete.setOnClickListener {
                 onRemoveItemClicked(foldable, adapterPosition)
             }
         }
 
-        fun initAs(folder: Folder) {
+        private fun init(folder: Folder) {
             nameView.text = folder.name
             itemIcon.setImageResource(R.drawable.ic_folder_black_24dp)
             arrowRight.visibility = View.VISIBLE
             item.setOnClickListener { onFolderItemClicked(folder) }
         }
 
-        fun initAs(track: Track) {
+        private fun init(track: Track) {
             nameView.text = track.name
             itemIcon.setImageResource(R.drawable.ic_music_note_black_24dp)
             arrowRight.visibility = View.GONE

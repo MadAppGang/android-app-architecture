@@ -30,7 +30,7 @@ internal class PlayerView @JvmOverloads constructor(
     init {
         inflate(getContext(), R.layout.view_player, this)
 
-        init()
+        initListener()
         setState(Player.State.NOT_STARTED)
         setTrackDuration(0)
         setCurrentPosition(0)
@@ -51,7 +51,7 @@ internal class PlayerView @JvmOverloads constructor(
         playerProgress.progress = position
     }
 
-    private fun init() {
+    private fun initListener() {
         startPausePlayer.setOnClickListener { onStartPausePlayer.invoke() }
 
         playerProgress.setOnTouchListener { v, event ->
