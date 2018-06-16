@@ -20,7 +20,8 @@ internal class RequestFactory(private val endpoint: Endpoint, private val mapper
     fun <T> makeForFetching(entityType: Class<T>, fetchingOptions: FetchingOptions) =
         when (entityType) {
             Folder::class.java,
-            Track::class.java -> makeForFetchingFoldable(fetchingOptions)
+            Track::class.java,
+            Foldable::class.java -> makeForFetchingFoldable(fetchingOptions)
 
             else -> throw IllegalArgumentException()
         }
@@ -31,6 +32,7 @@ internal class RequestFactory(private val endpoint: Endpoint, private val mapper
     fun <T> makeForCreate(entity: T): Request {
         return when (entity) {
             is Foldable,
+            is Folder,
             is Track -> makeForCreateFoldable(entity as Foldable)
 
             else -> throw IllegalArgumentException()
@@ -41,7 +43,9 @@ internal class RequestFactory(private val endpoint: Endpoint, private val mapper
      * @throws IllegalStateException if type [entity] is not supported
      */
     fun <T> makeForRemove(entity: T) = when (entity) {
-        is Foldable -> makeForRemoveFoldable(entity.name)
+        is Track,
+        is Folder,
+        is Foldable -> makeForRemoveFoldable((entity as Foldable).name)
 
         else -> throw IllegalArgumentException()
     }

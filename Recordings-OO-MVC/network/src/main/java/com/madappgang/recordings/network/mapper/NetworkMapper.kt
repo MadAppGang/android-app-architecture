@@ -8,7 +8,11 @@ package com.madappgang.recordings.network.mapper
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import com.madappgang.recordings.core.Foldable
+import com.madappgang.recordings.core.Folder
+import com.madappgang.recordings.core.Track
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 internal class NetworkMapper {
 
@@ -16,15 +20,25 @@ internal class NetworkMapper {
 
     fun <T> mapToEntity(data: String, entityType: Class<T>) = gson.fromJson(data, entityType)
 
-    fun <T> mapToList(data: String) =
-        gson.fromJson<List<T>>(data, object : TypeToken<List<T>>(){}.type)
+    fun <T> mapToList(data: String, entityType: Class<T>): List<T> =
+        gson.fromJson(data, ListOf(entityType))
 
     fun toJson(entity: Any) = gson.toJson(entity)
 }
 
 internal fun createGson() = GsonBuilder()
     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    .registerTypeAdapter(FoldableMapper::class.java, FoldableMapper())
-    .registerTypeAdapter(FolderMapper::class.java, FolderMapper())
-    .registerTypeAdapter(TrackMapper::class.java, TrackMapper())
+    .registerTypeAdapter(Foldable::class.java, FoldableMapper())
+    .registerTypeAdapter(Folder::class.java, FolderMapper())
+    .registerTypeAdapter(Track::class.java, TrackMapper())
     .create()
+
+internal class ListOf<T>(private val type: Class<T>) : ParameterizedType {
+
+    override fun getRawType() = List::class.java
+
+    override fun getOwnerType() = null
+
+    override fun getActualTypeArguments() = arrayOf<Type>(type)
+
+}

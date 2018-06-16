@@ -6,6 +6,7 @@
 
 package com.madappgang.recordings.network
 
+import com.google.gson.internal.LinkedTreeMap
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.network.mapper.NetworkMapper
 
@@ -45,7 +46,7 @@ class Network constructor(
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entity: List<T> = networkMapper.mapToList(data.value)
+            val entity: List<T> = networkMapper.mapToList(data.value, entityType)
 
             Result.Success(entity)
         } catch (e: Throwable) {
