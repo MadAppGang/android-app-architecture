@@ -102,7 +102,7 @@ internal class RecorderActivity :
 
     override fun onDialogPositiveClick(requestId: String, value: String) {
         if (requestId == saveTrackRequestId) {
-            track.folderId = folder.id
+            track.path = folder.getFullPath()
             track.name = value
             saveTrackJob?.cancel()
             saveTrackJob = saveTrack(track)
@@ -224,7 +224,7 @@ internal class RecorderActivity :
     private fun saveTrack(track: Track) = launch(uiContext) {
         progressBar.makeVisible()
 
-        val result = async(bgContext) { fileManager.add(track, Track::class.java) }.await()
+        val result = async(bgContext) { fileManager.add(track) }.await()
 
         when (result) {
             is Result.Success -> {

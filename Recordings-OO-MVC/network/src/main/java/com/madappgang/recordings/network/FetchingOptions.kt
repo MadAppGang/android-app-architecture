@@ -6,35 +6,33 @@
 
 package com.madappgang.recordings.network
 
-import com.madappgang.recordings.core.Id
-
 class FetchingOptions {
-    val options = mutableSetOf<Constraint>()
+
+    val options = mutableSetOf<Constraint<*>>()
 }
 
-sealed class Constraint(val value: Any) {
+sealed class Constraint<T>(val value: T) {
 
-    class OwnerId(id: Id): Constraint(id)
+    class FoldablePath(value: String): Constraint<String>(value)
 
-    class Owner(clazz: Class<*>): Constraint(clazz)
+    class FoldableName(value: String): Constraint<String>(value)
 
-     override fun equals(other: Any?): Boolean {
-         if (this === other) return true
-         if (javaClass != other?.javaClass) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Constraint<*>) return false
 
-         other as Constraint
+        if (value != other.value) return false
 
-         if (value != other.value) return false
+        return true
+    }
 
-         return true
-     }
+    override fun hashCode(): Int {
+        return value?.hashCode() ?: 0
+    }
 
-     override fun hashCode(): Int {
-         return value.hashCode()
-     }
  }
 
-fun FetchingOptions.add(constraint: Constraint): FetchingOptions {
+fun FetchingOptions.add(constraint: Constraint<*>): FetchingOptions {
     options.add(constraint)
     return this
 }

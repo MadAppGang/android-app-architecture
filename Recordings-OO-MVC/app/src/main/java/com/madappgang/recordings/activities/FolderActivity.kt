@@ -221,11 +221,11 @@ internal class FolderActivity :
         swipeRefreshLayout.isRefreshing = true
 
         val folder = Folder().apply {
-            this.folderId = folder.id
+            this.path = folder.getFullPath()
             this.name = name
         }
 
-        val result = async(bgContext) { fileManager.add(folder, Folder::class.java) }.await()
+        val result = async(bgContext) { fileManager.add(folder) }.await()
 
         when (result) {
             is Result.Success -> {

@@ -53,22 +53,22 @@ internal class OkHttpSession(
     }
 
     private fun convertRequest(request: Request): okhttp3.Request {
-        val requestBody = if (request.dataParts.size == 1) {
-            buildRequestBody(request.dataParts.first())
-        } else {
-            buildMultipartRequestBody(request)
-        }
-
         val builder = when (request.requestMethod) {
             RequestMethod.GET -> okhttp3.Request.Builder().get()
-            RequestMethod.POST -> okhttp3.Request.Builder().post(requestBody)
+            RequestMethod.POST -> okhttp3.Request.Builder().post(buildBody(request))
             RequestMethod.DELETE -> okhttp3.Request.Builder().delete()
-            RequestMethod.PUT -> okhttp3.Request.Builder().put(requestBody)
-            RequestMethod.PATCH -> okhttp3.Request.Builder().patch(requestBody)
+            RequestMethod.PUT -> okhttp3.Request.Builder().put(buildBody(request))
+            RequestMethod.PATCH -> okhttp3.Request.Builder().patch(buildBody(request))
         }
 
         builder.url(request.path)
         return builder.build()
+    }
+
+    private fun buildBody(request: Request) = if (request.dataParts.size == 1) {
+        buildRequestBody(request.dataParts.first())
+    } else {
+        buildMultipartRequestBody(request)
     }
 
     private fun buildMultipartRequestBody(request: Request): RequestBody {

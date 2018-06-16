@@ -8,7 +8,6 @@ package com.madappgang.recordings.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ProgressBar
 import com.madappgang.recordings.application.App
 import com.madappgang.recordings.R
 import com.madappgang.recordings.core.Folder
@@ -19,6 +18,9 @@ import com.madappgang.recordings.extensions.makeVisible
 import com.madappgang.recordings.extensions.showError
 import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Result
+import com.madappgang.recordings.network.Constraint
+import com.madappgang.recordings.network.FetchingOptions
+import com.madappgang.recordings.network.add
 import kotlinx.android.synthetic.main.activity_initial.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
@@ -93,7 +95,9 @@ internal class InitialActivity :
         progressBar.makeVisible()
 
         val result = async(bgContext) {
-            fileManager.fetchEntity(Folder::class.java, Id(""))
+            val fetchingOptions = FetchingOptions()
+                .add(Constraint.FoldablePath(""))
+            fileManager.fetchEntity(Folder::class.java, fetchingOptions)
         }.await()
 
         progressBar.makeGone()
@@ -116,7 +120,7 @@ internal class InitialActivity :
             this.name = name
         }
         progressBar.makeVisible()
-        val result = async(bgContext) { fileManager.add(folder, Folder::class.java) }.await()
+        val result = async(bgContext) { fileManager.add(folder) }.await()
 
         when (result) {
             is Result.Success -> startFolderActivity(result.value)

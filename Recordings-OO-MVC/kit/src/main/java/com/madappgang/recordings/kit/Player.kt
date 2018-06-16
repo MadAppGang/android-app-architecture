@@ -12,7 +12,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.core.Track
-import com.madappgang.recordings.network.Network
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 import kotlinx.coroutines.experimental.Job
@@ -23,10 +22,8 @@ import java.util.*
 
 
 class Player(
-    private val cacheDirectory: File,
-    private val network: Network
-) : MediaPlayer.OnPreparedListener,
-    MediaPlayer.OnCompletionListener {
+    private val cacheDirectory: File
+) : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     enum class State {
         /**
@@ -59,10 +56,6 @@ class Player(
     var onError: ((Throwable) -> Unit)? = null
 
     private val audioPlayer: MediaPlayer = MediaPlayer()
-    private var tempFile: File? = null
-    private var loadFileJob: Job? = null
-
-    private val bgContext: CoroutineDispatcher by lazy { CommonPool }
 
     init {
         state.value = State.NOT_STARTED
@@ -81,21 +74,9 @@ class Player(
     fun play(track: Track) {
         audioPlayer.reset()
         state.value = State.PREPARING
-        val destination = createCacheDestanition(track)
 
-        loadFileJob?.cancel()
-        loadFileJob = async(bgContext) {
-            val result = network.downloadFile(track.path, destination)
-
-            when (result) {
-                is Result.Success -> {
-                    audioPlayer.setDataSource(destination.absolutePath)
-                    audioPlayer.prepareAsync()
-                }
-                is Result.Failure -> onError?.invoke(result.throwable)
-            }
-            tempFile = destination
-        }
+        audioPlayer.setDataSource(track.getFullPath())
+        audioPlayer.prepareAsync()
 
     }
 
@@ -122,12 +103,6 @@ class Player(
 
     fun release() {
         audioPlayer.reset()
-        loadFileJob?.cancel()
-        tempFile?.let {
-            if (it.exists()) {
-                it.delete()
-            }
-        }
         state.value = State.NOT_STARTED
     }
 
@@ -148,12 +123,6 @@ class Player(
 
     override fun onCompletion(mp: MediaPlayer?) {
         state.value = State.COMPLETED
-    }
-
-    private fun createCacheDestanition(track: Track): File {
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmssSSS")
-        val fileName = "track_${track.folderId}_${track.name}_${dateFormat.format(Date())}.m4a"
-        return File(cacheDirectory, fileName)
     }
 }
 

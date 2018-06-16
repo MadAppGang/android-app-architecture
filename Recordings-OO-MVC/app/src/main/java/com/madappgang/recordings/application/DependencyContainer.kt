@@ -10,9 +10,6 @@ import com.madappgang.recordings.kit.FileManager
 import com.madappgang.recordings.kit.Player
 import com.madappgang.recordings.kit.Recorder
 import com.madappgang.recordings.network.Network
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.android.UI
 import java.io.File
 
 internal class DependencyContainer private constructor() {
@@ -29,7 +26,7 @@ internal class DependencyContainer private constructor() {
             val network = Network()
             val fileManager = FileManager(network)
             val recorder = Recorder(configurator.cacheDirectory)
-            val player = Player(configurator.cacheDirectory, network)
+            val player = Player(configurator.cacheDirectory)
 
             return DependencyContainer().apply {
                 this.fileManager = fileManager

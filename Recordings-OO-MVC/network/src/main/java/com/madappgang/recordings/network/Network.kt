@@ -6,11 +6,8 @@
 
 package com.madappgang.recordings.network
 
-import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.core.Result
 import com.madappgang.recordings.network.mapper.NetworkMapper
-import okio.Okio
-import java.io.File
 
 class Network constructor(
     private val endpoint: Endpoint = Endpoint.Staging,
@@ -21,17 +18,16 @@ class Network constructor(
     private val requestFactory: RequestFactory = RequestFactory(endpoint, networkMapper)
 
 
-    fun <T> fetchEntity(requestType: Class<T>, id: Id): Result<T> {
+    fun <T: Any> fetchEntity(entityType: Class<T>, fetchingOptions: FetchingOptions): Result<T> {
         val request = try {
-            requestFactory.makeForFetching(requestType, id)
+            requestFactory.makeForFetching(entityType, fetchingOptions)
         } catch (e: Throwable) {
             return Result.Failure(e)
         }
-
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entityResult = networkMapper.mapToEntity(data.value, requestType)
+            val entityResult = networkMapper.mapToEntity(data.value, entityType)
 
             Result.Success(entityResult)
         } catch (e: Throwable) {
@@ -39,9 +35,9 @@ class Network constructor(
         }
     }
 
-    fun <T> fetchList(requestType: Class<T>, fetchingOptions: FetchingOptions): Result<List<T>> {
+    fun <T> fetchList(entityType: Class<T>, fetchingOptions: FetchingOptions): Result<List<T>> {
         val request = try {
-            requestFactory.makeForFetching(requestType, fetchingOptions)
+            requestFactory.makeForFetching(entityType, fetchingOptions)
         } catch (e: Throwable) {
             return Result.Failure(e)
         }
@@ -57,7 +53,7 @@ class Network constructor(
         }
     }
 
-    fun <T> createEntity(entity: T, requestType: Class<T>): Result<T> {
+    fun <T: Any> createEntity(entity: T): Result<T> {
         val request = try {
             requestFactory.makeForCreate(entity)
         } catch (e: Throwable) {
@@ -67,7 +63,7 @@ class Network constructor(
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entityResult = networkMapper.mapToEntity(data.value, requestType)
+            val entityResult = networkMapper.mapToEntity(data.value, entity::class.java)
 
             Result.Success(entityResult)
         } catch (e: Throwable) {
@@ -75,7 +71,7 @@ class Network constructor(
         }
     }
 
-    fun <T> removeEntity(entity: T, requestType: Class<T>): Result<Unit> {
+    fun <T> removeEntity(entity: T): Result<Unit> {
         val request = try {
             requestFactory.makeForRemove(entity)
         } catch (e: Throwable) {
@@ -92,26 +88,6 @@ class Network constructor(
         }
     }
 
-    fun downloadFile(path: String, destination: File): Result<Unit> {
-        val request = try {
-            requestFactory.makeForDownload(path)
-        } catch (e: Throwable) {
-            return Result.Failure(e)
-        }
-
-        return try {
-            val response = networkSession.makeRequest(request, Response.BufferedBody::class.java)
-            val data = handleResponse(response)
-
-            val sink = Okio.buffer(Okio.sink(destination))
-            sink.writeAll(data.value)
-            sink.close()
-
-            Result.Success(Unit)
-        } catch (e: Throwable) {
-            Result.Failure(e)
-        }
-    }
 }
 
 /**

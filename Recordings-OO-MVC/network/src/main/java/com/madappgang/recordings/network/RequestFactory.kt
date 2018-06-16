@@ -15,20 +15,10 @@ import com.madappgang.recordings.network.mapper.NetworkMapper
 internal class RequestFactory(private val endpoint: Endpoint, private val mapper: NetworkMapper) {
 
     /**
-     * @throws IllegalStateException if [requestType] is not supported
+     * @throws IllegalStateException if [entityType] or [fetchingOptions] is not supported
      */
-    fun <T> makeForFetching(requestType: Class<T>, id: Id) = when (requestType) {
-        Folder::class.java,
-        Track::class.java -> makeForFetchingFoldable(id)
-
-        else -> throw IllegalArgumentException()
-    }
-
-    /**
-     * @throws IllegalStateException if [requestType] or [fetchingOptions] is not supported
-     */
-    fun <T> makeForFetching(requestType: Class<T>, fetchingOptions: FetchingOptions) =
-        when (requestType) {
+    fun <T> makeForFetching(entityType: Class<T>, fetchingOptions: FetchingOptions) =
+        when (entityType) {
             Folder::class.java,
             Track::class.java -> makeForFetchingFoldable(fetchingOptions)
 
@@ -51,29 +41,26 @@ internal class RequestFactory(private val endpoint: Endpoint, private val mapper
      * @throws IllegalStateException if type [entity] is not supported
      */
     fun <T> makeForRemove(entity: T) = when (entity) {
-        is Folder -> makeForRemoveFoldable(entity.id)
-        is Track -> makeForRemoveFoldable(entity.id)
+        is Foldable -> makeForRemoveFoldable(entity.name)
 
         else -> throw IllegalArgumentException()
     }
 
-    fun makeForDownload(path: String) =
-        Request(buildUrl(endpoint, "api/download/$path"), RequestMethod.GET)
-
-    private fun makeForFetchingFoldable(id: Id) =
-        Request(buildUrl(endpoint, "api/foldable/${id.value}"), RequestMethod.GET)
-
     private fun makeForFetchingFoldable(fetchingOptions: FetchingOptions): Request {
-        val ownerId = fetchingOptions.options.firstOrNull { it is Constraint.OwnerId }
+        val path = fetchingOptions.options
+            .firstOrNull { it is Constraint.FoldablePath } as Constraint.FoldablePath?
+            ?: throw IllegalArgumentException()
 
-        val isConstraintExist =
-            fetchingOptions.options.contains(Constraint.Owner(Folder::class.java))
+        val name = fetchingOptions.options
+            .firstOrNull { it is Constraint.FoldableName } as Constraint.FoldableName?
 
-        return if (isConstraintExist && ownerId != null) {
-            val pathSegment = "api/foldable/${ownerId.value}/contents"
-            Request(buildUrl(endpoint, pathSegment), RequestMethod.GET)
+        return if (path.value.isEmpty()) {
+            Request(buildUrl(endpoint, "api/foldable/"), RequestMethod.GET)
         } else {
-            throw IllegalArgumentException()
+            val dataParts = mutableListOf<DataPart<*>>()
+            name?.let { dataParts.add(DataPart.JsonPart(value = it.value)) }
+
+            Request(path.value, RequestMethod.GET, dataParts)
         }
     }
 
@@ -89,9 +76,9 @@ internal class RequestFactory(private val endpoint: Endpoint, private val mapper
     }
 
 
-    private fun makeForRemoveFoldable(id: Id?) = id?.let {
-        Request(buildUrl(endpoint, "api/foldable/${id.value}"), RequestMethod.DELETE)
-    } ?: let {
+    private fun makeForRemoveFoldable(path: String) = if (path.isEmpty())let {
+        Request(path, RequestMethod.DELETE)
+    } else {
         throw IllegalArgumentException()
     }
 
