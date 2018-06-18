@@ -33,7 +33,7 @@ ext {
     espressoVersion = "2.2.2"
     glideVersion = "4.7.1"
     databindingVersion = "3.1.2"
-    kodeinVersion = "5.0.0"
+    kodeinVersion = "5.1.0"
     navigationVersion = "1.0.0-alpha01"
     lifeCycleVersion = "1.1.1"
     constraintLayoutVersion = "1.1.0"

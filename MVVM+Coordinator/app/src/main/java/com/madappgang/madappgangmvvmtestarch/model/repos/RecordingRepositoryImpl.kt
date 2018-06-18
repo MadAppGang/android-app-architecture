@@ -5,9 +5,9 @@ import com.madappgang.madappgangmvvmtestarch.model.repos.RecordingRepository.Dat
 import java.io.File
 
 class RecordingRepositoryImpl : RecordingRepository {
-    override fun get(folder: String, id: String): SourceFile {
-        val folder = File(folder)
-        return folder.listFiles().filter { it.name == id }.mapNotNull { sourceOrNull(it) }.first { it.id == id }
+    override fun get(id: String): SourceFile {
+        val folder = File(id).parentFile
+        return folder.listFiles().filter { it.absolutePath.contains(id) }.mapNotNull { sourceOrNull(it) }.first { it.id == id }
     }
 
     override fun get(portion: RecordingRepository.DataPortion): List<SourceFile> {
@@ -24,6 +24,6 @@ class RecordingRepositoryImpl : RecordingRepository {
     }
 
     private fun sourceOrNull(it: File) =
-            SourceFile(it.name, it.name, it.parentFile.absolutePath, it.isDirectory)
+            SourceFile(it.absolutePath, it.name, it.parentFile.absolutePath, it.isDirectory)
 
 }

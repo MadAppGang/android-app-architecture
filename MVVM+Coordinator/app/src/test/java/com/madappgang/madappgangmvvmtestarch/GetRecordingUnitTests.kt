@@ -22,7 +22,7 @@ class GetRecordingUnitTests {
     fun `get file by id, if file exist`() {
         val id = "file1.mp4"
         val recordingUseCase = GetRecordingUseCase(repository)
-        val result = recordingUseCase["/testFolder", id]
+        val result = recordingUseCase[id]
         assert(result is Result.Success)
         assertEquals(id, (result as Result.Success<SourceFile>).value.id)
     }
@@ -31,7 +31,7 @@ class GetRecordingUnitTests {
     fun `get file by id, if file not exist`() {
         val id = "file20.mp4"
         val recordingUseCase = GetRecordingUseCase(repository)
-        val result = recordingUseCase["/testFolder", id]
+        val result = recordingUseCase[id]
         assert(result is Result.Error)
         assert((result as Result.Error<Throwable>).error is NoSuchElementException)
     }

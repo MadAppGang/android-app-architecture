@@ -98,7 +98,6 @@ class RecordingsFragment : Fragment(), KodeinAware {
         inflater.inflate(R.menu.record_file_menu, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         coordinator.onCreateRecord(folder)
         return true

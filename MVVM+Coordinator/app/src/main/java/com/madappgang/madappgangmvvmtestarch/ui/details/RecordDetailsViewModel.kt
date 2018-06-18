@@ -10,7 +10,6 @@ import kotlinx.coroutines.experimental.*
 
 class RecordDetailsViewModel(configurator: Configurator) : ViewModel() {
     class Configurator(
-            val folder: String,
             val recordId: String,
             val uiContext: CoroutineDispatcher,
             val bgContext: CoroutineDispatcher,
@@ -23,14 +22,13 @@ class RecordDetailsViewModel(configurator: Configurator) : ViewModel() {
         pause
     }
 
+
     private val tenSec = 1000 * 10
 
     private val uiContext: CoroutineDispatcher = configurator.uiContext
     private val bgContext: CoroutineDispatcher = configurator.bgContext
     private val recording: GetRecordingUseCase = configurator.getRecordingService
     private val mediaPlayer: PlayerService = configurator.mediaPlayer
-
-    private val folder: String = configurator.folder
     private val recordId: String = configurator.recordId
 
     private var job: Job? = Job()
@@ -49,6 +47,14 @@ class RecordDetailsViewModel(configurator: Configurator) : ViewModel() {
         }
         mediaPlayer.onComplete = {
             state.postValue(RecordDetailsViewModel.PlayerState.pause)
+        }
+        mediaPlayer.onError = { error, message ->
+            if (error == PlayerService.ErrorCodes().sourceDeletedError) {
+                mediaPlayer.seekTo(0)
+                mediaPlayer.pause()
+                true
+            }
+            false
         }
     }
 
@@ -72,12 +78,12 @@ class RecordDetailsViewModel(configurator: Configurator) : ViewModel() {
     fun startPlayRecord() {
         loadingContentJob?.cancel()
         loadingContentJob = launch(parent = job, context = uiContext) {
-            val result = async(parent = job, context = uiContext) { recording[folder, recordId] }.await()
+            val result = async(parent = job, context = uiContext) { recording[recordId] }.await()
             when (result) {is Success -> {
                 val sourceFile = result.value
                 val filepath = "${sourceFile?.filePath}/${sourceFile?.name}"
                 fileName.postValue(sourceFile?.name)
-                mediaPlayer.serDataSource(filepath)
+                mediaPlayer.setDataSource(filepath)
                 mediaPlayer.startPlay()
             }
                 is Error -> {

@@ -11,5 +11,5 @@ interface RecordingRepository {
     }
 
     fun get(portion: DataPortion): List<SourceFile>
-    fun get(folder: String, id: String): SourceFile
+    fun get(id: String): SourceFile
 }

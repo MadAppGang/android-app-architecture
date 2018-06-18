@@ -10,9 +10,9 @@ import org.kodein.di.generic.instance
  * Created by Serhii Chaban sc@madappgang.com on 29.05.18.
  */
 class GetRecordingUseCase(val recordingRepository: RecordingRepository) {
-    operator fun get(folder: String, id: String): Result<SourceFile, Throwable> {
+    operator fun get(id: String): Result<SourceFile, Throwable> {
         return try {
-            val sourceFile = recordingRepository.get(folder, id)
+            val sourceFile = recordingRepository.get(id)
             Result.Success(sourceFile)
         } catch (e: Throwable) {
             Result.Error(e)

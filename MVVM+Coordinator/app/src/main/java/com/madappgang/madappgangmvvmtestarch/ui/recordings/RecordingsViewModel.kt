@@ -55,6 +55,6 @@ class RecordingsViewModel(configurator: Configurator) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        job?.cancel()
+        job.cancel()
     }
 }

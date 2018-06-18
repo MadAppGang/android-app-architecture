@@ -6,9 +6,9 @@ import com.madappgang.madappgangmvvmtestarch.model.repos.RecordingRepository
 /**
  * Created by Serhii Chaban sc@madappgang.com on 13.06.18.
  */
-class RecordingRepositoryMock(val filesCount:Int) : RecordingRepository {
-    override fun get(folder: String, id: String): SourceFile {
-        return generateMockFiles(folder).first { it.id == id }
+class RecordingRepositoryMock(val filesCount: Int) : RecordingRepository {
+    override fun get(id: String): SourceFile {
+        return generateMockFiles("").first { it.id == id }
     }
 
     override fun get(portion: RecordingRepository.DataPortion): List<SourceFile> {
@@ -16,5 +16,5 @@ class RecordingRepositoryMock(val filesCount:Int) : RecordingRepository {
     }
 
     private fun generateMockFiles(folder: String) =
-            (1..filesCount).map { SourceFile("file$it.mp4", "file$it.mp4", "/$folder", false) }
+            (1..filesCount).map { SourceFile("/$folder/file$it.mp4", "file$it.mp4", "/$folder", false) }
 }

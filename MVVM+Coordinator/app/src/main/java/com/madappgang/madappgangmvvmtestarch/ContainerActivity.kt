@@ -17,18 +17,18 @@ import org.kodein.di.android.closestKodein
 import org.kodein.di.android.retainedKodein
 
 class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
+    override val kodein: Kodein by closestKodein()
 
-
-    override val kodein: Kodein by retainedKodein { extend((applicationContext as KodeinAware).kodein) }
     val navigation get() = Navigation.findNavController(this, R.id.container)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
         setSupportActionBar(toolbar)
     }
 
-    private fun showRecord(folder: String, id: String) {
-        val args = RecordDetailsFragmentArgs.Builder(id, folder).build()
+    private fun showRecord(id: String) {
+        val args = RecordDetailsFragmentArgs.Builder(id).build()
         navigation.navigate(R.id.action_superHeroesFragment2_to_heroDetailsFragment, args.toBundle())
     }
 
@@ -38,7 +38,7 @@ class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
     }
 
     override fun onSelectRecording(sourceFile: SourceFile) {
-        showRecord(sourceFile.filePath, sourceFile.id)
+        showRecord(sourceFile.id)
     }
 
     override fun onCreateRecord(folder: String) {

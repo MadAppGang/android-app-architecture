@@ -35,13 +35,9 @@
     <fragment
         android:id="@+id/heroDetailsFragment"
         android:name="com.madappgang.madappgangmvvmtestarch.ui.details.RecordDetailsFragment"
-        android:label="heroDetails"
-        tools:layout="@layout/fragment_details">
+        android:label="heroDetails">
         <argument
-            android:name="fileName"
-            app:type="string" />
-        <argument
-            android:name="folderPath"
+            android:name="sourceId"
             app:type="string" />
     </fragment>
     <fragment

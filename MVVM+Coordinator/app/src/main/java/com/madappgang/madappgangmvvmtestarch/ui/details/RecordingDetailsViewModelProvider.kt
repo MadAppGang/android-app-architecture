@@ -12,7 +12,7 @@ import org.kodein.di.generic.instance
 /**
  * Created by Serhii Chaban sc@madappgang.com on 06.06.18.
  */
-class RecordingDetailsViewModelProvider(val kodein: Kodein, val filePath: String, val fileName: String) : ViewModelProvider.Factory {
+class RecordingDetailsViewModelProvider(val kodein: Kodein, val fileId: String) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecordDetailsViewModel::class.java)) {
@@ -20,7 +20,7 @@ class RecordingDetailsViewModelProvider(val kodein: Kodein, val filePath: String
             val bgContext: CoroutineDispatcher  by kodein.instance("bgContext")
             val getRecordingsService: GetRecordingUseCase  by kodein.instance()
             val playerService: PlayerService  by kodein.instance()
-            val configurator = RecordDetailsViewModel.Configurator(filePath, fileName, uiContext, bgContext, getRecordingsService, playerService)
+            val configurator = RecordDetailsViewModel.Configurator(fileId, uiContext, bgContext, getRecordingsService, playerService)
             return RecordDetailsViewModel(configurator) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
