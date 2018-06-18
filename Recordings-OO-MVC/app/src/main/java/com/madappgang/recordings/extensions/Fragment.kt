@@ -9,14 +9,18 @@ package com.madappgang.recordings.extensions
 import android.support.v4.app.Fragment
 import java.lang.IllegalArgumentException
 
-fun <T: Any> Fragment.getArgument(key: String, defaultValue: T?): T {
+/**
+ * @throws [IllegalArgumentException] when type [defaultValue] is not supported
+ */
+internal fun <T> Fragment.getArgument(key: String, defaultValue: T): T {
     return when (defaultValue) {
-        is String -> (arguments?.getString(key, defaultValue) ?: defaultValue) as T
-        is Int -> (arguments?.getInt(key, defaultValue) ?: defaultValue) as T
+        is String? -> arguments?.getString(key) as T ?: defaultValue
+        is Int? -> arguments?.getInt(key) as T ?: defaultValue
 
         else -> {
-            val valueType = defaultValue?.let { it::class.java.simpleName }
-            val message = "Type of defaultValue $valueType is not Supported"
+            val valueType = defaultValue?.let { (defaultValue as Any)::class.java }
+            val message = "Type of defaultValue $valueType is not supported"
+
             throw  IllegalArgumentException(message)
         }
     }

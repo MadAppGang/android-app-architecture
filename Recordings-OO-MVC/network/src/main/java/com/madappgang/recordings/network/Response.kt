@@ -8,7 +8,7 @@ package com.madappgang.recordings.network
 
 import okio.BufferedSource
 
-sealed class Response<T>(val statusCode: Int, val value: T) {
+internal sealed class Response<T>(val statusCode: Int, val value: T) {
 
     class Body(statusCode: Int, value: String) : Response<String>(statusCode, value)
 

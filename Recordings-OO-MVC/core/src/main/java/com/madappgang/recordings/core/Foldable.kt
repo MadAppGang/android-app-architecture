@@ -7,5 +7,8 @@
 package com.madappgang.recordings.core
 
 interface Foldable {
+    var path: String
     var name: String
+
+    fun getFullPath() = "$path/$name"
 }

@@ -9,12 +9,12 @@ package com.madappgang.recordings.core
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Id(val id: String) : Parcelable {
+data class Id(val value: String) : Parcelable {
 
     constructor(parcel: Parcel) : this(parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(id)
+        parcel.writeString(value)
     }
 
     override fun describeContents() = 0

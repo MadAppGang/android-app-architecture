@@ -6,9 +6,13 @@
 
 package com.madappgang.recordings.kit
 
-import com.madappgang.recordings.core.Track
-import com.madappgang.recordings.network.Network
+import android.arch.lifecycle.MutableLiveData
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
 import com.madappgang.recordings.core.Result
+import com.madappgang.recordings.core.Track
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
@@ -18,44 +22,107 @@ import java.util.*
 
 
 class Player(
-    private val tempDirectory: File,
-    private val network: Network,
-    private val bgContext: CoroutineDispatcher
-) {
+    private val cacheDirectory: File
+) : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
-    var onPlay: ((File) -> Unit)? = null
+    enum class State {
+        /**
+         * Default state of just created [Player]
+         */
+        NOT_STARTED,
+        /**
+         * Preparing track for playing
+         */
+        PREPARING,
+        /**
+         * Playing track
+         */
+        PLAYING,
+        /**
+         * Paused track
+         */
+        PAUSED,
+        /**
+         * Roll back to start track and stop playing
+         */
+        STOPPED,
+        /**
+         * Track playing completed
+         */
+        COMPLETED
+    }
+
+    var state: MutableLiveData<State> = MutableLiveData()
     var onError: ((Throwable) -> Unit)? = null
 
-    private var tempFile: File? = null
-    private var loadFileJob: Job? = null
+    private val audioPlayer: MediaPlayer = MediaPlayer()
+
+    init {
+        state.value = State.NOT_STARTED
+
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+            .build()
+
+        audioPlayer.setAudioAttributes(audioAttributes)
+        audioPlayer.setOnPreparedListener(this)
+        audioPlayer.setOnCompletionListener(this)
+        audioPlayer.isLooping = false
+    }
 
     fun play(track: Track) {
-        val destination = getTempFile(track)
+        audioPlayer.reset()
+        state.value = State.PREPARING
 
-        loadFileJob = async(bgContext) {
-            val result = network.downloadFile(track.path, destination)
-
-            when (result) {
-                is Result.Success -> onPlay?.invoke(destination)
-                is Result.Failure -> onError?.invoke(result.throwable)
-            }
-            tempFile = destination
-        }
+        audioPlayer.setDataSource(track.getFullPath())
+        audioPlayer.prepareAsync()
 
     }
 
-    private fun getTempFile(track: Track): File {
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmssSSS")
-        val fileName = "track_${track.folderId}_${track.name}_${dateFormat.format(Date())}.m4a"
-        return File(tempDirectory, fileName)
+    fun start() {
+        audioPlayer.start()
+        state.value = State.PLAYING
+    }
+
+    fun pause() {
+        audioPlayer.pause()
+        state.value = State.PAUSED
     }
 
     fun stop() {
-        loadFileJob?.cancel()
-        tempFile?.let {
-            if (it.exists()) {
-                it.delete()
-            }
-        }
+        state.value = State.STOPPED
+        audioPlayer.pause()
+        val startPosition = audioPlayer.currentPosition * -1
+        audioPlayer.seekTo(startPosition)
+    }
+
+    fun seekTo(millisecond: Int) {
+        audioPlayer.seekTo(millisecond)
+    }
+
+    fun release() {
+        audioPlayer.reset()
+        state.value = State.NOT_STARTED
+    }
+
+    fun getCurrentPosition(): Int {
+        val isProgressZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+
+        return if (isProgressZero) 0 else audioPlayer.currentPosition
+    }
+
+    fun getDuration(): Int {
+        val isDurationZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+        return if (isDurationZero) 0 else audioPlayer.duration
+    }
+
+    override fun onPrepared(mp: MediaPlayer?) {
+        start()
+    }
+
+    override fun onCompletion(mp: MediaPlayer?) {
+        state.value = State.COMPLETED
     }
 }
+

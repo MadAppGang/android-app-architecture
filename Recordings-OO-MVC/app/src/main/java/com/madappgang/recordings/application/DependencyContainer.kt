@@ -10,21 +10,29 @@ import com.madappgang.recordings.kit.FileManager
 import com.madappgang.recordings.kit.Player
 import com.madappgang.recordings.kit.Recorder
 import com.madappgang.recordings.network.Network
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.android.UI
 import java.io.File
 
-class DependencyContainer(private val tempDirectory: File) {
+internal class DependencyContainer private constructor() {
 
-    val uiContext: CoroutineDispatcher by lazy { UI }
-    val bgContext: CoroutineDispatcher by lazy { CommonPool }
+    lateinit var fileManager: FileManager
+    lateinit var recorder: Recorder
+    lateinit var player: Player
 
-    val fileManager by lazy { FileManager(network) }
-    val recorder by lazy { Recorder() }
-    val player by lazy { Player(tempDirectory, network, bgContext) }
+    internal data class Configurator(val cacheDirectory: File)
 
+    companion object {
 
-    private val network: Network = Network()
+        fun newInstance(configurator: Configurator): DependencyContainer {
+            val network = Network()
+            val fileManager = FileManager(network)
+            val recorder = Recorder(configurator.cacheDirectory)
+            val player = Player(configurator.cacheDirectory)
 
+            return DependencyContainer().apply {
+                this.fileManager = fileManager
+                this.recorder = recorder
+                this.player = player
+            }
+        }
+    }
 }

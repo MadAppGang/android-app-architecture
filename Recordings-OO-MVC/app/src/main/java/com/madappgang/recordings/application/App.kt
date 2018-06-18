@@ -8,16 +8,18 @@ package com.madappgang.recordings.application
 
 import android.app.Application
 
-class App : Application() {
+internal class App : Application() {
 
     companion object {
 
-        lateinit var dependencyContainer : DependencyContainer
+        lateinit var dependencyContainer :  DependencyContainer
 
     }
 
     override fun onCreate() {
         super.onCreate()
-        dependencyContainer = DependencyContainer(getExternalFilesDir(null))
+        val configurator = DependencyContainer.Configurator(cacheDir)
+
+        dependencyContainer = DependencyContainer.newInstance(configurator)
     }
 }

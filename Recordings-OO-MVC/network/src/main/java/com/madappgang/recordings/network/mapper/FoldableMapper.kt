@@ -10,7 +10,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
-import com.madappgang.recordings.core.NetworkExceptions
+import com.madappgang.recordings.network.NetworkExceptions
 import com.madappgang.recordings.core.Track
 import java.lang.reflect.Type
 
@@ -59,6 +59,10 @@ internal enum class FileType(val type: String) {
     TRACK("track");
 
     companion object {
+
+        /**
+         * @throws IllegalStateException if type [type] is not supported
+         */
         fun ofValue(type: String): FileType {
             return when (type) {
                 FOLDER.type -> FOLDER

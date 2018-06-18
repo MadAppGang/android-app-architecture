@@ -6,46 +6,29 @@
 
 package com.madappgang.recordings.network
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
-import com.madappgang.recordings.core.Id
-import com.madappgang.recordings.core.NetworkExceptions
+import com.google.gson.internal.LinkedTreeMap
 import com.madappgang.recordings.core.Result
-import com.madappgang.recordings.network.mapper.FoldableMapper
-import com.madappgang.recordings.network.mapper.FolderMapper
 import com.madappgang.recordings.network.mapper.NetworkMapper
-import com.madappgang.recordings.network.mapper.TrackMapper
-import java.io.File
-import okio.Okio
 
-class Network internal constructor(
+class Network constructor(
     private val endpoint: Endpoint = Endpoint.Staging,
-    private val networkSession: NetworkSession = OkHttpSession(),
-    private val requestFactory: RequestFactory = RequestFactory(endpoint, createGson()),
-    private val networkMapper: NetworkMapper = NetworkMapper(createGson())
+    private val networkSession: NetworkSession = OkHttpSession()
 ) {
 
-    constructor(
-        endpoint: Endpoint = Endpoint.Staging,
-        networkSession: NetworkSession = OkHttpSession()
-    ) : this(
-        endpoint,
-        networkSession,
-        RequestFactory(endpoint, createGson()),
-        NetworkMapper(createGson())
-    )
+    private val networkMapper: NetworkMapper = NetworkMapper()
+    private val requestFactory: RequestFactory = RequestFactory(endpoint, networkMapper)
 
-    fun <T> fetchEntity(requestType: Class<T>, id: Id): Result<T> {
+
+    fun <T: Any> fetchEntity(entityType: Class<T>, fetchingOptions: FetchingOptions): Result<T> {
         val request = try {
-            requestFactory.makeForFetching(requestType, id)
+            requestFactory.makeForFetching(entityType, fetchingOptions)
         } catch (e: Throwable) {
             return Result.Failure(e)
         }
-
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entityResult = networkMapper.mapToEntity(data.value, requestType)
+            val entityResult = networkMapper.mapToEntity(data.value, entityType)
 
             Result.Success(entityResult)
         } catch (e: Throwable) {
@@ -53,9 +36,9 @@ class Network internal constructor(
         }
     }
 
-    fun <T> fetchList(requestType: Class<T>, fetchingOptions: FetchingOptions): Result<List<T>> {
+    fun <T> fetchList(entityType: Class<T>, fetchingOptions: FetchingOptions): Result<List<T>> {
         val request = try {
-            requestFactory.makeForFetching(requestType, fetchingOptions)
+            requestFactory.makeForFetching(entityType, fetchingOptions)
         } catch (e: Throwable) {
             return Result.Failure(e)
         }
@@ -63,7 +46,7 @@ class Network internal constructor(
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entity: List<T> = networkMapper.mapToList(data.value)
+            val entity: List<T> = networkMapper.mapToList(data.value, entityType)
 
             Result.Success(entity)
         } catch (e: Throwable) {
@@ -71,7 +54,7 @@ class Network internal constructor(
         }
     }
 
-    fun <T> createEntity(entity: T, requestType: Class<T>): Result<T> {
+    fun <T: Any> createEntity(entity: T): Result<T> {
         val request = try {
             requestFactory.makeForCreate(entity)
         } catch (e: Throwable) {
@@ -81,7 +64,7 @@ class Network internal constructor(
         return try {
             val response = networkSession.makeRequest(request, Response.Body::class.java)
             val data = handleResponse(response)
-            val entityResult = networkMapper.mapToEntity(data.value, requestType)
+            val entityResult = networkMapper.mapToEntity(data.value, entity::class.java)
 
             Result.Success(entityResult)
         } catch (e: Throwable) {
@@ -89,7 +72,7 @@ class Network internal constructor(
         }
     }
 
-    fun <T> removeEntity(entity: T, requestType: Class<T>): Result<Unit> {
+    fun <T> removeEntity(entity: T): Result<Unit> {
         val request = try {
             requestFactory.makeForRemove(entity)
         } catch (e: Throwable) {
@@ -106,39 +89,15 @@ class Network internal constructor(
         }
     }
 
-    fun downloadFile(path: String, destination: File): Result<Unit> {
-        val request = try {
-            requestFactory.makeForDownload(path)
-        } catch (e: Throwable) {
-            return Result.Failure(e)
-        }
-
-        return try {
-            val response = networkSession.makeRequest(request, Response.BufferedBody::class.java)
-            val data = handleResponse(response)
-
-            val sink = Okio.buffer(Okio.sink(destination))
-            sink.writeAll(data.value)
-            sink.close()
-
-            Result.Success(Unit)
-        } catch (e: Throwable) {
-            Result.Failure(e)
-        }
-    }
 }
 
+/**
+ * @throws NetworkExceptions.UnknownException if response status code  more equals than 400
+ */
 internal fun <T, R : Response<T>> Network.handleResponse(response: R): R {
-    return if (response.statusCode > 400) {
+    return if (response.statusCode >= 400) {
         throw NetworkExceptions.UnknownException()
     } else {
         response
     }
 }
-
-internal fun createGson() = GsonBuilder()
-    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    .registerTypeAdapter(FoldableMapper::class.java, FoldableMapper())
-    .registerTypeAdapter(FolderMapper::class.java, FolderMapper())
-    .registerTypeAdapter(TrackMapper::class.java, TrackMapper())
-    .create()

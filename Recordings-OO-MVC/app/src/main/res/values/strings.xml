@@ -6,6 +6,8 @@
     <string name="InitialActivity_cancel">Cancel</string>
     <string name="InitialActivity_create">Create</string>
 
+    <string name="EditableDialogFragment_title"></string>
+    <string name="EditableDialogFragment_hint"></string>
     <string name="EditableDialogFragment_cancel">Cancel</string>
     <string name="EditableDialogFragment_save">Save</string>
 

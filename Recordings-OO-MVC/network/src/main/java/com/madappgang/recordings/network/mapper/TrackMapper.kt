@@ -20,10 +20,8 @@ internal class TrackMapper : JsonSerializer<Track>, JsonDeserializer<Track> {
     ) = src?.let {
         JsonObject().apply {
             with(src) {
-                id?.let { addProperty("id", it.id) }
-                folderId?.let { addProperty("folder_id", it.id) }
-                addProperty("name", name)
                 addProperty("path", path)
+                addProperty("name", name)
                 addProperty("type", FileType.TRACK.type)
             }
         }
@@ -37,20 +35,9 @@ internal class TrackMapper : JsonSerializer<Track>, JsonDeserializer<Track> {
         context: JsonDeserializationContext?
     ): Track {
         val jsonObject = json as JsonObject
-        val id = if (jsonObject.has("id")) Id(jsonObject["id"].asString) else null
-        val folderId = if (jsonObject.has("folder_Id")) {
-                Id(jsonObject["folder_Id"].asString)
-            } else {
-                null
-            }
-        val name = if (jsonObject.has("name")) jsonObject["name"].asString else ""
         val path = if (jsonObject.has("path")) jsonObject["path"].asString else ""
+        val name = if (jsonObject.has("name")) jsonObject["name"].asString else ""
 
-        return Track(
-            id = id,
-            folderId = folderId,
-            name = name,
-            path = path
-        )
+        return Track(name = name, path = path)
     }
 }

@@ -6,72 +6,83 @@
 
 package com.madappgang.recordings.network
 
-import com.google.gson.Gson
+import com.madappgang.recordings.core.Foldable
 import com.madappgang.recordings.core.Folder
 import com.madappgang.recordings.core.Id
 import com.madappgang.recordings.core.Track
+import com.madappgang.recordings.network.mapper.NetworkMapper
 
-internal class RequestFactory(
-    private val endpoint: Endpoint,
-    private val gson: Gson
-) {
+internal class RequestFactory(private val endpoint: Endpoint, private val mapper: NetworkMapper) {
 
-    fun <T> makeForFetching(clazz: Class<T>, id: Id) = when (clazz) {
-        Folder::class.java,
-        Track::class.java -> makeForFetchingFoldable(id)
+    /**
+     * @throws IllegalStateException if [entityType] or [fetchingOptions] is not supported
+     */
+    fun <T> makeForFetching(entityType: Class<T>, fetchingOptions: FetchingOptions) =
+        when (entityType) {
+            Folder::class.java,
+            Track::class.java,
+            Foldable::class.java -> makeForFetchingFoldable(fetchingOptions)
 
-        else -> throw IllegalArgumentException()
-    }
+            else -> throw IllegalArgumentException()
+        }
 
-    fun <T> makeForFetching(clazz: Class<T>, fetchingOptions: FetchingOptions) = when (clazz) {
-        Folder::class.java,
-        Track::class.java -> makeForFetchingFoldable(fetchingOptions)
-
-        else -> throw IllegalArgumentException()
-    }
-
+    /**
+     * @throws IllegalStateException if type [entity] is not supported
+     */
     fun <T> makeForCreate(entity: T): Request {
-        val data = gson.toJson(entity)
         return when (entity) {
+            is Foldable,
             is Folder,
-            is Track -> makeForCreateFoldable(data)
+            is Track -> makeForCreateFoldable(entity as Foldable)
 
             else -> throw IllegalArgumentException()
         }
     }
 
+    /**
+     * @throws IllegalStateException if type [entity] is not supported
+     */
     fun <T> makeForRemove(entity: T) = when (entity) {
-        is Folder -> makeForRemoveFoldable(entity.id)
-        is Track -> makeForRemoveFoldable(entity.id)
+        is Track,
+        is Folder,
+        is Foldable -> makeForRemoveFoldable((entity as Foldable).name)
 
         else -> throw IllegalArgumentException()
     }
 
-    fun makeForDownload(path: String) =
-        Request(buildUrl(endpoint, "api/download/$path"), RequestMethod.GET)
-
-    private fun makeForFetchingFoldable(id: Id) =
-        Request(buildUrl(endpoint, "api/foldable/${id.id}"), RequestMethod.GET)
-
     private fun makeForFetchingFoldable(fetchingOptions: FetchingOptions): Request {
-        val ownerId = fetchingOptions.options.firstOrNull { it is Constraint.OwnerId }
+        val path = fetchingOptions.options
+            .firstOrNull { it is Constraint.FoldablePath } as Constraint.FoldablePath?
+            ?: throw IllegalArgumentException()
 
-        return if (fetchingOptions.options.contains(Constraint.Owner(Folder::class.java)) &&
-            ownerId != null
-        ) {
-            Request(buildUrl(endpoint, "api/foldable/${ownerId.value}/contents"), RequestMethod.GET)
+        val name = fetchingOptions.options
+            .firstOrNull { it is Constraint.FoldableName } as Constraint.FoldableName?
+
+        return if (path.value.isEmpty()) {
+            Request(buildUrl(endpoint, "api/foldable/"), RequestMethod.GET)
         } else {
-            throw IllegalArgumentException()
+            val dataParts = mutableListOf<DataPart<*>>()
+            name?.let { dataParts.add(DataPart.JsonPart(value = it.value)) }
+
+            Request(path.value, RequestMethod.GET, dataParts)
         }
     }
 
-    private fun makeForCreateFoldable(data: String) =
-        Request(buildUrl(endpoint, "api/foldable"), RequestMethod.POST, data)
+    private fun makeForCreateFoldable(foldable: Foldable): Request {
+        val dataParts = mutableListOf<DataPart<*>>()
+        dataParts.add(DataPart.JsonPart("body", mapper.toJson(foldable)))
+
+        if (foldable is Track) {
+            dataParts.add(DataPart.AudioPart("track", foldable.name))
+        }
+
+        return Request(buildUrl(endpoint, "api/foldable"), RequestMethod.POST, dataParts)
+    }
 
 
-    private fun makeForRemoveFoldable(id: Id?) = id?.let {
-        Request(buildUrl(endpoint, "api/foldable/${id.id}"), RequestMethod.DELETE)
-    } ?: let {
+    private fun makeForRemoveFoldable(path: String) = if (path.isEmpty())let {
+        Request(path, RequestMethod.DELETE)
+    } else {
         throw IllegalArgumentException()
     }
 
