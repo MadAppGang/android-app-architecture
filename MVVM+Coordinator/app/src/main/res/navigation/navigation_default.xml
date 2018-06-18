@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/recordingsListFragment">
+
+    <fragment
+        android:id="@+id/recordingsListFragment"
+        android:name="com.madappgang.madappgangmvvmtestarch.ui.recordings.RecordingsFragment"
+        android:label="superHeroes"
+        tools:layout="@layout/fragment_recordings">
+        <action
+            android:id="@+id/action_superHeroesFragment2_to_heroDetailsFragment"
+            app:destination="@id/heroDetailsFragment"
+            app:enterAnim="@anim/slide_start"
+            app:popExitAnim="@anim/slide_end">
+            <argument
+                android:name="hero_id"
+                android:defaultValue="id" />
+        </action>
+        <argument
+            android:name="folder"
+            android:defaultValue="empty" />
+        <action
+            android:id="@+id/action_superHeroesFragment2_self3"
+            app:destination="@id/recordingsListFragment"
+            app:enterAnim="@anim/slide_start"
+            app:popExitAnim="@anim/slide_end" />
+        <action
+            android:id="@+id/action_superHeroesFragment2_to_micRecordFragment"
+            app:destination="@id/micRecordFragment"
+            app:enterAnim="@anim/slide_start"
+            app:popExitAnim="@anim/slide_end" />
+    </fragment>
+    <fragment
+        android:id="@+id/heroDetailsFragment"
+        android:name="com.madappgang.madappgangmvvmtestarch.ui.details.RecordDetailsFragment"
+        android:label="heroDetails">
+        <argument
+            android:name="sourceId"
+            app:type="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/micRecordFragment"
+        android:name="com.madappgang.madappgangmvvmtestarch.ui.micRecord.MicRecordFragment"
+        android:label="mic_record_fragment"
+        tools:layout="@layout/fragment_mic_record" >
+        <argument
+            android:name="folderPath"
+            android:defaultValue="empty"
+            app:type="string" />
+    </fragment>
+</navigation>

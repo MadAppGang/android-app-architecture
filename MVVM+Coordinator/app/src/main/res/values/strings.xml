@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MadAppGangMVVMTestArch</string>
+    <string name="RecordingsPage_Title">Recordings</string>
+    <string name="RecordingsPage_Menu_AddRecord">Add Record</string>
+</resources>

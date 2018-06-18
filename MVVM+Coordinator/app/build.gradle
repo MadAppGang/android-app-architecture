@@ -1,0 +1,89 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'androidx.navigation.safeargs'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.madappgang.madappgangmvvmtestarch"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "com.madappgang.madappgangmvvmtestarch.InjectedTestRunner"
+    }
+    dataBinding {
+        enabled = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/main.kotlin_module'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
+
+    implementation 'com.android.support:design:' + rootProject.supportLibVersion
+    implementation 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
+    implementation 'com.android.support:cardview-v7:' + rootProject.supportLibVersion
+    implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
+    implementation 'com.android.support.constraint:constraint-layout:' + rootProject.constraintLayoutVersion
+
+    implementation 'com.github.bumptech.glide:glide:' + rootProject.glideVersion
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + rootProject.glideVersion
+
+    implementation 'android.arch.lifecycle:extensions:' + rootProject.lifeCycleVersion
+    annotationProcessor "android.arch.lifecycle:compiler:" + rootProject.lifeCycleVersion
+    implementation 'org.kodein.di:kodein-di-generic-jvm:' + rootProject.kodeinVersion
+    implementation 'org.kodein.di:kodein-di-conf-jvm:' + rootProject.kodeinVersion
+    implementation 'org.kodein.di:kodein-di-framework-android:' + rootProject.kodeinVersion
+    // Navigation
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.3'
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.3"
+    implementation 'android.arch.navigation:navigation-fragment:' + rootProject.navigationVersion
+    implementation 'android.arch.navigation:navigation-ui:' + rootProject.navigationVersion
+    // Required -- JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+    // Optional -- Mockito framework
+    testImplementation 'org.mockito:mockito-core:2.8.47'
+    testImplementation "org.hamcrest:hamcrest-all:1.3"
+    testImplementation "io.mockk:mockk:1.8"
+    testImplementation("android.arch.core:core-testing:1.1.0")
+    androidTestImplementation('com.schibsted.spain:barista:2.4.0')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+    androidTestImplementation "io.mockk:mockk-android:1.8"
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
