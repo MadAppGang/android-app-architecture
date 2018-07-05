@@ -19,8 +19,7 @@ class MicRecordViewModelProvider(val kodein: Kodein) : ViewModelProvider.Factory
             val uiContext: CoroutineDispatcher by kodein.instance("uiContext")
             val bgContext: CoroutineDispatcher  by kodein.instance("bgContext")
             val recordDataUseCase: RecordDataUseCase  by kodein.instance()
-            val playerService: PlayerService  by kodein.instance()
-            val configurator = MicRecordViewModel.Configurator(playerService, recordDataUseCase, uiContext, bgContext)
+            val configurator = MicRecordViewModel.Configurator( recordDataUseCase, uiContext, bgContext)
             return MicRecordViewModel(configurator) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -17,6 +17,10 @@ import org.kodein.di.android.closestKodein
 import org.kodein.di.android.retainedKodein
 
 class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
+    override fun onBack() {
+        onBackPressed()
+    }
+
     override val kodein: Kodein by closestKodein()
 
     val navigation get() = Navigation.findNavController(this, R.id.container)
@@ -56,4 +60,5 @@ interface Coordinator {
     fun onSelectRecording(sourceFile: SourceFile)
     fun onSelectFolder(sourceFile: SourceFile)
     fun onCreateRecord(folder: String)
+    fun onBack()
 }
