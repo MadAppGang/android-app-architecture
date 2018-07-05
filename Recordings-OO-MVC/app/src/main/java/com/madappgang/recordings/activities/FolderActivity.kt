@@ -89,12 +89,7 @@ internal class FolderActivity :
         createFolder(value)
     }
 
-    override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validateName(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
+    override fun onValidField(requestId: String, value: String) = fileManager.validateName(value)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

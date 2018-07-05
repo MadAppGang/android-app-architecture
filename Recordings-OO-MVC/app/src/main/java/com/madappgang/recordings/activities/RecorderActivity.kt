@@ -117,12 +117,7 @@ internal class RecorderActivity :
         }
     }
 
-    override fun onValidField(requestId: String, value: String) = try {
-        fileManager.validateName(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
+    override fun onValidField(requestId: String, value: String) = fileManager.validateName(value)
 
     override fun onDestroy() {
         super.onDestroy()

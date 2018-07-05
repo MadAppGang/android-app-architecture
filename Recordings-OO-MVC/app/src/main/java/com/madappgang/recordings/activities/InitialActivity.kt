@@ -58,14 +58,7 @@ internal class InitialActivity :
         onBackPressed()
     }
 
-    override fun onValidField(requestId: String, value: String): Boolean {
-        return try {
-            fileManager.validateName(value)
-            true
-        } catch (e: Throwable) {
-            false
-        }
-    }
+    override fun onValidField(requestId: String, value: String) = fileManager.validateName(value)
 
     override fun onDestroy() {
         super.onDestroy()

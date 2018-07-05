@@ -108,7 +108,7 @@ internal class PlayerActivity : AppCompatActivity() {
 
     private fun createUpdateUiJob() = launch(uiContext) {
         while (true) {
-            delay(300, TimeUnit.MILLISECONDS)
+            delay(500, TimeUnit.MILLISECONDS)
             updateUi()
         }
     }
