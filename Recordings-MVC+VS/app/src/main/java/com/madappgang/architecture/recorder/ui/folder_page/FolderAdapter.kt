@@ -1,4 +1,4 @@
-package com.madappgang.architecture.recorder
+package com.madappgang.architecture.recorder.ui.folder_page
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,20 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
+import com.madappgang.architecture.recorder.R
+import com.madappgang.architecture.recorder.application.AppInstance
+import com.madappgang.architecture.recorder.data.models.FileModel
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
-import java.io.File
 
 
-class FolderAdapter(private val basePath: String) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
+class FolderAdapter(var basePath: String) : RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
 
     private lateinit var clickListener: ItemClickListener
-    private var dataSet: MutableList<File> = mutableListOf()
+    private var dataSet: MutableList<FileModel> = mutableListOf()
     private var currentPath: String = ""
     private var isNormalMode: Boolean = true
-    private val fileManager = AppInstance.appInstance.fileManager
+    private val fileManager = AppInstance.managersInstance.fileManager
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.cell_item, parent, false)
         return ViewHolder(view)
@@ -62,7 +64,7 @@ class FolderAdapter(private val basePath: String) : RecyclerView.Adapter<FolderA
     fun prevPath(): String {
         if (currentPath == basePath) return basePath
 
-        val folders: MutableList<String> = currentPath.split("/").map { it.trim() }.toMutableList()
+        var folders: MutableList<String> = currentPath.split("/").map { it.trim() }.toMutableList()
         folders.removeAt(folders.size - 1)
 
         return folders.joinToString("/")
@@ -89,7 +91,7 @@ class FolderAdapter(private val basePath: String) : RecyclerView.Adapter<FolderA
         notifyDataSetChanged()
     }
 
-    private fun removeFile(file: File) {
+    private fun removeFile(file: FileModel) {
         fileManager.removeFile(file)
         updateListFiles()
     }
@@ -101,7 +103,7 @@ class FolderAdapter(private val basePath: String) : RecyclerView.Adapter<FolderA
     }
 
     interface ItemClickListener {
-        fun onItemClick(file: File)
+        fun onItemClick(file: FileModel)
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

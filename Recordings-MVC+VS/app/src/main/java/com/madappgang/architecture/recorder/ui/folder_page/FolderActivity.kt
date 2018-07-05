@@ -1,4 +1,4 @@
-package com.madappgang.architecture.recorder.activities
+package com.madappgang.architecture.recorder.ui.folder_page
 
 import android.Manifest
 import android.app.AlertDialog
@@ -13,14 +13,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
-import com.madappgang.architecture.recorder.AppInstance
-import com.madappgang.architecture.recorder.FolderAdapter
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.helpers.FileManager
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
-import com.madappgang.architecture.recorder.view_state_model.FolderViewState
+import com.madappgang.architecture.recorder.application.AppInstance
+import com.madappgang.architecture.recorder.data.models.FileModel
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.mainDirectory
+import com.madappgang.architecture.recorder.managers.FileManager
+import com.madappgang.architecture.recorder.managers.ViewStateStoresManager
+import com.madappgang.architecture.recorder.ui.player_page.PlayerActivity
+import com.madappgang.architecture.recorder.ui.recorder_page.RecorderActivity
 import kotlinx.android.synthetic.main.activity_folder.*
-import java.io.File
 
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
@@ -28,8 +29,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: FolderAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private val fileManager = AppInstance.appInstance.fileManager
-    private val viewStateStore = AppInstance.appInstance.viewStateStore
+    private val fileManager = AppInstance.managersInstance.fileManager
+    private val viewStatStorageManager: ViewStateStoresManager = AppInstance.managersInstance.viewStateStore
+    private val folderViewStateStore: FolderViewStateStore? = viewStatStorageManager.folderViewStateStore
     private val REQUEST_PERMISSION = 200
     private val permissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
     private var permissionAccepted = false
@@ -40,7 +42,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         setContentView(R.layout.activity_folder)
         setSupportActionBar(toolbar)
         toolbarButton.setOnClickListener {
-            viewStateStore.toggleEditing(!currentViewState().editing)
+            folderViewStateStore?.toggleEditing(!currentViewState().editing)
         }
         ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION)
 
@@ -53,7 +55,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_PERMISSION -> {
-                permissionAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (grantResults.isNotEmpty()) {
+                    permissionAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                }
             }
         }
         if (!permissionAccepted) {
@@ -70,7 +74,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
             adapter = viewAdapter
         }
 
-        viewStateStore.folderViewState.observe(this, Observer<FolderViewState> {
+        folderViewStateStore?.folderViewState?.observe(this, Observer<FolderViewState> {
             it?.let { handle(it) }
         })
 
@@ -85,6 +89,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     override fun onResume() {
         super.onResume()
         viewAdapter.updateListFiles()
+        viewStatStorageManager.resumeFolderActivity()
+        AppInstance.managersInstance.playerService.release()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -95,7 +101,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(file: File) {
+    override fun onItemClick(file: FileModel) {
         if (file.isDirectory) {
             pushFolder(file)
         } else {
@@ -103,19 +109,21 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         }
     }
 
-    private fun pushFolder(file: File) {
-        viewStateStore.pushFolder(file)
+    private fun pushFolder(file: FileModel) {
+        folderViewStateStore?.pushFolder(file)
     }
 
-    private fun playRecord(file: File) {
-        PlayerActivity.start(this, file.absolutePath)
+    private fun playRecord(file: FileModel) {
+        viewStatStorageManager.createPlayerViewStateStore()
+        PlayerActivity.start(this, file.filePath)
     }
 
     private fun onClickCreateFolder() {
-        viewStateStore.showCreateFolder()
+        folderViewStateStore?.showCreateFolder()
     }
 
     private fun onClickCreateRecord() {
+        viewStatStorageManager.createRecorderViewStateStore()
         val intent = Intent(this, RecorderActivity::class.java)
         startActivityForResult(intent, RecorderActivity.RECORDER_REQUEST_CODE)
     }
@@ -139,7 +147,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     override fun onBackPressed() {
         if (viewAdapter.getCurrentPath() != mainDirectory) {
             val prevPath = viewAdapter.prevPath()
-            viewStateStore.popFolder(File(prevPath))
+            folderViewStateStore?.popFolder(FileModel(prevPath))
         } else {
             super.onBackPressed()
         }
@@ -147,9 +155,9 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
-            viewStateStore.showSaveRecording()
+            folderViewStateStore?.showSaveRecording()
         } else {
-            AppInstance.appInstance.recorder.onStopRecord()
+            AppInstance.managersInstance.recorder.onStopRecord()
         }
     }
 
@@ -165,18 +173,19 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.setPositiveButton(R.string.button_title_save, { dialog, whichButton ->
             val name = editName.text.toString()
             if (isFolderDialog) onSaveFolder(name) else onSaveRecord(name)
-            viewStateStore.dismissAlert()
+            folderViewStateStore?.dismissAlert()
         })
         dialogBuilder.setNegativeButton(R.string.button_title_cancel, { dialog, whichButton ->
-            viewStateStore.dismissAlert()
+            folderViewStateStore?.dismissAlert()
         })
         dialogBuilder.setOnCancelListener({
-            viewStateStore.dismissAlert()
+            folderViewStateStore?.dismissAlert()
         })
         dialogBuilder.create().show()
     }
 
-    private fun currentViewState(): FolderViewState = viewStateStore.folderView
+    private fun currentViewState(): FolderViewState = folderViewStateStore?.folderView
+            ?: FolderViewState()
 
     private fun handle(viewState: FolderViewState) {
         when (viewState.action) {
@@ -194,9 +203,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
                 pushFolder()
             }
             FolderViewState.Action.POP_FOLDER -> {
-                val filePath = currentViewState().file?.let { it.absolutePath } ?: ""
-                viewAdapter.setPathForAdapter(filePath)
-                label.text = File(viewAdapter.getCurrentPath()).name
+                viewAdapter.setPathForAdapter(currentViewState().file?.filePath ?: "")
+                label.text = AppInstance.managersInstance.fileManager.getFileNameByPath(viewAdapter.getCurrentPath())
             }
             else -> {
             }
@@ -204,8 +212,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun pushFolder() {
-        val file = currentViewState().file ?: File(mainDirectory)
-        viewAdapter.setPathForAdapter(file.absolutePath)
+        val file = currentViewState().file ?: FileModel(mainDirectory)
+        viewAdapter.setPathForAdapter(file.filePath)
         label.text = file.name
     }
 
@@ -220,8 +228,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
     }
 
     private fun restoreState() {
-        val file = currentViewState().file ?: File(mainDirectory)
-        viewAdapter.setCurrentPath(file.absolutePath)
+        val file = currentViewState().file ?: FileModel(mainDirectory)
+        viewAdapter.setCurrentPath(file.filePath)
         label.text = file.name
         toggleEditing()
     }

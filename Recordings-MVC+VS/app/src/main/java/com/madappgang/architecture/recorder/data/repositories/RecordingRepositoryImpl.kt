@@ -1,21 +1,18 @@
-package com.madappgang.architecture.recorder.helpers
+package com.madappgang.architecture.recorder.data.repositories
 
 import android.media.MediaRecorder
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.mainDirectory
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.testRecordName
+import com.madappgang.architecture.recorder.data.repositories.RecordingRepository.RecordTimeUpdate
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.mainDirectory
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.recordFormat
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.testRecordName
 
 
-class Recorder {
+class RecordingRepositoryImpl : RecordingRepository {
 
-    interface RecordTimeUpdate {
-        fun onTimeUpdate(time: Long)
-    }
-
-    private val LOG_TAG = "Recorder"
+    private val LOG_TAG = "RecordingRepositoryImpl"
     private var fileName: String? = null
     private val recorder = MediaRecorder()
     private val handler = Handler()
@@ -33,7 +30,7 @@ class Recorder {
         }
     }
 
-    fun init(callback: RecordTimeUpdate) {
+    override fun init(callback: RecordTimeUpdate) {
         try {
             this.callback = callback
             if (!isStartRecord) {
@@ -50,7 +47,7 @@ class Recorder {
     }
 
     private fun setOutputFile() {
-        fileName = mainDirectory + "/$testRecordName$recordFormat"
+        fileName = "$mainDirectory/$testRecordName$recordFormat"
         recorder.setOutputFile(fileName)
     }
 
@@ -61,7 +58,7 @@ class Recorder {
         handler.postDelayed(updateTimerThread, 0)
     }
 
-    fun onStopRecord() {
+    override fun onStopRecord() {
         if (isStartRecord) recorder.stop()
         isStartRecord = false
         handler.removeCallbacks(updateTimerThread)
