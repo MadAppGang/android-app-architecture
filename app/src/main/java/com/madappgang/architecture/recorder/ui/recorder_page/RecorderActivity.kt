@@ -1,4 +1,4 @@
-package com.madappgang.architecture.recorder.activities
+package com.madappgang.architecture.recorder.ui.recorder_page
 
 import android.arch.lifecycle.Observer
 import android.content.Context
@@ -6,25 +6,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.helpers.Recorder
-import com.madappgang.architecture.recorder.view_state_model.RecorderViewState
+import com.madappgang.architecture.recorder.application.AppInstance
+import com.madappgang.architecture.recorder.data.repositories.RecordingRepository
 import kotlinx.android.synthetic.main.activity_recorder.*
 
 
-class RecorderActivity : AppCompatActivity(), Recorder.RecordTimeUpdate {
+class RecorderActivity : AppCompatActivity(), RecordingRepository.RecordTimeUpdate {
 
     private val LOG_TAG = "RecorderActivity"
-    private val recorder = AppInstance.appInstance.recorder
-    private val viewStateStore = AppInstance.appInstance.viewStateStore
+    private val recorder = AppInstance.managersInstance.recorder
+    private val viewStateStore = AppInstance.managersInstance.viewStateStore
+    private val recorderViewStateStore = viewStateStore.recorderViewStateStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recorder)
         init()
 
-        viewStateStore.recorderViewState.observe(this, Observer<RecorderViewState> {
+        recorderViewStateStore?.recorderViewState?.observe(this, Observer<RecorderViewState> {
             it?.let { handle(it) }
         })
     }
@@ -44,10 +44,11 @@ class RecorderActivity : AppCompatActivity(), Recorder.RecordTimeUpdate {
     }
 
     override fun onTimeUpdate(time: Long) {
-        viewStateStore.updateRecordDuration(time)
+        recorderViewStateStore?.updateRecordDuration(time)
     }
 
-    private fun currentViewState(): RecorderViewState = viewStateStore.recorderViewState.value!!
+    private fun currentViewState(): RecorderViewState = recorderViewStateStore?.recorderView
+            ?: RecorderViewState()
 
     private fun handle(viewState: RecorderViewState) {
         when (viewState.action) {

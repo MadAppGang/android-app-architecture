@@ -1,4 +1,4 @@
-package com.madappgang.architecture.recorder.activities
+package com.madappgang.architecture.recorder.ui.player_page
 
 
 import android.arch.lifecycle.Observer
@@ -12,26 +12,27 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
-import com.madappgang.architecture.recorder.AppInstance
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.helpers.FileManager.Companion.recordFormat
-import com.madappgang.architecture.recorder.helpers.Player
-import com.madappgang.architecture.recorder.view_state_model.PlayerViewState
-import com.madappgang.architecture.recorder.view_state_model.PlayerViewState.PlayerState.*
+import com.madappgang.architecture.recorder.application.AppInstance
+import com.madappgang.architecture.recorder.data.services.PlayerService
+import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.recordFormat
+import com.madappgang.architecture.recorder.ui.player_page.PlayerViewState.PlayerState.*
+import com.madappgang.architecture.recorder.ui.recorder_page.RecorderActivity
 import kotlinx.android.synthetic.main.activity_player.*
 
 
-class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, TextWatcher, Player.PlayerCallback {
+class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, TextWatcher, PlayerService.PlayerCallback {
 
-    private lateinit var player: Player
-    private var isClickOnButton = false
+    private var isPlayerPause = false
     private val handler = Handler()
     private lateinit var filePath: String
     private lateinit var fileDirectory: String
     private lateinit var fileName: String
     private lateinit var originalName: String
-    private val fileManager = AppInstance.appInstance.fileManager
-    private val viewStateStore = AppInstance.appInstance.viewStateStore
+    private var playerService: PlayerService = AppInstance.managersInstance.playerService
+    private val fileManager = AppInstance.managersInstance.fileManager
+    private val viewStateStore = AppInstance.managersInstance.viewStateStore
+    private val playerViewStateStore = viewStateStore.playerViewStateStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +46,10 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         filePath = if (resumePlay) {
             currentViewState().filePath
         } else {
-            viewStateStore.updateFilePath(path)
-            viewStateStore.updateOriginalFilePath(path)
+            playerViewStateStore?.updateFilePath(path)
+            playerViewStateStore?.updateOriginalFilePath(path)
             playButton.text = getString(R.string.player_button_play)
-            viewStateStore.changePlaybackPosition(0)
+            playerViewStateStore?.changePlaybackPosition(0)
             path
         }
 
@@ -56,7 +57,7 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         fileName = originalName
         fileDirectory = filePath.removeSuffix(recordFormat)
         fileDirectory = fileDirectory.substring(0, fileDirectory.length - (fileName.length + 1))
-        player = Player(filePath, this)
+        playerService.init(filePath, this)
         playerLabel.text = fileName
         editRecordName.setText(fileName)
         editRecordName.addTextChangedListener(this)
@@ -67,13 +68,13 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
             if (currentViewState().playerState == PLAY) {
                 startPlaying()
             } else {
-                player.play()
-                player.pause()
+                playerService.play()
+                playerService.pause()
                 playButton.text = getString(R.string.player_button_resume_play)
             }
         }
 
-        viewStateStore.playerViewState.observe(this, Observer<PlayerViewState> {
+        playerViewStateStore?.playerViewState?.observe(this, Observer<PlayerViewState> {
             it?.let { handle(it) }
         })
     }
@@ -84,17 +85,16 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     }
 
     private fun seekChange() {
-        viewStateStore.playerSeekTo(seekBar.progress)
+        playerViewStateStore?.playerSeekTo(seekBar.progress)
     }
 
     private fun startPlayProgressUpdater() {
-        if (player.isPlaying()) {
-            isClickOnButton = false
-            viewStateStore.changePlaybackPosition(player.getCurrentPosition())
+        if (playerService.isPlaying()) {
+            playerViewStateStore?.changePlaybackPosition(playerService.getCurrentPosition())
             val notification = Runnable { startPlayProgressUpdater() }
             handler.postDelayed(notification, 10)
-        } else if (!isClickOnButton) {
-            viewStateStore.updatePlayState(STOP)
+        } else if (!isPlayerPause) {
+            playerViewStateStore?.updatePlayState(STOP)
         }
     }
 
@@ -126,32 +126,28 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
         val newFile = "$fileDirectory/$fileName$recordFormat"
         if (currentViewState().filePath != newFile) {
             if (fileManager.renameFile(currentViewState().filePath, newFile)) {
-                viewStateStore.updateFilePath(newFile)
+                playerViewStateStore?.updateFilePath(newFile)
             }
         }
     }
 
     fun onClickPlay(v: View) {
-        if (player.isPlaying()) {
-            viewStateStore.updatePlayState(PAUSE)
+        if (playerService.isPlaying()) {
+            playerViewStateStore?.updatePlayState(PAUSE)
         } else {
-            viewStateStore.updatePlayState(PLAY)
+            playerViewStateStore?.updatePlayState(PLAY)
         }
     }
 
     override fun onPause() {
         renameFile()
-        isClickOnButton = true
-        player.pause()
+        playerService.pause()
+        isPlayerPause = true
         super.onPause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        player.release()
-    }
-
-    private fun currentViewState(): PlayerViewState = viewStateStore.playerViewState.value!!
+    private fun currentViewState(): PlayerViewState = playerViewStateStore?.playerView
+            ?: PlayerViewState()
 
     private fun handle(viewState: PlayerViewState) {
         when (viewState.action) {
@@ -166,18 +162,17 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
             PlayerViewState.Action.UPDATE_PLAY_STATE -> {
                 when (viewState.playerState) {
                     PLAY -> {
-                        isClickOnButton = true
                         startPlaying()
                     }
                     PAUSE -> {
-                        isClickOnButton = true
-                        player.pause()
+                        playerService.pause()
+                        isPlayerPause = true
                         playButton.text = getString(R.string.player_button_resume_play)
                     }
                     STOP -> {
-                        player.pause()
+                        playerService.pause()
                         playButton.text = getString(R.string.player_button_play)
-                        viewStateStore.changePlaybackPosition(0)
+                        playerViewStateStore?.changePlaybackPosition(0)
                     }
                 }
             }
@@ -185,13 +180,14 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     }
 
     private fun startPlaying() {
-        player.play()
+        playerService.play()
+        isPlayerPause = false
         playButton.text = getString(R.string.player_button_pause)
         startPlayProgressUpdater()
     }
 
     private fun seekToPosition(progress: Int) {
-        player.seekTo(progress)
+        playerService.seekTo(progress)
         seekBar.progress = progress
         currentTime.text = RecorderActivity.getTimeFormat(progress.toLong())
     }
