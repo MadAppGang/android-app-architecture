@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3f738c8f-0b49-4cca-92cb-567f7cea3fa9" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileColors">
+    <fileColor scope="Non-Project Files (Material Default)" color="2E3C43" />
+    <fileColor scope="Non-Project Files (Material Darker)" color="323232" />
+    <fileColor scope="Non-Project Files (Material Lighter)" color="eae8e8" />
+    <fileColor scope="Non-Project Files (Material Palenight)" color="2f2e43" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/useCases/GetRecordingsUseCase.kt" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/ExampleUnitTest.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/ExampleInstrumentedTest.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsViewModelUnitTests.kt" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/RecordingsViewModelUnitTests.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/Waiter.java" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/WAiter.java" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/WAiter.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/application/RecordingRepositoryMock.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_recording.xml" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/ContainerActivityTest.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/service/PlayerServiceImpl.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/service/PlayerService.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsViewModel.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/useCases/GetRecordingUseCase.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepository.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/repos/RecordingRepositoryMock.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordingDetailsViewModelProvider.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/res/navigation/navigation_default.xml" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/TestUtils.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/DrawableMAtchers.java" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/EspressoTestMatchers.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils/EspressoTestMatchers.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils/TestUtils.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepositoryImpl.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/recordings/RecordingsFragment.kt" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/InjectedTestRunner.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ContainerActivity.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/application/AppInstance.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsViewTest.kt" />
+        <option value="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsDetailsViewTest.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/recordings/RecordingsViewModel.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsFragment.kt" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/GetRecordingUnitTests.kt" />
+        <option value="$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepositoryMock.kt" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="MVVM+Coordinator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MVVM+Coordinator" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="application" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="details" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="micRecord" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="recordings" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="madappgangmvvmtestarch" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="repos" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="MVVM+Coordinator" type="1abcf292:AndroidViewProjectNode" />
+              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DEBUGGABLE_DEVICE" value="samsung-sm_g950f-ce031713c059242a0d" />
+    <property name="DEBUGGABLE_PROCESS" value="com.madappgang.madappgangmvvmtestarch" />
+    <property name="DEBUGGER_ID" value="Auto" />
+    <property name="SHOW_ALL_PROCESSES" value="false" />
+    <property name="SearchEverywhereHistoryKey" value="Player&#9;FILE&#9;file:///Users/sergeychaban/android-app-architecture/MVVM+Coordinator/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt&#10;Recde&#9;FILE&#9;file:///Users/sergeychaban/android-app-architecture/MVVM+Coordinator/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsViewModel.kt&#10;Re&#9;FILE&#9;file:///Users/sergeychaban/android-app-architecture/MVVM+Coordinator/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsDetailsViewTest.kt&#10;PlayerS&#9;FILE&#9;file:///Users/sergeychaban/android-app-architecture/MVVM+Coordinator/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt&#10;Conta&#9;FILE&#9;file:///Users/sergeychaban/android-app-architecture/MVVM+Coordinator/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ContainerActivity.kt" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="device.picker.selection" value="Pixel_2_XL_API_27" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.madappgang.madappgangmvvmtestarch" />
+      <recent name="com.madappgang.madappgangmvvmtestarch.application" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.madappgang.madappgangmvvmtestarch.model.service" />
+      <recent name="com.madappgang.madappgangmvvmtestarch" />
+    </key>
+    <key name="KotlinExtractInterfaceDialog.RECENT_KEYS">
+      <recent name="com.madappgang.madappgangmvvmtestarch.model.service" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Android App.app">
+    <configuration name="GetRecordingUnitTests" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.madappgang.madappgangmvvmtestarch" />
+      <option name="MAIN_CLASS_NAME" value="com.madappgang.madappgangmvvmtestarch.GetRecordingUnitTests" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
+        <option name="Make" enabled="false" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GetRecordingUnitTests.get file by id, if file exist" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.madappgang.madappgangmvvmtestarch" />
+      <option name="MAIN_CLASS_NAME" value="com.madappgang.madappgangmvvmtestarch.GetRecordingUnitTests" />
+      <option name="METHOD_NAME" value="get file by id, if file exist" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
+        <option name="Make" enabled="false" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GetRecordingUnitTests.get file by id, if file not exist" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.madappgang.madappgangmvvmtestarch" />
+      <option name="MAIN_CLASS_NAME" value="com.madappgang.madappgangmvvmtestarch.GetRecordingUnitTests" />
+      <option name="METHOD_NAME" value="get file by id, if file not exist" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
+        <option name="Make" enabled="false" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
+        <option name="Make" enabled="false" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sampled (Java)" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+    </configuration>
+    <configuration name="RecordingsDetailsVie..." type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="TESTING_TYPE" value="2" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="com.madappgang.madappgangmvvmtestarch.RecordingsDetailsViewTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sampled (Java)" />
+      </Profilers>
+    </configuration>
+    <configuration name="initialtest() (1)" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+      <module name="app" />
+      <option name="TESTING_TYPE" value="3" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="initialtest" />
+      <option name="CLASS_NAME" value="com.madappgang.madappgangmvvmtestarch.RecordingsDetailsViewTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sampled (Java)" />
+      </Profilers>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <list>
+      <item itemvalue="Android App.app" />
+      <item itemvalue="Android Instrumented Tests.RecordingsDetailsVie..." />
+      <item itemvalue="Android Instrumented Tests.initialtest() (1)" />
+      <item itemvalue="Android JUnit.GetRecordingUnitTests.get file by id, if file exist" />
+      <item itemvalue="Android JUnit.GetRecordingUnitTests.get file by id, if file not exist" />
+      <item itemvalue="Android JUnit.GetRecordingUnitTests" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Android JUnit.GetRecordingUnitTests" />
+        <item itemvalue="Android JUnit.GetRecordingUnitTests.get file by id, if file exist" />
+        <item itemvalue="Android JUnit.GetRecordingUnitTests.get file by id, if file not exist" />
+        <item itemvalue="Android Instrumented Tests.initialtest() (1)" />
+        <item itemvalue="Android Instrumented Tests.RecordingsDetailsVie..." />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3f738c8f-0b49-4cca-92cb-567f7cea3fa9" name="Default" comment="" />
+      <created>1528883631436</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1528883631436</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="initialtest()_(1) - 2018.06.18 at 14h 22m 05s.xml">
+      <configuration name="initialtest() (1)" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="initialtest()_(1) - 2018.06.18 at 15h 41m 17s.xml">
+      <configuration name="initialtest() (1)" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="initialtest()_(1) - 2018.06.18 at 15h 41m 59s.xml">
+      <configuration name="initialtest() (1)" configurationId="AndroidTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_exist - 2018.06.18 at 16h 09m 15s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_not_exist - 2018.06.18 at 16h 09m 27s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file not exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_exist - 2018.06.18 at 16h 10m 34s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_exist - 2018.06.18 at 16h 11m 25s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_exist - 2018.06.18 at 16h 11m 29s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests_get_file_by_id,_if_file_exist - 2018.06.18 at 16h 12m 52s.xml">
+      <configuration name="GetRecordingUnitTests.get file by id, if file exist" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="GetRecordingUnitTests - 2018.06.18 at 16h 12m 59s.xml">
+      <configuration name="GetRecordingUnitTests" configurationId="AndroidJUnit" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="12" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="Image Layers" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50143266" side_tool="true" weight="0.48084545" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.49856734" weight="0.25099075" />
+      <window_info anchor="bottom" id="Version Control" order="3" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="Designer" order="2" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.18489768" />
+      <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.49928367" weight="0.45046234" />
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info anchor="bottom" id="Build" order="4" sideWeight="0.49928367" weight="0.33808553" />
+      <window_info id="Build Variants" order="1" side_tool="true" />
+      <window_info anchor="right" id="Commander" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Android Profiler" order="5" weight="0.32893" />
+      <window_info id="Captures" order="7" weight="0.25" />
+      <window_info anchor="right" id="Preview" order="8" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="7" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="bottom" id="Logcat" order="0" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="6" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="bottom" id="Build" order="4" sideWeight="0.49928367" weight="0.33817703" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Build Variants" order="1" side_tool="true" />
+      <window_info id="Image Layers" order="6" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.49856734" weight="0.3632761" />
+      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Android Profiler" order="5" weight="0.32893" />
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info id="Captures" order="7" weight="0.25" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="right" id="Commander" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50143266" side_tool="true" weight="0.48084545" />
+      <window_info anchor="right" id="Preview" order="8" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="7" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="bottom" id="Logcat" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="3" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="2" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info active="true" content_ui="combo" id="Project" order="4" visible="true" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="6" />
+      <window_info anchor="bottom" id="TODO" order="12" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="9" sideWeight="0.49928367" visible="true" weight="0.3989432" />
+    </layout-to-restore>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/service/PlayerServiceImpl.kt</url>
+          <line>16</line>
+          <properties />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>26</line>
+          <properties />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>15</line>
+          <properties />
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>30</line>
+          <properties />
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>34</line>
+          <properties />
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>38</line>
+          <properties />
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt</url>
+          <line>48</line>
+          <properties />
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepositoryMock.kt</url>
+          <line>9</line>
+          <properties>
+            <option name="lambda-ordinal" value="0" />
+          </properties>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="40" />
+    </breakpoint-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>recordingsViewModel.recordings.value!!.size</expression-string>
+        <language-id>kotlin</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/content/ContextWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/app/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/WAiter.kt" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test.espresso/espresso-core/3.0.2/433f4f601a3f3835691d80838dd7ff9414931b05/espresso-core-3.0.2-sources.jar!/android/support/test/espresso/matcher/ViewMatchers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="473" column="30" selection-start-line="473" selection-start-column="30" selection-end-line="473" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test.espresso/espresso-core/3.0.2/433f4f601a3f3835691d80838dd7ff9414931b05/espresso-core-3.0.2-sources.jar!/android/support/test/espresso/ViewAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test.espresso/espresso-core/3.0.2/433f4f601a3f3835691d80838dd7ff9414931b05/espresso-core-3.0.2-sources.jar!/android/support/test/espresso/util/TreeIterables.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-322">
+          <caret line="45" column="19" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/not_namespaced_r_class_sources/debug/processDebugResources/r/com/madappgang/madappgangmvvmtestarch/R.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_recording.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/ContainerActivityTest.kt" />
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-27/android/media/MediaPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2290">
+          <caret line="3783" column="40" selection-start-line="3783" selection-start-column="40" selection-end-line="3783" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/repos/RecordingRepositoryMock.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/application/RecordingRepositoryMock.kt" />
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/navigation-args/debug/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsFragmentArgs.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/navigation/navigation_default.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordingDetailsViewModelProvider.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/ExampleInstrumentedTest.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils/DrawableMatcher.java" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils/EspressoTestMatchers.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_details.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/testUtils/TestUtils.kt" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test.espresso/espresso-core/3.0.2/433f4f601a3f3835691d80838dd7ff9414931b05/espresso-core-3.0.2-sources.jar!/android/support/test/espresso/Espresso.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5786">
+          <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test.espresso/espresso-core/3.0.2/433f4f601a3f3835691d80838dd7ff9414931b05/espresso-core-3.0.2-sources.jar!/android/support/test/espresso/action/ViewActions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-299">
+          <caret line="393" column="27" selection-start-line="393" selection-start-column="27" selection-end-line="393" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepository.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/service/PlayerService.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/service/PlayerServiceImpl.kt" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.schibsted.spain/barista/2.4.0/b97102757e2f0d6abc2a5c1a692596ad6bc08fda/barista-2.4.0-sources.jar!/com/schibsted/spain/barista/internal/viewaction/SeekBarActions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-537">
+          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.schibsted.spain/barista/2.4.0/b97102757e2f0d6abc2a5c1a692596ad6bc08fda/barista-2.4.0-sources.jar!/com/schibsted/spain/barista/interaction/BaristaSeekBarViewInteractions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="14" column="63" selection-start-line="14" selection-start-column="63" selection-end-line="14" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepositoryImpl.kt" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test/monitor/1.0.2/5764301056100b445e9ba31df7d1b554a55450f6/monitor-1.0.2-sources.jar!/android/support/test/InstrumentationRegistry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test/runner/1.0.2/b2ce2342744a66e935dbc4a298259709a4c1f042/runner-1.0.2-sources.jar!/android/support/test/runner/AndroidJUnitRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="272" column="14" selection-start-line="272" selection-start-column="14" selection-end-line="272" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support.test/monitor/1.0.2/5764301056100b445e9ba31df7d1b554a55450f6/monitor-1.0.2-sources.jar!/android/support/test/runner/MonitoringInstrumentation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="403" column="14" selection-start-line="403" selection-start-column="14" selection-end-line="403" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa/junit-4.12-sources.jar!/org/junit/BeforeClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/InjectedTestRunner.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsViewTest.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/service/PlayerServiceMock.kt" />
+    <entry file="file://$PROJECT_DIR$/build.gradle" />
+    <entry file="file://$PROJECT_DIR$/app/build.gradle" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/recordings/RecordingsViewModelProvider.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/RecordingsViewModelUnitTests.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/application/AppInstance.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_mic_record.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_recordings.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/recordings/RecordingsViewModel.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsViewModel.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/details/RecordDetailsFragment.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ContainerActivity.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/model/useCases/GetRecordingUseCase.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/madappgang/madappgangmvvmtestarch/RecordingsDetailsViewTest.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/model/repos/RecordingRepositoryMock.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/madappgang/madappgangmvvmtestarch/GetRecordingUnitTests.kt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/madappgang/madappgangmvvmtestarch/ui/recordings/RecordingsFragment.kt" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

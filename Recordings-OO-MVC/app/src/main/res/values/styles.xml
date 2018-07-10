@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.Button.Borderless" parent="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+    <style name="AppTheme.TextAppearance.LargeHeader" parent="@style/Base.TextAppearance.AppCompat.Large"/>
+
+    <style name="AppTheme.ProgressBar.Circle" parent="AppTheme">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">20dp</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.ToolbarTitle" parent="AppTheme.TextAppearance.LargeHeader"/>
+
+    <style name="AppTheme.Divider">
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">#c6c6c6</item>
+    </style>
+
+</resources>

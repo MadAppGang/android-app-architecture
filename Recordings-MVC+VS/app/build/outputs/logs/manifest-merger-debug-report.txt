@@ -1,0 +1,132 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/0ad3124c9d271aafa5a66ffdd74c64a3/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.1.aar/08b0a60f96148f7635576caedad26097/AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:recyclerview-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.1.1.aar/8b50bde60fab1cafc28e788cc3a0a7b3/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/b6cc18446f09910264fbc97049e867b5/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/8f01c14b0d99f06a9520b9f0da4f07b6/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/b8f56d5f76366d6e51025198a214b597/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/e6e66f2df2cde64f52ae1a5b6bc0802c/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/ae4d64f1420935577bbc17097c99981b/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/54cf0ca27de7738f6268f21e6ac4111c/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/1211907946f31eec52a183eb009afa9f/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/ab0a6536d0094eb11136abb21c14c4b2/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/0809cb2ed7a72aeb3f9e561f74e249fd/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/8f5328474efe19678993976f6e14d90a/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+	package
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:3:5-51
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:1-30:12
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:5:5-71
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:5:22-68
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:6:5-80
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:6:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:7:22-78
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:8:5-68
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:8:22-65
+application
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:10:5-28:19
+MERGED from [com.android.support.constraint:constraint-layout:1.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.1.aar/08b0a60f96148f7635576caedad26097/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.1.aar/08b0a60f96148f7635576caedad26097/AndroidManifest.xml:9:5-20
+	android:supportsRtl
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:16:9-35
+	android:label
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:14:9-41
+	android:roundIcon
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:15:9-54
+	android:icon
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:13:9-43
+	android:allowBackup
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:12:9-35
+	android:theme
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:17:9-65
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:11:9-36
+activity#com.madappgang.architecture.recorder.activities.FolderActivity
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:18:9-25:20
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:19:13-54
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:20:13-24:29
+action#android.intent.action.MAIN
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:21:17-69
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:21:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:23:17-77
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:23:27-74
+activity#com.madappgang.architecture.recorder.activities.PlayerActivity
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:26:9-63
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:26:19-60
+activity#com.madappgang.architecture.recorder.activities.RecorderActivity
+ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:27:9-65
+	android:name
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml:27:19-62
+uses-sdk
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/0ad3124c9d271aafa5a66ffdd74c64a3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/0ad3124c9d271aafa5a66ffdd74c64a3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.1.aar/08b0a60f96148f7635576caedad26097/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.1.aar/08b0a60f96148f7635576caedad26097/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:recyclerview-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.1.1.aar/8b50bde60fab1cafc28e788cc3a0a7b3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.1.1.aar/8b50bde60fab1cafc28e788cc3a0a7b3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/b6cc18446f09910264fbc97049e867b5/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/b6cc18446f09910264fbc97049e867b5/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/8f01c14b0d99f06a9520b9f0da4f07b6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/8f01c14b0d99f06a9520b9f0da4f07b6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/b8f56d5f76366d6e51025198a214b597/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/b8f56d5f76366d6e51025198a214b597/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/e6e66f2df2cde64f52ae1a5b6bc0802c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/e6e66f2df2cde64f52ae1a5b6bc0802c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/ae4d64f1420935577bbc17097c99981b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/ae4d64f1420935577bbc17097c99981b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/54cf0ca27de7738f6268f21e6ac4111c/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/54cf0ca27de7738f6268f21e6ac4111c/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/1211907946f31eec52a183eb009afa9f/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/1211907946f31eec52a183eb009afa9f/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/ab0a6536d0094eb11136abb21c14c4b2/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/ab0a6536d0094eb11136abb21c14c4b2/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/0809cb2ed7a72aeb3f9e561f74e249fd/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/0809cb2ed7a72aeb3f9e561f74e249fd/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/8f5328474efe19678993976f6e14d90a/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] /Users/sergeychaban/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/8f5328474efe19678993976f6e14d90a/AndroidManifest.xml:20:5-44
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		ADDED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/sergeychaban/android-app-architecture/Recordings-MVC+VS/app/src/main/AndroidManifest.xml
