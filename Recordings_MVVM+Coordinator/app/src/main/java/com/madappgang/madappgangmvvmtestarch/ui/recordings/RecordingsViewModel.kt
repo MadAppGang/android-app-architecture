@@ -57,4 +57,5 @@ class RecordingsViewModel(configurator: Configurator) : ViewModel() {
         super.onCleared()
         job.cancel()
     }
+
 }

@@ -1,25 +1,23 @@
 package com.madappgang.madappgangmvvmtestarch
 
+import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import androidx.navigation.Navigation
+import com.madappgang.madappgangmvvmtestarch.application.GlobalCoordinator
+import com.madappgang.madappgangmvvmtestarch.application.globalCoordinator
 import com.madappgang.madappgangmvvmtestarch.model.models.SourceFile
 import com.madappgang.madappgangmvvmtestarch.ui.details.RecordDetailsFragmentArgs
-import com.madappgang.madappgangmvvmtestarch.ui.micRecord.MicRecordFragment
 import com.madappgang.madappgangmvvmtestarch.ui.micRecord.MicRecordFragmentArgs
 import com.madappgang.madappgangmvvmtestarch.ui.recordings.RecordingsFragmentArgs
 import kotlinx.android.synthetic.main.activity_container.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
-import org.kodein.di.KodeinTrigger
 import org.kodein.di.android.closestKodein
-import org.kodein.di.android.retainedKodein
 
 class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
-    override fun onBack() {
-        onBackPressed()
-    }
+
 
     override val kodein: Kodein by closestKodein()
 
@@ -29,6 +27,20 @@ class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
         setSupportActionBar(toolbar)
+        handleRoutingEvents()
+    }
+
+    private fun handleRoutingEvents() {
+        applicationContext.globalCoordinator.navigationEventObservable.observe(this, Observer {
+            it?.let {
+                when (it) {
+                    is GlobalCoordinator.NavigationEvent.SelectRecording -> showRecord(it.sourceFile.id)
+                    is GlobalCoordinator.NavigationEvent.SelectFolder -> onSelectFolder(it.sourceFile)
+                    is GlobalCoordinator.NavigationEvent.onCreateRecord -> onCreateRecord(it.folder)
+                    is GlobalCoordinator.NavigationEvent.onBack -> onBack()
+                }
+            }
+        })
     }
 
     private fun showRecord(id: String) {
@@ -48,6 +60,10 @@ class ContainerActivity : AppCompatActivity(), Coordinator, KodeinAware {
     override fun onCreateRecord(folder: String) {
         val args = MicRecordFragmentArgs.Builder().setFolderPath(folder).build()
         navigation.navigate(R.id.action_superHeroesFragment2_to_micRecordFragment, args.toBundle())
+    }
+
+    override fun onBack() {
+        onBackPressed()
     }
 
     override fun getToolbar(): Toolbar {

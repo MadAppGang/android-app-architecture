@@ -6,7 +6,6 @@ import com.madappgang.madappgangmvvmtestarch.model.models.SourceFile
 import com.madappgang.madappgangmvvmtestarch.model.repos.RecordingRepository
 import com.madappgang.madappgangmvvmtestarch.model.repos.RecordingRepositoryMock
 import com.madappgang.madappgangmvvmtestarch.model.useCases.GetRecordingsUseCase
-import com.madappgang.madappgangmvvmtestarch.ui.recordings.RecordingsViewModel
 import kotlinx.coroutines.experimental.Unconfined
 import org.junit.Rule
 import org.junit.Test
