@@ -24,3 +24,5 @@ abstract class Foldable {
 
     abstract fun remove(): Result<Void>
 }
+
+fun Foldable.Companion.validateName(name: String) = name.isNotBlank()

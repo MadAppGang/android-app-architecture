@@ -12,8 +12,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Folder(
-    override var path: String,
-    override var name: String
+    override var path: String = "",
+    override var name: String = ""
 ) : Foldable(), Parcelable {
 
     companion object {
@@ -29,12 +29,12 @@ data class Folder(
         }
     }
 
-    fun create(): Result<Void> {
+    fun create(): Result<Folder> {
         val request = Request.SingleBody(
-            Void::class.java,
+            Folder::class.java,
             "api/folder",
             RequestMethod.POST,
-            body = BodyPart.Json("body", mapper.toJson(this))
+            body = BodyPart.Json(value = mapper.toJson(this))
         )
         return Foldable.network.executeQuery(request, mapper)
     }

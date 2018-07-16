@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">Recordings</string>
+
+    <string name="InitialActivity_Create_root_folder">Create root folder</string>
+    <string name="InitialActivity_enter_name">Enter name</string>
+    <string name="InitialActivity_cancel">Cancel</string>
+    <string name="InitialActivity_create">Create</string>
+
+    <string name="EditableDialogFragment_title"></string>
+    <string name="EditableDialogFragment_hint"></string>
+    <string name="EditableDialogFragment_cancel">Cancel</string>
+    <string name="EditableDialogFragment_save">Save</string>
+
+    <string name="SelectFoldableTypeDialogFragment_chose">Chose</string>
+    <string name="SelectFoldableTypeDialogFragment_add_folder">Add folder</string>
+    <string name="SelectFoldableTypeDialogFragment_start_recording">Start Recording</string>
+
+    <string name="FoldableAdapter_delete">Delete</string>
+
+    <string name="RecorderActivity_start">Start</string>
+    <string name="RecorderActivity_pause">Pause</string>
+    <string name="RecorderActivity_resume">Resume</string>
+    <string name="RecorderActivity_stop">Stop</string>
+
+    <string name="RecorderActivity_save_recording">Save recording</string>
+    <string name="RecorderActivity_enter_name">Enter name</string>
+    <string name="RecorderActivity_cancel">Cancel</string>
+    <string name="RecorderActivity_save">Save</string>
+    <string name="RecorderActivity_explanation_permission_request">Please grant permissions first, to enable this feature</string>
+    <string name="RecorderActivity_ok">Ok</string>
+
+    <string name="PlayerActivity_start">Start</string>
+    <string name="PlayerActivity_pause">Pause</string>
+
 </resources>

@@ -10,16 +10,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".pages.initial.InitialActivity">
+        <activity
+            android:name=".pages.initial.InitialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".pages.recorder.RecorderActivity" />
-        <activity android:name=".pages.folder.FolderActivity" />
-        <activity android:name=".pages.player.PlayerActivity" />
+        <activity
+            android:name=".pages.recorder.RecorderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".pages.folder.FolderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".pages.player.PlayerActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
