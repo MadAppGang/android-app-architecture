@@ -7,8 +7,11 @@
 package com.madappgang.recordings.models
 
 import android.arch.lifecycle.MutableLiveData
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
 
-class Player {
+class Player : MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     enum class State {
         /**
@@ -39,35 +42,73 @@ class Player {
 
     var state: MutableLiveData<State> = MutableLiveData()
 
+    private val audioPlayer: MediaPlayer = MediaPlayer()
+
+    init {
+        state.value = State.NOT_STARTED
+
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+            .build()
+
+        audioPlayer.setAudioAttributes(audioAttributes)
+        audioPlayer.setOnPreparedListener(this)
+        audioPlayer.setOnCompletionListener(this)
+        audioPlayer.isLooping = false
+    }
+
     fun play(track: Track) {
-        TODO("not implemented")
+        audioPlayer.reset()
+        state.value = State.PREPARING
+
+        audioPlayer.setDataSource(track.fullPath)
+        audioPlayer.prepareAsync()
+
     }
 
     fun start() {
-        TODO("not implemented")
+        audioPlayer.start()
+        state.value = State.PLAYING
     }
 
     fun pause() {
-        TODO("not implemented")
+        audioPlayer.pause()
+        state.value = State.PAUSED
     }
 
     fun stop() {
-        TODO("not implemented")
+        state.value = State.STOPPED
+        audioPlayer.pause()
+        val startPosition = audioPlayer.currentPosition * -1
+        audioPlayer.seekTo(startPosition)
     }
 
     fun seekTo(millisecond: Int) {
-        TODO("not implemented")
+        audioPlayer.seekTo(millisecond)
     }
 
     fun reset() {
-        TODO("not implemented")
+        audioPlayer.reset()
+        state.value = State.NOT_STARTED
     }
 
     fun getCurrentPosition(): Int {
-        TODO("not implemented")
+        val isProgressZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+
+        return if (isProgressZero) 0 else audioPlayer.currentPosition
     }
 
     fun getDuration(): Int {
-        TODO("not implemented")
+        val isDurationZero = state.value == State.NOT_STARTED || state.value == State.PREPARING
+        return if (isDurationZero) 0 else audioPlayer.duration
+    }
+
+    override fun onPrepared(mp: MediaPlayer?) {
+        start()
+    }
+
+    override fun onCompletion(mp: MediaPlayer?) {
+        state.value = State.COMPLETED
     }
 }
