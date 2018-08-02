@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.FileModel
+import com.madappgang.architecture.recorder.data.storages.FileStorage
 import com.madappgang.architecture.recorder.data.storages.FileStorage.Companion.recordFormat
 import kotlinx.android.synthetic.main.cell_item.view.*
 

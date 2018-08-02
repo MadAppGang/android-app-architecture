@@ -13,13 +13,14 @@ class FileManager(private val fileStorage: FileStorage) {
         fileStorage.saveDirectory(FileModel(mainDirectory))
     }
 
-    fun onSaveFolder(path: String, name: String, callback: FileManagerCallback) {
+    fun onSaveFolder(path: String?, name: String, callback: FileManagerCallback) {
+        if (path == null) return
         fileStorage.saveDirectory(FileModel(path, name, true))
         callback.onResult()
     }
 
-    fun onSaveRecord(path: String, name: String, callback: FileManagerCallback) {
-        if (fileStorage.saveRecord(FileModel(path, name))) callback.onResult()
+    fun onSaveRecord(path: String?, name: String, callback: FileManagerCallback) {
+        if (path != null && fileStorage.saveRecord(FileModel(path, name))) callback.onResult()
     }
 
     fun getListFiles(currentPath: String): MutableList<FileModel> {
@@ -34,8 +35,9 @@ class FileManager(private val fileStorage: FileStorage) {
         return fileStorage.renameFile(FileModel(oldFilePath), FileModel(newFilePath))
     }
 
-    fun getFileNameByPath(currentPath: String): String {
-        return fileStorage.getFileNameByPath(currentPath)
+    fun getFileNameByPath(currentPath: String?): String {
+        if (currentPath != null) return fileStorage.getFileNameByPath(currentPath)
+        return ""
     }
 
     interface FileManagerCallback {
