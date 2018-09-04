@@ -2,23 +2,28 @@ package com.madappgang.architecture.recorder.ui.folder_page
 
 import android.Manifest
 import android.app.AlertDialog
+import android.arch.lifecycle.LifecycleOwner
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.DialogModel
+import com.madappgang.architecture.recorder.data.models.FileModel
+import com.madappgang.architecture.recorder.data.storages.FileStorage
 import com.madappgang.architecture.recorder.ui.player_page.PlayerActivity
 import com.madappgang.architecture.recorder.ui.recorder_page.RecorderActivity
 import kotlinx.android.synthetic.main.activity_folder.*
 
-
-class FolderActivity : AppCompatActivity() {
+class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     private var folderViewBinder: FolderViewBinder = AppInstance.managersInstance.folderViewBinder
     private val REQUEST_PERMISSION = 200
@@ -27,6 +32,7 @@ class FolderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_folder)
         setSupportActionBar(toolbar)
         toolbarButton.setOnClickListener {
@@ -35,8 +41,14 @@ class FolderActivity : AppCompatActivity() {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION)
     }
 
+    override fun onResume() {
+        super.onResume()
+        folderViewBinder.onResume()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         when (requestCode) {
             REQUEST_PERMISSION -> {
                 if (grantResults.isNotEmpty()) {
@@ -47,14 +59,38 @@ class FolderActivity : AppCompatActivity() {
         if (!permissionAccepted) {
             finish()
         } else {
-            init()
+            initList()
+            prepareViewBinder()
         }
     }
 
-    private fun init() {
-        folderViewBinder.initDelegates(::labelSetText, ::toolbarSetText, ::startRecorderActivity, ::startPlayerActivity,
-                ::createDialogBuilder)
-        folderViewBinder.init(myRecyclerView, this, LinearLayoutManager(this), this.layoutInflater)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.documents_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.create_folder -> folderViewBinder.onClickCreateFolder()
+            R.id.create_record -> folderViewBinder.onClickCreateRecord()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (folderViewBinder.onBackPressed()) super.onBackPressed()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        folderViewBinder.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun prepareViewBinder() {
+        folderViewBinder.showDialog = { isFolderDialog -> showNewNameDialog(isFolderDialog) }
+        folderViewBinder.startPlayer = { filePath -> startPlayerActivity(filePath) }
+        folderViewBinder.startRecorder = { startRecorderActivity() }
+        folderViewBinder.setTitleText = { titleText -> labelSetText(titleText) }
+        folderViewBinder.setToolbarButtonText = { toolbarButtonTextId -> toolbarSetText(toolbarButtonTextId) }
     }
 
     private fun labelSetText(text: String) {
@@ -78,29 +114,48 @@ class FolderActivity : AppCompatActivity() {
         return DialogModel(AlertDialog.Builder(this), this.layoutInflater)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.documents_menu, menu)
-        return true
+    private fun showNewNameDialog(isFolderDialog: Boolean) {
+        val dialogModel = createDialogBuilder()
+        val dialogBuilder = dialogModel.alertDialog
+        val inflater = dialogModel.layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_item_name, null)
+        val editName = dialogView.findViewById<EditText>(R.id.editItemName)
+
+        dialogBuilder.setView(dialogView)
+        dialogBuilder.setTitle(if (isFolderDialog) R.string.dlg_folder_name_title else R.string.dlg_recording_name_title)
+        dialogBuilder.setMessage(if (isFolderDialog) R.string.dlg_folder_name_subtitle else R.string.dlg_recording_name_subtitle)
+        dialogBuilder.setPositiveButton(R.string.button_title_save, { _, _ ->
+            val name = editName.text.toString()
+            if (isFolderDialog) folderViewBinder.onSaveFolder(name) else folderViewBinder.onSaveRecord(name)
+            folderViewBinder.onDismissAlert()
+        })
+        dialogBuilder.setNegativeButton(R.string.button_title_cancel, { _, _ ->
+            folderViewBinder.onDismissAlert()
+        })
+        dialogBuilder.setOnCancelListener({
+            folderViewBinder.onDismissAlert()
+        })
+        dialogBuilder.create().show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        folderViewBinder.onResume()
-    }
+    fun initList() {
+        val viewAdapter = FolderAdapter(FileStorage.mainDirectory)
+        viewAdapter.setupItemClickListener(this)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.create_folder -> folderViewBinder.onClickCreateFolder()
-            R.id.create_record -> folderViewBinder.onClickCreateRecord()
+        myRecyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = viewAdapter
         }
-        return super.onOptionsItemSelected(item)
+
+//        folderViewStateStore?.folderViewState?.observe(lifecycleOwner, Observer<FolderViewState> {
+//            it?.let { handle(it) }
+//        })
+//
+//        restoreState()
     }
 
-    override fun onBackPressed() {
-        if (folderViewBinder.onBackPressed()) super.onBackPressed()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        folderViewBinder.onActivityResult(requestCode, resultCode, data)
+    override fun onItemClick(file: FileModel) {
+        folderViewBinder.onItemListClick(file)
     }
 }
