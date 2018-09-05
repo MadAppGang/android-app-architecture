@@ -2,15 +2,12 @@ package com.madappgang.architecture.recorder.ui.folder_page
 
 import android.Manifest
 import android.app.AlertDialog
-import android.arch.lifecycle.LifecycleOwner
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -18,7 +15,6 @@ import com.madappgang.architecture.recorder.R
 import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.DialogModel
 import com.madappgang.architecture.recorder.data.models.FileModel
-import com.madappgang.architecture.recorder.data.storages.FileStorage
 import com.madappgang.architecture.recorder.ui.player_page.PlayerActivity
 import com.madappgang.architecture.recorder.ui.recorder_page.RecorderActivity
 import kotlinx.android.synthetic.main.activity_folder.*
@@ -32,7 +28,6 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_folder)
         setSupportActionBar(toolbar)
         toolbarButton.setOnClickListener {
@@ -48,7 +43,6 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         when (requestCode) {
             REQUEST_PERMISSION -> {
                 if (grantResults.isNotEmpty()) {
@@ -59,8 +53,8 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         if (!permissionAccepted) {
             finish()
         } else {
-            initList()
             prepareViewBinder()
+            folderViewBinder.restoreState(this, ::initList)
         }
     }
 
@@ -138,21 +132,12 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.create().show()
     }
 
-    fun initList() {
-        val viewAdapter = FolderAdapter(FileStorage.mainDirectory)
-        viewAdapter.setupItemClickListener(this)
-
+    private fun initList(viewAdapter : FolderAdapter?) {
         myRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
         }
-
-//        folderViewStateStore?.folderViewState?.observe(lifecycleOwner, Observer<FolderViewState> {
-//            it?.let { handle(it) }
-//        })
-//
-//        restoreState()
     }
 
     override fun onItemClick(file: FileModel) {

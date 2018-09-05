@@ -7,17 +7,14 @@ import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.FileModel
 import com.madappgang.architecture.recorder.data.storages.FileStorage
 import com.madappgang.architecture.recorder.managers.FileManager
-import com.madappgang.architecture.recorder.managers.ViewStateStoresManager
 
 /**
  * Created by Bohdan Shchavinskiy <bogdan@madappgang.com> on 01.08.2018.
  */
 class FolderViewBinder {
 
-    private var viewAdapter: FolderAdapter? = null
-    private val fileManager = AppInstance.managersInstance.fileManager
-    private val viewStatStorageManager: ViewStateStoresManager = AppInstance.managersInstance.viewStateStore
-    private val folderViewStateStore: FolderViewStateStore? = viewStatStorageManager.folderViewStateStore
+    var viewAdapter: FolderAdapter? = null
+    var folderModelAdapter: FolderModelAdapter = FolderModelAdapter(::handle)
 
     var showDialog: (isFolderDialog: Boolean) -> Unit = {}
     var startPlayer: (filePath: String) -> Unit = {}
@@ -25,57 +22,58 @@ class FolderViewBinder {
     var setTitleText: (text: String) -> Unit = {}
     var setToolbarButtonText: (textId: Int) -> Unit = {}
 
-    private fun restoreState() {
-        val file = currentViewState().file ?: FileModel(FileStorage.mainDirectory)
+    fun restoreState(clickListener: FolderAdapter.ItemClickListener, initList: (viewAdapter: FolderAdapter?) -> Unit) {
+        viewAdapter = FolderAdapter(FileStorage.mainDirectory)
+        viewAdapter?.setupItemClickListener(clickListener)
+        val currentViewState = folderModelAdapter.currentViewState()
+        val file = currentViewState.file
         viewAdapter?.setCurrentPath(file.filePath)
+        initList(viewAdapter)
         setTitleText(file.name)
-        toggleEditing()
+        handle(currentViewState)
     }
 
     fun onClickToolbarButton() {
-        folderViewStateStore?.toggleEditing(!currentViewState().editing)
+        folderModelAdapter.onClickToolbarButton()
     }
-
-    private fun currentViewState(): FolderViewState = folderViewStateStore?.folderView?: FolderViewState()
 
     fun onResume() {
         viewAdapter?.updateListFiles()
-        viewStatStorageManager.resumeFolderActivity()
-        AppInstance.managersInstance.playerService.release()
+        folderModelAdapter.onResume()
     }
 
     private fun handle(viewState: FolderViewState) {
         when (viewState.action) {
             FolderViewState.Action.SHOW_ALERT -> {
-                if (currentViewState().alertType == FolderViewState.AlertType.CREATE_FOLDER) {
-                    showDialog.invoke(true)
-                } else if (currentViewState().alertType == FolderViewState.AlertType.SAVE_RECORDING) {
-                    showDialog.invoke(false)
+                if (viewState.alertType == FolderViewState.AlertType.CREATE_FOLDER) {
+                    showDialog(true)
+                } else if (viewState.alertType == FolderViewState.AlertType.SAVE_RECORDING) {
+                    showDialog(false)
                 }
             }
-            FolderViewState.Action.TOGGLE_EDITING -> {
-                toggleEditing()
-            }
             FolderViewState.Action.PUSH_FOLDER -> {
-                pushFolder()
+                pushFolder(viewState)
+                folderModelAdapter.toggleEditing()
             }
             FolderViewState.Action.POP_FOLDER -> {
-                viewAdapter?.setPathForAdapter(currentViewState().file?.filePath ?: "")
+                viewAdapter?.setPathForAdapter(viewState.file.filePath)
                 setTitleText(AppInstance.managersInstance.fileManager.getFileNameByPath(viewAdapter?.getCurrentPath()))
+                folderModelAdapter.toggleEditing()
             }
             else -> {
             }
         }
+        toggleEditing(viewState)
     }
 
-    private fun pushFolder() {
-        val file = currentViewState().file ?: FileModel(FileStorage.mainDirectory)
+    private fun pushFolder(viewState: FolderViewState) {
+        val file = viewState.file
         viewAdapter?.setPathForAdapter(file.filePath)
         setTitleText(file.name)
     }
 
-    private fun toggleEditing() {
-        if (currentViewState().editing) {
+    private fun toggleEditing(viewState: FolderViewState) {
+        if (viewState.editing) {
             viewAdapter?.setRemoveMode()
             setToolbarButtonText(R.string.toolbar_button_select)
         } else {
@@ -85,25 +83,25 @@ class FolderViewBinder {
     }
 
     private fun pushFolder(file: FileModel) {
-        folderViewStateStore?.pushFolder(file)
+        folderModelAdapter.pushFolder(file)
     }
 
     private fun playRecord(file: FileModel) {
-        viewStatStorageManager.createPlayerViewStateStore()
+        folderModelAdapter.playRecord(file)
         startPlayer(file.filePath)
     }
 
     fun onClickCreateFolder() {
-        folderViewStateStore?.showCreateFolder()
+        folderModelAdapter.onClickCreateFolder()
     }
 
     fun onClickCreateRecord() {
-        viewStatStorageManager.createRecorderViewStateStore()
+        folderModelAdapter.onClickCreateRecord()
         startRecorder()
     }
 
     fun onSaveFolder(name: String) {
-        fileManager.onSaveFolder(viewAdapter?.getCurrentPath(), name, object : FileManager.FileManagerCallback {
+        folderModelAdapter.onSaveFolder(viewAdapter?.getCurrentPath(), name, object : FileManager.FileManagerCallback {
             override fun onResult() {
                 viewAdapter?.updateListFiles()
             }
@@ -111,7 +109,7 @@ class FolderViewBinder {
     }
 
     fun onSaveRecord(name: String) {
-        fileManager.onSaveRecord(viewAdapter?.getCurrentPath(), name, object : FileManager.FileManagerCallback {
+        folderModelAdapter.onSaveRecord(viewAdapter?.getCurrentPath(), name, object : FileManager.FileManagerCallback {
             override fun onResult() {
                 viewAdapter?.updateListFiles()
             }
@@ -119,22 +117,16 @@ class FolderViewBinder {
     }
 
     fun onDismissAlert() {
-        folderViewStateStore?.dismissAlert()
+        folderModelAdapter.onDismissAlert()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == AppCompatActivity.RESULT_OK) {
-            folderViewStateStore?.showSaveRecording()
+            folderModelAdapter.showSaveRecording()
         } else {
             AppInstance.managersInstance.recorder.onStopRecord()
         }
     }
-
-    fun onBackPressed(): Boolean = if (viewAdapter?.getCurrentPath() != FileStorage.mainDirectory) {
-        val prevPath = viewAdapter?.let { it.prevPath() } ?: ""
-        folderViewStateStore?.popFolder(FileModel(prevPath))
-        false
-    } else true
 
     fun onItemListClick(file: FileModel) {
         if (file.isDirectory) {
@@ -143,4 +135,10 @@ class FolderViewBinder {
             playRecord(file)
         }
     }
+
+    fun onBackPressed(): Boolean = if (viewAdapter?.getCurrentPath() != FileStorage.mainDirectory) {
+        val prevPath = viewAdapter?.let { it.prevPath() } ?: ""
+        folderModelAdapter.popFolder(prevPath)
+        false
+    } else true
 }
