@@ -32,7 +32,7 @@ class PlayerActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, Tex
     private var playerService: PlayerService = AppInstance.managersInstance.playerService
     private val fileManager = AppInstance.managersInstance.fileManager
     private val viewStateStore = AppInstance.managersInstance.viewStateStore
-    private val playerViewStateStore = viewStateStore.playerViewStateStore
+    private val playerViewStateStore = viewStateStore.playerViewStateStore?.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

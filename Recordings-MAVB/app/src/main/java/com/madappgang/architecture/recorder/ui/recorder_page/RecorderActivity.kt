@@ -17,7 +17,7 @@ class RecorderActivity : AppCompatActivity(), RecordingRepository.RecordTimeUpda
     private val LOG_TAG = "RecorderActivity"
     private val recorder = AppInstance.managersInstance.recorder
     private val viewStateStore = AppInstance.managersInstance.viewStateStore
-    private val recorderViewStateStore = viewStateStore.recorderViewStateStore
+    private val recorderViewStateStore = viewStateStore.recorderViewStateStore?.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

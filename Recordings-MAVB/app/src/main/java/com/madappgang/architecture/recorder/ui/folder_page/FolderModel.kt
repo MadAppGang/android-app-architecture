@@ -1,50 +1,49 @@
 package com.madappgang.architecture.recorder.ui.folder_page
 
+import android.arch.lifecycle.MutableLiveData
 import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.FileModel
 import com.madappgang.architecture.recorder.managers.FileManager
 import com.madappgang.architecture.recorder.managers.ViewStateStoresManager
+import com.madappgang.architecture.recorder.ui.player_page.PlayerViewStateStore
+import com.madappgang.architecture.recorder.ui.recorder_page.RecorderViewStateStore
 
 /**
  * Created by Bohdan Shchavinskiy <bogdan@madappgang.com> on 05.09.2018.
  */
-class FolderModel(private val callback: FolderModelAdapterCallback) {
+class FolderModel {
 
     private val fileManager = AppInstance.managersInstance.fileManager
     private val viewStateStorageManager: ViewStateStoresManager = AppInstance.managersInstance.viewStateStore
     private val folderViewStateStore: FolderViewStateStore? = viewStateStorageManager.folderViewStateStore
 
 
-    fun onClickToolbarButton() {
+    fun changeEditing() {
         folderViewStateStore?.toggleEditing(!currentViewState().editing)
-        callback.onResult(currentViewState())
     }
 
     fun currentViewState(): FolderViewState = folderViewStateStore?.folderView
             ?: FolderViewState()
 
-    fun onResume() {
+    fun resume() {
         viewStateStorageManager.resumeFolderActivity()
         AppInstance.managersInstance.playerService.release()
     }
 
     fun toggleEditing() {
         folderViewStateStore?.toggleEditing(currentViewState().editing)
-        callback.onResult(currentViewState())
     }
 
     fun pushFolder(file: FileModel) {
         folderViewStateStore?.pushFolder(file)
-        callback.onResult(currentViewState())
     }
 
     fun playRecord(file: FileModel) {
-        viewStateStorageManager.createPlayerViewStateStore()
+        viewStateStorageManager.createPlayerViewStateStore(file)
     }
 
     fun onClickCreateFolder() {
         folderViewStateStore?.showCreateFolder()
-        callback.onResult(currentViewState())
     }
 
     fun onClickCreateRecord() {
@@ -61,16 +60,25 @@ class FolderModel(private val callback: FolderModelAdapterCallback) {
 
     fun onDismissAlert() {
         folderViewStateStore?.dismissAlert()
-        callback.onResult(currentViewState())
     }
 
     fun showSaveRecording() {
         folderViewStateStore?.showSaveRecording()
-        callback.onResult(currentViewState())
     }
 
     fun popFolder(prevPath: String) {
         folderViewStateStore?.popFolder(FileModel(prevPath))
-        callback.onResult(currentViewState())
+    }
+
+    fun getViewState(): MutableLiveData<FolderViewState>? {
+        return folderViewStateStore?.folderViewState
+    }
+
+    fun getPlayerViewStateStore(): MutableLiveData<PlayerViewStateStore>? {
+        return viewStateStorageManager.playerViewStateStore
+    }
+
+    fun getRecorderViewStateStore(): MutableLiveData<RecorderViewStateStore>? {
+        return viewStateStorageManager.recorderViewStateStore
     }
 }

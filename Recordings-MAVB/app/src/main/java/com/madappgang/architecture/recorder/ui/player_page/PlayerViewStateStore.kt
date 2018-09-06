@@ -1,11 +1,12 @@
 package com.madappgang.architecture.recorder.ui.player_page
 
 import android.arch.lifecycle.MutableLiveData
+import com.madappgang.architecture.recorder.data.models.FileModel
 
 /**
  * Created by Bohdan Shchavinskiy <bogdan@madappgang.com> on 05.07.2018.
  */
-class PlayerViewStateStore {
+class PlayerViewStateStore(val playFile: FileModel) {
 
     var playerView: PlayerViewState? = PlayerViewState()
     var playerViewState: MutableLiveData<PlayerViewState>? = MutableLiveData()

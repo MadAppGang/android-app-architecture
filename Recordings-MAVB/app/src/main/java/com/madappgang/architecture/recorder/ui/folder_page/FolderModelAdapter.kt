@@ -1,27 +1,57 @@
 package com.madappgang.architecture.recorder.ui.folder_page
 
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.Observer
 import com.madappgang.architecture.recorder.data.models.FileModel
 import com.madappgang.architecture.recorder.managers.FileManager
 
 /**
  * Created by Bohdan Shchavinskiy <bogdan@madappgang.com> on 05.09.2018.
  */
-class FolderModelAdapter(var handle: (viewState: FolderViewState) -> Unit = {}) : FolderModelAdapterCallback {
+class FolderModelAdapter(owner: LifecycleOwner, private var folderViewBinderCallback: FolderViewBinderCallback) {
 
-    private val folderModel = FolderModel(this)
+    private val folderModel = FolderModel()
 
-    override fun onResult(viewState: FolderViewState) {
-        handle(viewState)
+    init {
+        folderModel.getViewState()?.observe(owner, Observer {
+            it?.let { handle(it) }
+        })
+        folderModel.getPlayerViewStateStore()?.observe(owner, Observer {
+            it?.let { folderViewBinderCallback.onCreatePlayerViewState(it.playFile.filePath) }
+                    ?: folderViewBinderCallback.updateListFiles()
+        })
+        folderModel.getRecorderViewStateStore()?.observe(owner, Observer {
+            it?.let { folderViewBinderCallback.onCreateRecorderViewState() }
+        })
+    }
+
+    private fun handle(viewState: FolderViewState) {
+        when (viewState.action) {
+            FolderViewState.Action.SHOW_ALERT -> {
+                if (viewState.alertType == FolderViewState.AlertType.CREATE_FOLDER) {
+                    folderViewBinderCallback.showDialog(true, viewState.editing)
+                } else if (viewState.alertType == FolderViewState.AlertType.SAVE_RECORDING) {
+                    folderViewBinderCallback.showDialog(false, viewState.editing)
+                }
+            }
+            FolderViewState.Action.PUSH_FOLDER -> {
+                folderViewBinderCallback.setFolderTitle(viewState.file.filePath, viewState.file.name)
+            }
+            FolderViewState.Action.POP_FOLDER -> {
+                folderViewBinderCallback.setFolderTitle(viewState.file.filePath, null)
+            }
+            else -> {
+                folderViewBinderCallback.toggleEditing(viewState.editing)
+            }
+        }
     }
 
     fun onClickToolbarButton() {
-        folderModel.onClickToolbarButton()
+        folderModel.changeEditing()
     }
 
-    fun currentViewState(): FolderViewState = folderModel.currentViewState()
-
-    fun onResume() {
-        folderModel.onResume()
+    fun resume() {
+        folderModel.resume()
     }
 
     fun toggleEditing() {
@@ -36,11 +66,11 @@ class FolderModelAdapter(var handle: (viewState: FolderViewState) -> Unit = {}) 
         folderModel.playRecord(file)
     }
 
-    fun onClickCreateFolder() {
+    fun createFolder() {
         folderModel.onClickCreateFolder()
     }
 
-    fun onClickCreateRecord() {
+    fun createRecord() {
         folderModel.onClickCreateRecord()
     }
 
@@ -62,5 +92,12 @@ class FolderModelAdapter(var handle: (viewState: FolderViewState) -> Unit = {}) 
 
     fun popFolder(prevPath: String) {
         folderModel.popFolder(prevPath)
+    }
+
+    fun restoreState() {
+        //TODO Вот этот момент мне не нравится
+        val currentViewState = folderModel.currentViewState()
+        folderViewBinderCallback.initPage(currentViewState.file)
+        handle(currentViewState)
     }
 }

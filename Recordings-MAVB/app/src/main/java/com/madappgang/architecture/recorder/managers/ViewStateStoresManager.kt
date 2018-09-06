@@ -1,5 +1,7 @@
 package com.madappgang.architecture.recorder.managers
 
+import android.arch.lifecycle.MutableLiveData
+import com.madappgang.architecture.recorder.data.models.FileModel
 import com.madappgang.architecture.recorder.ui.folder_page.FolderViewStateStore
 import com.madappgang.architecture.recorder.ui.player_page.PlayerViewStateStore
 import com.madappgang.architecture.recorder.ui.recorder_page.RecorderViewStateStore
@@ -9,25 +11,26 @@ import com.madappgang.architecture.recorder.ui.recorder_page.RecorderViewStateSt
  */
 class ViewStateStoresManager {
     var folderViewStateStore: FolderViewStateStore? = null
-    var playerViewStateStore: PlayerViewStateStore? = null
-    var recorderViewStateStore: RecorderViewStateStore? = null
+
+    var playerViewStateStore: MutableLiveData<PlayerViewStateStore>? = MutableLiveData()
+    var recorderViewStateStore: MutableLiveData<RecorderViewStateStore>? = MutableLiveData()
 
     init {
         folderViewStateStore = FolderViewStateStore()
     }
 
-    fun createPlayerViewStateStore(){
-        playerViewStateStore = PlayerViewStateStore()
+    fun createPlayerViewStateStore(playFile: FileModel) {
+        playerViewStateStore?.value = PlayerViewStateStore(playFile)
     }
 
-    fun createRecorderViewStateStore(){
-        recorderViewStateStore = RecorderViewStateStore()
+    fun createRecorderViewStateStore() {
+        recorderViewStateStore?.value = RecorderViewStateStore()
     }
 
     fun resumeFolderActivity() {
-        playerViewStateStore?.clearData()
-        recorderViewStateStore?.clearData()
-        playerViewStateStore = null
-        recorderViewStateStore = null
+        playerViewStateStore?.value?.clearData()
+        recorderViewStateStore?.value?.clearData()
+        playerViewStateStore?.value = null
+        recorderViewStateStore?.value = null
     }
 }

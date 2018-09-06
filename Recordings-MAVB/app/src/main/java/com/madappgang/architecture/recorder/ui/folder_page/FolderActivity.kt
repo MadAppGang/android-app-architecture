@@ -8,11 +8,11 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import com.madappgang.architecture.recorder.R
-import com.madappgang.architecture.recorder.application.AppInstance
 import com.madappgang.architecture.recorder.data.models.DialogModel
 import com.madappgang.architecture.recorder.data.models.FileModel
 import com.madappgang.architecture.recorder.ui.player_page.PlayerActivity
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_folder.*
 
 class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
 
-    private var folderViewBinder: FolderViewBinder = AppInstance.managersInstance.folderViewBinder
+    private var folderViewBinder: FolderViewBinder = FolderViewBinder(this)
     private val REQUEST_PERMISSION = 200
     private val permissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
     private var permissionAccepted = false
@@ -54,7 +54,7 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
             finish()
         } else {
             prepareViewBinder()
-            folderViewBinder.restoreState(this, ::initList)
+            folderViewBinder.initState(this)
         }
     }
 
@@ -85,10 +85,12 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         folderViewBinder.startRecorder = { startRecorderActivity() }
         folderViewBinder.setTitleText = { titleText -> labelSetText(titleText) }
         folderViewBinder.setToolbarButtonText = { toolbarButtonTextId -> toolbarSetText(toolbarButtonTextId) }
+        folderViewBinder.initList = { viewAdapter -> initList(viewAdapter) }
     }
 
     private fun labelSetText(text: String) {
-        label.text = text
+        val title = if (TextUtils.isEmpty(text)) resources.getString(R.string.app_name) else text
+        label.text = title
     }
 
     private fun toolbarSetText(textId: Int) {
@@ -121,18 +123,18 @@ class FolderActivity : AppCompatActivity(), FolderAdapter.ItemClickListener {
         dialogBuilder.setPositiveButton(R.string.button_title_save, { _, _ ->
             val name = editName.text.toString()
             if (isFolderDialog) folderViewBinder.onSaveFolder(name) else folderViewBinder.onSaveRecord(name)
-            folderViewBinder.onDismissAlert()
+            folderViewBinder.dismissAlert()
         })
         dialogBuilder.setNegativeButton(R.string.button_title_cancel, { _, _ ->
-            folderViewBinder.onDismissAlert()
+            folderViewBinder.dismissAlert()
         })
         dialogBuilder.setOnCancelListener({
-            folderViewBinder.onDismissAlert()
+            folderViewBinder.dismissAlert()
         })
         dialogBuilder.create().show()
     }
 
-    private fun initList(viewAdapter : FolderAdapter?) {
+    private fun initList(viewAdapter: FolderAdapter?) {
         myRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
