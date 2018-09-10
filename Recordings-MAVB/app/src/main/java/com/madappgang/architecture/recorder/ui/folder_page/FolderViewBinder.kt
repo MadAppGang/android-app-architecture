@@ -15,7 +15,7 @@ import com.madappgang.architecture.recorder.managers.FileManager
 class FolderViewBinder(owner: LifecycleOwner) : FolderViewBinderCallback {
 
     var viewAdapter: FolderAdapter? = null
-    var folderModelAdapter: FolderModelAdapter = FolderModelAdapter(owner, this)
+    private var folderModelAdapter: FolderModelAdapter = FolderModelAdapter(owner, this)
 
     var showDialog: (isFolderDialog: Boolean) -> Unit = {}
     var startPlayer: (filePath: String) -> Unit = {}

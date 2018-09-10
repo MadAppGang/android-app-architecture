@@ -22,8 +22,7 @@ class FolderModel {
         folderViewStateStore?.toggleEditing(!currentViewState().editing)
     }
 
-    fun currentViewState(): FolderViewState = folderViewStateStore?.folderView
-            ?: FolderViewState()
+    fun currentViewState() = folderViewStateStore?.folderView ?: FolderViewState()
 
     fun resume() {
         viewStateStorageManager.resumeFolderActivity()

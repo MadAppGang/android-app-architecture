@@ -95,7 +95,6 @@ class FolderModelAdapter(owner: LifecycleOwner, private var folderViewBinderCall
     }
 
     fun restoreState() {
-        //TODO Вот этот момент мне не нравится
         val currentViewState = folderModel.currentViewState()
         folderViewBinderCallback.initPage(currentViewState.file)
         handle(currentViewState)
